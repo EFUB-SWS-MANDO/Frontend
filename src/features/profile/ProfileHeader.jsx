@@ -12,7 +12,7 @@ function ProfileHeader({ user, isOwner }) {
   };
 
   const handleEditPhoto = () => {
-    // TODO: 프로필 사진 수정 동작 - 기능 TBD (버튼만 우선 생성)
+    // TODO: 프로필 사진 수정-일단 버튼 우선 생성
   };
 
   const handleFollowToggle = () => {
