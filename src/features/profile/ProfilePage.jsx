@@ -1,47 +1,32 @@
-import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import ProfileHeader from '../features/profile/ProfileHeader';
-import PostList from '../features/post/PostList';
-import { getUserProfile, getUserPosts } from '../apis/endpoints';
-import { useUserStore } from '../store/useUserStore';
+import { useProfile } from '@/features/profile/api/useProfile';
+import { usePosts } from '@/features/post/api/usePosts';
+import ProfileHeader from '@/features/profile/ProfileHeader';
+import PostCard from '@/features/post/components/PostCard';
+import Spinner from '@/components/Spinner/Spinner';
+import EmptyState from '@/components/EmptyState/EmptyState';
+import { useUserStore } from '@/stores/authStore'; // 아까 확인한 실제 파일명
 
 function ProfilePage() {
-  const { userId } = useParams(); // URL 예: /profile/123 → userId = "123"
-  const myUserId = useUserStore((state) => state.userId); // 로그인한 내 유저 ID
-
-  const [profile, setProfile] = useState(null);
-  const [posts, setPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
+  const { userId } = useParams();
+  const myUserId = useUserStore((state) => state.userId);
   const isOwner = String(userId) === String(myUserId);
 
-  useEffect(() => {
-    async function fetchProfileData() {
-      try {
-        const [profileData, postsData] = await Promise.all([
-          getUserProfile(userId),
-          getUserPosts(userId),
-        ]);
-        setProfile(profileData);
-        setPosts(postsData);
-      } catch (error) {
-        console.error('프로필 데이터 불러오기 실패:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    fetchProfileData();
-  }, [userId]);
+  const { profile, isLoading: profileLoading, error: profileError } = useProfile(userId);
+  const { posts, isLoading: postsLoading, error: postsError } = usePosts({ userId });
 
-  if (isLoading) {
-    return <div>로딩 중...</div>; // 추후 Spinner 컴포넌트로 교체
-  }
+  if (profileLoading || postsLoading) return <Spinner />;
+  if (profileError || postsError) return <EmptyState message="불러오지 못했어요. 다시 시도해 주세요." />;
 
   return (
     <div>
       <ProfileHeader user={profile} isOwner={isOwner} />
       <h3>{isOwner ? '내가 쓴 글' : `${profile?.name}님의 글`}</h3>
-      <PostList posts={posts} />
+      {posts.length === 0 ? (
+        <EmptyState />
+      ) : (
+        posts.map((post) => <PostCard key={post.id} post={post} />)
+      )}
     </div>
   );
 }

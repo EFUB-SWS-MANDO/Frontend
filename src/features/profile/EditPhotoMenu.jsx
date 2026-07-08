@@ -1,4 +1,4 @@
-import MoreIcon from '../../assets/icons/MoreIcon';
+import MoreIcon from '../../asset/icons/MoreIcon';
 
 function EditPhotoMenu({ onClick }) {
   return (
