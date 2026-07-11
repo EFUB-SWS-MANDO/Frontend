@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import EditIntroButton from './EditIntroButton';
 import EditPhotoMenu from './EditPhotoMenu';
@@ -6,6 +6,10 @@ import FollowButton from './FollowButton';
 
 function ProfileHeader({ user, isOwner }) {
   const [isFollowing, setIsFollowing] = useState(user?.isFollowing ?? false);
+
+  useEffect(() => {
+    setIsFollowing(user?.isFollowing ?? false);
+  }, [user?.isFollowing]);
 
   const handleEditIntro = () => {
     // TODO: 소개글 수정 화면 열기
