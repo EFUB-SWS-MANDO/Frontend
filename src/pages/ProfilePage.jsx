@@ -1,4 +1,3 @@
-// src/pages/ProfilePage.jsx
 import { useParams } from 'react-router-dom';
 import { useProfile } from '@/features/profile/api/useProfile';
 import { usePosts } from '@/features/post/api/usePosts';
