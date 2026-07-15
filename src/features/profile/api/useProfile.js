@@ -1,7 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { MOCK_PROFILE } from '@/mocks/mockProfile';
-// import { api } from '@/apis/axiosInstance'; // TODO: 백엔드 연동 후 주석 해제
-// import { ENDPOINTS } from '@/apis/endpoints'; // TODO: 백엔드 연동 후 주석 해제
 
 export function useProfile(userId) {
   const [profile, setProfile] = useState(null);
@@ -13,7 +11,6 @@ export function useProfile(userId) {
     setError(null);
     try {
       // TODO: 백엔드 연동 후 아래 mock 대신 실제 api.get() 사용
-      // const { data } = await api.get(ENDPOINTS.profile.detail(userId));
       await new Promise((resolve) => setTimeout(resolve, 300));
       setProfile(MOCK_PROFILE);
     } catch (e) {
