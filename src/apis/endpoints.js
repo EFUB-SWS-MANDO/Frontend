@@ -1,31 +1,22 @@
-import { useState, useEffect, useCallback } from 'react';
-import { MOCK_PROFILE } from '@/mocks/mockProfile';
-// import { api } from '@/apis/axiosInstance'; // TODO: 백엔드 연동 후 주석 해제
-// import { ENDPOINTS } from '@/apis/endpoints'; // TODO: 백엔드 연동 후 주석 해제
-
-export function useProfile(userId) {
-  const [profile, setProfile] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const fetchProfile = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      // TODO: 백엔드 연동 후 아래 mock 대신 실제 api.get() 사용
-      // const { data } = await api.get(ENDPOINTS.profile.detail(userId));
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      setProfile(MOCK_PROFILE);
-    } catch (e) {
-      setError(e);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [userId]);
-
-  useEffect(() => {
-    fetchProfile();
-  }, [fetchProfile]);
-
-  return { profile, isLoading, error, refetch: fetchProfile };
-}
+// API 경로를 한 곳에서 관리 (오타/중복 방지)
+export const ENDPOINTS = {
+  auth: {
+    kakaoLogin: '/auth/kakao',
+    signup: '/auth/signup', // 약관 동의 + 닉네임/프로필 설정 완료
+    me: '/auth/me',
+  },
+  posts: {
+    list: '/posts',
+    detail: (id) => `/posts/${id}`,
+    like: (id) => `/posts/${id}/like`,
+    comments: (id) => `/posts/${id}/comments`,
+  },
+  profile: {
+    detail: (userId) => `/users/${userId}`,
+    follow: (userId) => `/users/${userId}/follow`,
+  },
+  ai: {
+    coverLetter: '/ai/cover-letter',
+    interview: '/ai/interview',
+  },
+};

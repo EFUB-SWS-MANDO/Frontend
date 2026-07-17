@@ -11,6 +11,8 @@ export const theme = {
     textSub: '#6B7280',
     border: '#E5E7EB',
     error: '#E03131',
+    kakao: '#FEE500',
+    kakaoText: '#191919',
   },
   fontSize: {
     xs: '12px',
