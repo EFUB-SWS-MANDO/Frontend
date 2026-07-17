@@ -10,7 +10,12 @@ export function useKakaoLogin() {
     const clientId = import.meta.env.VITE_KAKAO_CLIENT_ID;
     const redirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 
-    if (!clientId || !redirectUri) {
+    // VITE_MOCK_AUTH=true면 실제 OAuth 없이 온보딩 플로우만 진행 (시연/개발용)
+    if (
+      import.meta.env.VITE_MOCK_AUTH === 'true' ||
+      !clientId ||
+      !redirectUri
+    ) {
       navigate('/signup/terms');
       return;
     }

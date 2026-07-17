@@ -12,6 +12,18 @@ export function useSignup() {
   const signup = async ({ nickname, profileImageFile }) => {
     setIsSubmitting(true);
     setError(null);
+
+    // VITE_MOCK_AUTH=true면 API 호출 없이 가입 성공 처리 (시연/개발용)
+    if (import.meta.env.VITE_MOCK_AUTH === 'true') {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      setAuth({
+        accessToken: 'mock-token',
+        user: { id: 0, nickname, profileImage: null },
+      });
+      setIsSubmitting(false);
+      return true;
+    }
+
     try {
       const formData = new FormData();
       formData.append('nickname', nickname);
