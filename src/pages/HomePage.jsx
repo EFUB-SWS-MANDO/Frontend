@@ -3,15 +3,19 @@ import styled, { useTheme } from 'styled-components';
 import { usePosts } from '@/features/post/api/usePosts';
 import PostCard from '@/features/post/components/PostCard';
 import FeedTabs from '@/features/post/components/FeedTabs';
+import FilterChips from '@/features/post/components/FilterChips';
+import FilterModal from '@/features/post/components/FilterModal';
 import Spinner from '@/components/Spinner/Spinner';
 import EmptyState from '@/components/EmptyState/EmptyState';
 import SearchIcon from '@/asset/icons/SearchIcon';
 
-// 메인(글목록): Welcome 헤더 + 탭 + 글 목록. 로딩/에러/빈 상태 항상 처리.
+// 메인(글목록): Welcome 헤더 + 탭 + 필터 + 글 목록. 로딩/에러/빈 상태 항상 처리.
 function HomePage() {
   const theme = useTheme();
   const [activeTab, setActiveTab] = useState('all');
-  const { posts, isLoading, error } = usePosts({ tab: activeTab });
+  const [filters, setFilters] = useState({ recruitStatus: 'all', tags: [] });
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const { posts, isLoading, error } = usePosts({ tab: activeTab, ...filters });
 
   return (
     <section>
@@ -23,6 +27,31 @@ function HomePage() {
       </TitleRow>
 
       <FeedTabs activeTab={activeTab} onChange={setActiveTab} />
+
+      <FilterChips
+        filters={filters}
+        onRemoveTag={(tag) =>
+          setFilters((prev) => ({
+            ...prev,
+            tags: prev.tags.filter((t) => t !== tag),
+          }))
+        }
+        onClearRecruit={() =>
+          setFilters((prev) => ({ ...prev, recruitStatus: 'all' }))
+        }
+        onOpenModal={() => setIsFilterOpen(true)}
+      />
+
+      {isFilterOpen && (
+        <FilterModal
+          initialFilters={filters}
+          onApply={(next) => {
+            setFilters(next);
+            setIsFilterOpen(false);
+          }}
+          onClose={() => setIsFilterOpen(false)}
+        />
+      )}
 
       <ListArea>
         {isLoading ? (
