@@ -1,29 +1,31 @@
 import { useState } from 'react';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import { usePosts } from '@/features/post/api/usePosts';
 import PostCard from '@/features/post/components/PostCard';
 import FeedTabs from '@/features/post/components/FeedTabs';
 import FilterChips from '@/features/post/components/FilterChips';
 import FilterModal from '@/features/post/components/FilterModal';
+import PostSearch from '@/features/post/components/PostSearch';
 import Spinner from '@/components/Spinner/Spinner';
 import EmptyState from '@/components/EmptyState/EmptyState';
-import SearchIcon from '@/asset/icons/SearchIcon';
 
-// 메인(글목록): Welcome 헤더 + 탭 + 필터 + 글 목록. 로딩/에러/빈 상태 항상 처리.
+// 메인(글목록): Welcome 헤더 + 탭 + 필터 + 검색 + 글 목록. 로딩/에러/빈 상태 항상 처리.
 function HomePage() {
-  const theme = useTheme();
   const [activeTab, setActiveTab] = useState('all');
   const [filters, setFilters] = useState({ recruitStatus: 'all', tags: [] });
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const { posts, isLoading, error } = usePosts({ tab: activeTab, ...filters });
+  const [keyword, setKeyword] = useState('');
+  const { posts, isLoading, error } = usePosts({
+    tab: activeTab,
+    keyword,
+    ...filters,
+  });
 
   return (
     <section>
       <TitleRow>
         <Title>Welcome</Title>
-        <IconButton type="button" aria-label="검색">
-          <SearchIcon size={20} color={theme.colors.textSub} />
-        </IconButton>
+        <PostSearch keyword={keyword} onSearch={setKeyword} />
       </TitleRow>
 
       <FeedTabs activeTab={activeTab} onChange={setActiveTab} />
@@ -79,18 +81,6 @@ const Title = styled.h1`
   font-size: ${({ theme }) => theme.fontSize.xl};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   color: ${({ theme }) => theme.colors.text};
-`;
-
-const IconButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: ${({ theme }) => theme.spacing(2)};
-  border-radius: ${({ theme }) => theme.radius.full};
-
-  &:hover {
-    background: ${({ theme }) => theme.colors.bgSub};
-  }
 `;
 
 const ListArea = styled.div`
