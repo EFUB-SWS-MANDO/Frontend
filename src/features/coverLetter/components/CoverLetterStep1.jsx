@@ -30,8 +30,7 @@ const StepWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: ${({ theme }) => theme.spacing(8)};
+  padding-top: 130px; /* 헤더 → 안내 텍스트 (Figma 실측) */
 `;
 
 const TextGroup = styled.div`
@@ -49,19 +48,20 @@ const IconWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 100px; /* 안내 텍스트 → 아이콘 (Figma 실측) */
 `;
 
 const BottomArea = styled.div`
   width: 100%;
   max-width: 400px;
-  padding: 0 ${({ theme }) => theme.spacing(2)};
+  margin-top: 130px; /* 아이콘 → 버튼 (Figma 실측) */
 `;
 
 const PrimaryButton = styled.button`
   width: 100%;
   padding: ${({ theme }) => theme.spacing(3.5)};
   border: none;
-  border-radius: ${({ theme }) => theme.radius.md};
+  border-radius: ${({ theme }) => theme.radius.full};
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.bg};
   font-size: ${({ theme }) => theme.fontSize.sm};
