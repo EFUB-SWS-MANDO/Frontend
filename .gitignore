@@ -49,3 +49,4 @@ desktop.ini
 *.tsbuildinfo
 .eslintcache
 .parcel-cache/
+.claude/
