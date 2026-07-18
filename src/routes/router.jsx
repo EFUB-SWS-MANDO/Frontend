@@ -1,6 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from '@/layouts/RootLayout';
+import SplashPage from '@/pages/SplashPage';
 import LoginPage from '@/pages/LoginPage';
+import TermsPage from '@/pages/TermsPage';
+import ProfileSetupPage from '@/pages/ProfileSetupPage';
 import HomePage from '@/pages/HomePage';
 import PostDetailPage from '@/pages/PostDetailPage';
 import PostWritePage from '@/pages/PostWritePage';
@@ -11,7 +14,10 @@ import CoverLetterPage from '@/pages/ai/CoverLetterPage';
 import InterviewPage from '@/pages/ai/InterviewPage';
 
 export const router = createBrowserRouter([
+  { path: '/splash', element: <SplashPage /> },
   { path: '/login', element: <LoginPage /> },
+  { path: '/signup/terms', element: <TermsPage /> },
+  { path: '/signup/profile', element: <ProfileSetupPage /> },
   {
     path: '/',
     element: <RootLayout />, // 네비게이션 바 + Outlet

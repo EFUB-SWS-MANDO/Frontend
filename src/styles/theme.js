@@ -1,7 +1,7 @@
 // Figma 디자인 시스템 색상 팔레트 반영 완료
 export const theme = {
   colors: {
-    // ===== Primary (Green) - 세부 스케일 =====
+// ===== Primary (Green) - 세부 스케일 =====
     green50: '#ECFCEF',
     green100: '#C9F3D1',
     green200: '#9CDDA9',
@@ -36,6 +36,8 @@ export const theme = {
     textSub: '#9197AC',      // gray700
     border: '#E1E3ED',       // gray300
     error: '#E03131',        // 기존 유지
+    kakao: '#FEE500',
+    kakaoText: '#191919',
   },
   fontSize: {
     xs: '12px',
