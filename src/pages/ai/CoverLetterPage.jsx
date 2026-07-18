@@ -6,7 +6,7 @@ import CoverLetterStep1 from '../../features/coverLetter/components/CoverLetterS
 import CoverLetterStep2 from '../../features/coverLetter/components/CoverLetterStep2';
 import CoverLetterStep3 from '../../features/coverLetter/components/CoverLetterStep3';
 
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 3;
 
 const CoverLetterPage = () => {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ const CoverLetterPage = () => {
           />
         );
       default:
-        return <CoverLetterStep1 onNext={goNext} />;
+        return <PlaceholderText>아직 준비 중인 단계예요.</PlaceholderText>;
     }
   };
 
@@ -108,4 +108,11 @@ const Content = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+`;
+
+const PlaceholderText = styled.p`
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  color: ${({ theme }) => theme.colors.textSub};
+  text-align: center;
+  margin-top: ${({ theme }) => theme.spacing(10)};
 `;
