@@ -9,9 +9,10 @@ const CoverLetterStep2 = ({ selectedActivities, setSelectedActivities, onNext })
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredActivities = useMemo(() => {
-    if (!searchTerm.trim()) return mockActivities;
+    const trimmed = searchTerm.trim().toLowerCase();
+    if (!trimmed) return mockActivities;
     return mockActivities.filter((activity) =>
-      activity.name.includes(searchTerm.trim())
+      activity.name.toLowerCase().includes(trimmed)
     );
   }, [searchTerm]);
 
