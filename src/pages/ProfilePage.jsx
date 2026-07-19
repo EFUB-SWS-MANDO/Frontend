@@ -11,7 +11,7 @@ import { useAuthStore } from '@/stores/authStore';
 function ProfilePage() {
   const { userId } = useParams();
   const myUser = useAuthStore((state) => state.user);
-  const isOwner = String(userId) === String(myUser?.id);
+  const isOwner = userId === 'me' || String(userId) === String(myUser?.id);
 
   const { profile, isLoading: profileLoading, error: profileError } = useProfile(userId);
   const { posts, isLoading: postsLoading, error: postsError } = usePosts({ userId });
