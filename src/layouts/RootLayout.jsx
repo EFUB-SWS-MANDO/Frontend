@@ -12,7 +12,7 @@ function RootLayout() {
       <Content>
         <Outlet />
       </Content>
-      <FloatingButton onClick={() => navigate('/write')}>+</FloatingButton>
+      <FloatingButton onClick={() => navigate('/write')}>글쓰기 +</FloatingButton>
     </Wrapper>
   );
 }
@@ -32,12 +32,16 @@ const FloatingButton = styled.button`
   position: fixed;
   right: 20px;
   bottom: 20px;
-  width: 56px;
-  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing(1)};
+  padding: ${({ theme }) => `${theme.spacing(3.5)} ${theme.spacing(6)}`};
   border-radius: ${({ theme }) => theme.radius.full};
-  background: ${({ theme }) => theme.colors.primary};
+  background: ${({ theme }) => theme.colors.gray950};
   color: #fff;
-  font-size: 28px;
+  font-size: ${({ theme }) => theme.fontSize.md};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 15;
 `;
 
