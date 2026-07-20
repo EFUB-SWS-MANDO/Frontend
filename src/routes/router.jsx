@@ -14,6 +14,7 @@ import CoverLetterPage from '@/pages/ai/CoverLetterPage';
 import InterviewPage from '@/pages/ai/InterviewPage';
 import InterviewSelectPage from '@/pages/ai/InterviewSelectPage';
 import InterviewSessionPage from '@/pages/ai/InterviewSessionPage';
+import InterviewResultPage from '@/pages/ai/InterviewResultPage';
 
 export const router = createBrowserRouter([
   { path: '/splash', element: <SplashPage /> },
@@ -37,6 +38,7 @@ export const router = createBrowserRouter([
           { path: 'interview', element: <InterviewPage /> },
           { path: 'interview/select/:mode', element: <InterviewSelectPage /> },
           { path: 'interview/session', element: <InterviewSessionPage /> },
+          { path: 'interview/result', element: <InterviewResultPage /> },
         ],
       },
     ],
