@@ -36,7 +36,7 @@ export const theme = {
     textSub: '#9197AC',      // gray700
     border: '#E1E3ED',       // gray300
     error: '#E03131',        // 기존 유지
-    kakao: '#FEE500',
+    kakao: '#FFE607', // Figma 시안 카카오 버튼 색
     kakaoText: '#191919',
   },
   fontSize: {
