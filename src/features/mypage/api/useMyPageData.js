@@ -13,6 +13,7 @@ export function useMyPageData() {
     setError(null);
     try {
       // TODO: 백엔드 연동 후 아래 mock 대신 실제 api.get() 사용
+      // TODO: 컴포넌트 언마운트/재요청 시 이전 요청 취소 처리 (AbortController 등) 필요
       await new Promise((resolve) => setTimeout(resolve, 300));
       setStats(MOCK_MYPAGE_STATS);
       setRecords(MOCK_ACTIVITY_RECORDS);

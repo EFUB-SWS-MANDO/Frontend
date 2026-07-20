@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 
+const DEFAULT_MESSAGE = '아직 등록된 동기부여 문구가 없어요. 나만의 문구를 남겨보세요!';
+
 function GoalMessageCard({ message }) {
   return (
     <Section>
       <SectionTitle>동기부여 문구</SectionTitle>
       <Card>
-        <Message>{message}</Message>
+        <Message>{message || DEFAULT_MESSAGE}</Message>
       </Card>
     </Section>
   );

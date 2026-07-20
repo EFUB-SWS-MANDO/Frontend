@@ -23,17 +23,23 @@ function ActivityRecordList({ records }) {
         <EmptyState />
       ) : (
         <List>
-          {records.map((record) => (
-            <Item
-              key={`${record.type}-${record.id}`}
-              onClick={() => handleClick(record)}
-              $clickable={record.type === 'post'}
-            >
-              <TypeTag $type={record.type}>{TYPE_LABEL[record.type]}</TypeTag>
-              <Title>{record.title}</Title>
-              <DateText>{record.createdAt}</DateText>
-            </Item>
-          ))}
+          {records.map((record) => {
+            const clickable = record.type === 'post';
+            return (
+              <Item key={`${record.type}-${record.id}`}>
+                <ItemContent
+                  as={clickable ? 'button' : 'div'}
+                  type={clickable ? 'button' : undefined}
+                  onClick={clickable ? () => handleClick(record) : undefined}
+                  $clickable={clickable}
+                >
+                  <TypeTag $type={record.type}>{TYPE_LABEL[record.type]}</TypeTag>
+                  <Title>{record.title}</Title>
+                  <DateText>{record.createdAt}</DateText>
+                </ItemContent>
+              </Item>
+            );
+          })}
         </List>
       )}
     </Box>
@@ -54,15 +60,22 @@ const List = styled.ul`
 `;
 
 const Item = styled.li`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing(3)};
-  padding: ${({ theme }) => theme.spacing(4)} 0;
-  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
-
   & + & {
     border-top: 1px solid ${({ theme }) => theme.colors.border};
   }
+`;
+
+const ItemContent = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: ${({ theme }) => theme.spacing(3)};
+  padding: ${({ theme }) => theme.spacing(4)} 0;
+  border: none;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
 `;
 
 const TypeTag = styled.span`
