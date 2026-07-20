@@ -1,0 +1,202 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import PageHeader from '@/components/PageHeader/PageHeader';
+import { useInterview } from '@/features/ai/api/useInterview';
+
+// 모의면접 진행: AI 질문 → 답변 작성 → 피드백 확인 → (추가질문 반복) → 총평
+function InterviewSessionPage() {
+  const navigate = useNavigate();
+  const [answer, setAnswer] = useState('');
+  const [isSaved, setIsSaved] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
+  const { question, feedback, isSubmitting, submitAnswer, nextQuestion } =
+    useInterview();
+
+  const isFeedbackStep = feedback !== null;
+
+  const handleNextQuestion = () => {
+    nextQuestion();
+    setAnswer('');
+    setIsSaved(false);
+    setIsCopied(false);
+  };
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(feedback);
+    setIsCopied(true);
+  };
+
+  return (
+    <Container>
+      <PageHeader title="모의면접" />
+
+      <QuestionRow>
+        <AiAvatar aria-hidden />
+        <QuestionBox>
+          <BoxLabel>AI 질문</BoxLabel>
+          <BoxText>{question}</BoxText>
+        </QuestionBox>
+      </QuestionRow>
+
+      <AnswerBox
+        value={answer}
+        placeholder="내가 작성한 답변"
+        readOnly={isFeedbackStep}
+        onChange={(e) => setAnswer(e.target.value)}
+      />
+
+      {isFeedbackStep ? (
+        <>
+          <FeedbackBox>
+            <BoxText>{feedback}</BoxText>
+          </FeedbackBox>
+          <ActionRow>
+            <ActionButton type="button" onClick={handleCopy}>
+              {isCopied ? '복사됨' : '복사하기'}
+            </ActionButton>
+            <ActionButton type="button" onClick={() => setIsSaved(true)}>
+              {isSaved ? '저장됨' : '저장하기'}
+            </ActionButton>
+          </ActionRow>
+          <PrimaryButton
+            type="button"
+            onClick={() => navigate('/ai/interview/result')}
+          >
+            총평 보기
+          </PrimaryButton>
+        </>
+      ) : (
+        <>
+          <ButtonRow>
+            <SubButton type="button" onClick={handleNextQuestion}>
+              추가질문 받기
+            </SubButton>
+          </ButtonRow>
+          <PrimaryButton
+            type="button"
+            disabled={answer.trim() === '' || isSubmitting}
+            onClick={submitAnswer}
+          >
+            {isSubmitting ? '피드백 생성 중...' : '제출하고 피드백 보기'}
+          </PrimaryButton>
+        </>
+      )}
+    </Container>
+  );
+}
+
+const Container = styled.section`
+  max-width: 560px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing(4)};
+`;
+
+const QuestionRow = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: ${({ theme }) => theme.spacing(3)};
+`;
+
+const AiAvatar = styled.div`
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: ${({ theme }) => theme.radius.full};
+  background: ${({ theme }) => theme.colors.bgSub};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+`;
+
+const QuestionBox = styled.div`
+  flex: 1;
+  padding: ${({ theme }) => theme.spacing(4)};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+`;
+
+const BoxLabel = styled.p`
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.textSub};
+  margin-bottom: ${({ theme }) => theme.spacing(2)};
+`;
+
+const BoxText = styled.p`
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  color: ${({ theme }) => theme.colors.text};
+  line-height: 1.6;
+`;
+
+const AnswerBox = styled.textarea`
+  width: 100%;
+  min-height: 120px;
+  padding: ${({ theme }) => theme.spacing(4)};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  color: ${({ theme }) => theme.colors.text};
+  line-height: 1.6;
+  resize: vertical;
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.textSub};
+  }
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
+`;
+
+const FeedbackBox = styled.div`
+  padding: ${({ theme }) => theme.spacing(4)};
+  border: 1px solid ${({ theme }) => theme.colors.primary};
+  border-radius: ${({ theme }) => theme.radius.md};
+`;
+
+const ActionRow = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing(6)};
+`;
+
+const ActionButton = styled.button`
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.textSub};
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.text};
+  }
+`;
+
+const ButtonRow = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const SubButton = styled.button`
+  padding: ${({ theme }) => `${theme.spacing(2)} ${theme.spacing(4)}`};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.full};
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  color: ${({ theme }) => theme.colors.text};
+`;
+
+const PrimaryButton = styled.button`
+  display: block;
+  margin: 0 auto;
+  padding: ${({ theme }) => `${theme.spacing(2.5)} ${theme.spacing(12)}`};
+  border-radius: ${({ theme }) => theme.radius.full};
+  background: ${({ theme }) => theme.colors.primary};
+  color: #fff;
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+export default InterviewSessionPage;
