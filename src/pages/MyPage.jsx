@@ -8,6 +8,8 @@ import Spinner from '@/components/Spinner/Spinner';
 import EmptyState from '@/components/EmptyState/EmptyState';
 
 function MyPage() {
+  // TODO: 닉네임/아바타는 이미 전역 Header가 useAuthStore로 표시 중.
+  // 마이페이지 내부에도 유저 정보가 필요해지면 useProfile(mock) 대신 useAuthStore 연동 검토
   const { profile, isLoading: profileLoading, error: profileError } = useProfile();
   const { stats, records, isLoading: dataLoading, error: dataError } = useMyPageData();
 
