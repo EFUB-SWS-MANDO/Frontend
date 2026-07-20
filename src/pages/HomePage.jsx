@@ -22,7 +22,7 @@ function HomePage() {
   });
 
   return (
-    <section>
+    <Container>
       <TitleRow>
         <Title>Welcome</Title>
         <PostSearch keyword={keyword} onSearch={setKeyword} />
@@ -66,25 +66,33 @@ function HomePage() {
           posts.map((post) => <PostCard key={post.id} post={post} />)
         )}
       </ListArea>
-    </section>
+    </Container>
   );
 }
+
+const Container = styled.section`
+  /* 시안: 콘텐츠 폭 840, 상단 여백 48 */
+  max-width: 840px;
+  margin: 0 auto;
+  padding-top: ${({ theme }) => theme.spacing(12)};
+`;
 
 const TitleRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: ${({ theme }) => `${theme.spacing(4)} 0`};
+  /* 시안: Welcome 영역과 탭 사이 32 */
+  margin-bottom: ${({ theme }) => theme.spacing(8)};
 `;
 
 const Title = styled.h1`
-  font-size: ${({ theme }) => theme.fontSize.xl};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  font-size: ${({ theme }) => theme.fontSize.xxxl};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme }) => theme.colors.text};
 `;
 
 const ListArea = styled.div`
-  padding-top: ${({ theme }) => theme.spacing(4)};
+  padding-top: ${({ theme }) => theme.spacing(8)};
 `;
 
 export default HomePage;

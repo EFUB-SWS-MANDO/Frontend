@@ -37,8 +37,9 @@ const Row = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: ${({ theme }) => theme.spacing(3)};
-  padding: ${({ theme }) => `${theme.spacing(3)} 0`};
-  min-height: 48px;
+  /* 시안: 탭 아래 32, 높이 36, 목록까지 32 */
+  margin-top: ${({ theme }) => theme.spacing(8)};
+  min-height: 36px;
 `;
 
 const Chips = styled.div`
