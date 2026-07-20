@@ -9,8 +9,9 @@ import EmptyState from '@/components/EmptyState/EmptyState';
 import { useAuthStore } from '@/stores/authStore';
 
 function ProfilePage() {
-  const { userId } = useParams();
+  const { userId: rawUserId } = useParams();
   const myUser = useAuthStore((state) => state.user);
+  const userId = rawUserId === 'me' ? myUser?.id : rawUserId;
   const isOwner = String(userId) === String(myUser?.id);
 
   const { profile, isLoading: profileLoading, error: profileError } = useProfile(userId);
