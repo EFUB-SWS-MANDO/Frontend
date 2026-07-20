@@ -12,6 +12,11 @@ import ProfilePage from '@/pages/ProfilePage';
 import AiHomePage from '@/pages/ai/AiHomePage';
 import CoverLetterPage from '@/pages/ai/CoverLetterPage';
 import InterviewPage from '@/pages/ai/InterviewPage';
+import InterviewSelectPage from '@/pages/ai/InterviewSelectPage';
+import InterviewSessionPage from '@/pages/ai/InterviewSessionPage';
+import InterviewResultPage from '@/pages/ai/InterviewResultPage';
+import HistoryPage from '@/pages/ai/HistoryPage';
+import SavedPage from '@/pages/ai/SavedPage';
 
 export const router = createBrowserRouter([
   { path: '/splash', element: <SplashPage /> },
@@ -33,6 +38,11 @@ export const router = createBrowserRouter([
           { index: true, element: <AiHomePage /> },
           { path: 'cover-letter', element: <CoverLetterPage /> },
           { path: 'interview', element: <InterviewPage /> },
+          { path: 'interview/select/:mode', element: <InterviewSelectPage /> },
+          { path: 'interview/session', element: <InterviewSessionPage /> },
+          { path: 'interview/result', element: <InterviewResultPage /> },
+          { path: 'history', element: <HistoryPage /> },
+          { path: 'saved', element: <SavedPage /> },
         ],
       },
     ],
