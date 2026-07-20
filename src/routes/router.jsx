@@ -1,4 +1,5 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { useAuthStore } from '@/stores/authStore';
 import RootLayout from '@/layouts/RootLayout';
 import SplashPage from '@/pages/SplashPage';
 import LoginPage from '@/pages/LoginPage';
@@ -13,6 +14,12 @@ import AiHomePage from '@/pages/ai/AiHomePage';
 import CoverLetterPage from '@/pages/ai/CoverLetterPage';
 import InterviewPage from '@/pages/ai/InterviewPage';
 
+// 미로그인 상태로 루트 진입 시 스플래시(온보딩)부터 시작
+function HomeGate() {
+  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
+  return isLoggedIn ? <HomePage /> : <Navigate to="/splash" replace />;
+}
+
 export const router = createBrowserRouter([
   { path: '/splash', element: <SplashPage /> },
   { path: '/login', element: <LoginPage /> },
@@ -22,7 +29,7 @@ export const router = createBrowserRouter([
     path: '/',
     element: <RootLayout />, // 네비게이션 바 + Outlet
     children: [
-      { index: true, element: <HomePage /> },
+      { index: true, element: <HomeGate /> },
       { path: 'posts/:postId', element: <PostDetailPage /> },
       { path: 'write', element: <PostWritePage /> },
       { path: 'mypage', element: <MyPage /> },
