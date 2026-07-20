@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
 import styled from 'styled-components';
-import Button from '@/components/Button/Button';
 import { useSignup } from '@/features/auth/api/useSignup';
 
 const NICKNAME_MIN = 2;
@@ -74,9 +73,9 @@ function ProfileSetupForm({ onSuccess }) {
 
       {error && <ErrorText>가입에 실패했어요. 다시 시도해 주세요.</ErrorText>}
 
-      <Button type="submit" disabled={!isValidNickname || isSubmitting}>
+      <SubmitButton type="submit" disabled={!isValidNickname || isSubmitting}>
         {isSubmitting ? '가입 중...' : '시작하기'}
-      </Button>
+      </SubmitButton>
     </Form>
   );
 }
@@ -85,7 +84,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing(5)};
+  gap: ${({ theme }) => theme.spacing(6)};
   width: 100%;
 
   > button[type='submit'] {
@@ -94,8 +93,10 @@ const Form = styled.form`
 `;
 
 const AvatarButton = styled.button`
-  width: 96px;
-  height: 96px;
+  /* 시안: 프로필 이미지 116×116, 입력 영역과 64 간격 */
+  width: 116px;
+  height: 116px;
+  margin-bottom: ${({ theme }) => theme.spacing(10)};
   border-radius: ${({ theme }) => theme.radius.full};
   overflow: hidden;
   background: ${({ theme }) => theme.colors.bgSub};
@@ -149,6 +150,22 @@ const Helper = styled.p`
 const ErrorText = styled.p`
   color: ${({ theme }) => theme.colors.error};
   font-size: ${({ theme }) => theme.fontSize.sm};
+`;
+
+/* 시안: 초록 pill 버튼, 높이 52 */
+const SubmitButton = styled.button`
+  height: 52px;
+  border-radius: ${({ theme }) => theme.radius.full};
+  background: ${({ theme }) => theme.colors.primary};
+  color: #fff;
+  font-size: ${({ theme }) => theme.fontSize.md};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;
 
 export default ProfileSetupForm;
