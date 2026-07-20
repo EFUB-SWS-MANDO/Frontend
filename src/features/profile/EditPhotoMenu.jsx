@@ -10,9 +10,6 @@ function EditPhotoMenu({ onClick }) {
 }
 
 const IconButton = styled.button`
-  position: absolute;
-  top: ${({ theme }) => theme.spacing(6)};
-  right: ${({ theme }) => theme.spacing(6)};
   background: none;
   border: none;
   cursor: pointer;
