@@ -12,7 +12,7 @@ function RootLayout() {
       <Content>
         <Outlet />
       </Content>
-      <FloatingButton onClick={() => navigate('/write')}>+</FloatingButton>
+      <FloatingButton onClick={() => navigate('/write')}>글쓰기 +</FloatingButton>
     </Wrapper>
   );
 }
@@ -30,14 +30,16 @@ const Content = styled.main`
 `;
 const FloatingButton = styled.button`
   position: fixed;
-  right: 20px;
-  bottom: 20px;
-  width: 56px;
-  height: 56px;
+  /* 시안 Development 노트: 항상 화면 하단 52px, 오른쪽 40px 위치 */
+  right: 40px;
+  bottom: 52px;
+  padding: ${({ theme }) => `${theme.spacing(3)} ${theme.spacing(5)}`};
   border-radius: ${({ theme }) => theme.radius.full};
-  background: ${({ theme }) => theme.colors.primary};
+  background: ${({ theme }) => theme.colors.text};
   color: #fff;
-  font-size: 28px;
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   z-index: 15;
 `;
 
