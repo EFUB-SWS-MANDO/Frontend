@@ -1,4 +1,3 @@
-// 과거 기록 / 저장 목록 목 데이터 (자기소개서·모의 면접 탭별, 날짜별 그룹)
 export const MOCK_HISTORY = {
   coverLetter: [
     {

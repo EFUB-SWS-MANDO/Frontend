@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import PageHeader from '@/components/PageHeader/PageHeader';
 import { useInterview } from '@/features/ai/api/useInterview';
 
-// 모의면접 총평: 오늘의 면접 점수 + 총평
 function InterviewResultPage() {
   const navigate = useNavigate();
   const { summary } = useInterview();
@@ -70,7 +69,6 @@ const BoxText = styled.p`
   line-height: 1.7;
 `;
 
-/* 시안: 초록 pill 버튼, 높이 52 */
 const FinishButton = styled.button`
   display: block;
   margin: 0 auto;

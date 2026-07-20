@@ -26,7 +26,6 @@ const MODE_CONFIG = {
   },
 };
 
-// 모의면접 선택 화면: 활동 / 카테고리(태그) / 자소서 기반 3가지 모드
 function InterviewSelectPage() {
   const { mode } = useParams();
   const navigate = useNavigate();
@@ -41,7 +40,6 @@ function InterviewSelectPage() {
   const config = MODE_CONFIG[mode] ?? MODE_CONFIG.activity;
   const q = keyword.trim().toLowerCase();
 
-  // 모드별 선택 대상 (검색어 필터 적용)
   const candidates =
     mode === 'category'
       ? CATEGORIES.filter((c) => c.toLowerCase().includes(q))
@@ -207,7 +205,6 @@ const TagChip = styled.button`
     $selected ? '#fff' : theme.colors.textSub};
 `;
 
-/* 시안: 초록 pill 버튼, 높이 52 */
 const SubmitButton = styled.button`
   display: block;
   margin: ${({ theme }) => `${theme.spacing(8)} auto 0`};

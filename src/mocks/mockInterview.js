@@ -1,4 +1,3 @@
-// 모의면접 진행용 목 데이터 (AI 연동 전)
 export const MOCK_INTERVIEW_QUESTIONS = [
   {
     id: 1,

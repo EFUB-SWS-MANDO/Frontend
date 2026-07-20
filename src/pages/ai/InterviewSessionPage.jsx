@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import PageHeader from '@/components/PageHeader/PageHeader';
 import { useInterview } from '@/features/ai/api/useInterview';
 
-// 모의면접 진행: AI 질문 → 답변 작성 → 피드백 확인 → (추가질문 반복) → 총평
 function InterviewSessionPage() {
   const navigate = useNavigate();
   const [answer, setAnswer] = useState('');
@@ -183,7 +182,6 @@ const SubButton = styled.button`
   color: ${({ theme }) => theme.colors.text};
 `;
 
-/* 시안: 초록 pill 버튼, 높이 52 */
 const PrimaryButton = styled.button`
   display: block;
   margin: 0 auto;

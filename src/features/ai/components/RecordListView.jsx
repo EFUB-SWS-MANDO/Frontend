@@ -11,7 +11,6 @@ const TABS = [
   { key: 'interview', label: '모의 면접' },
 ];
 
-// 과거 기록 / 저장 목록 공용 뷰: 탭 + 날짜별 그룹 리스트
 function RecordListView({ title, type }) {
   const [activeTab, setActiveTab] = useState('coverLetter');
   const [selected, setSelected] = useState(() => new Set());

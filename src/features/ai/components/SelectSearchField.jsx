@@ -1,7 +1,6 @@
 import styled, { useTheme } from 'styled-components';
 import SearchIcon from '@/asset/icons/SearchIcon';
 
-// 선택 화면 공통 검색 입력 (지우기 × + 검색 아이콘)
 function SelectSearchField({ value, onChange }) {
   const theme = useTheme();
 

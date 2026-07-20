@@ -1,4 +1,3 @@
-// 모의면접 자소서 기반 선택용 목 데이터 (날짜별 그룹)
 export const MOCK_COVER_LETTERS = [
   {
     date: '2026.01.12',

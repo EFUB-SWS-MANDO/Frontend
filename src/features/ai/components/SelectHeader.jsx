@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-// 선택 화면 공통 상단: 안내 문구 + 복수선택 안내 + 모두 선택 버튼
 function SelectHeader({ guide, onSelectAll, allSelected }) {
   return (
     <Wrapper>

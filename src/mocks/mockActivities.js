@@ -1,4 +1,3 @@
-// 모의면접 활동 선택용 목 데이터
 export const MOCK_ACTIVITIES = [
   { id: 1, name: '교내 해커톤 참가', keyword: '기획·개발 협업, 24시간 몰입' },
   { id: 2, name: '동아리 세미나 운영', keyword: '발표 자료 제작, 진행 리딩' },

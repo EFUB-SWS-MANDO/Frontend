@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-// 뒤로가기 + 가운데 타이틀 공통 헤더 (모의면접/과거 기록/저장 목록 등)
 function PageHeader({ title, onBack }) {
   const navigate = useNavigate();
 

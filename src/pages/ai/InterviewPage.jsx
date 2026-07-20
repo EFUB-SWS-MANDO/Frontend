@@ -20,7 +20,6 @@ const SELECT_MODES = [
   },
 ];
 
-// 모의면접 시작: 활동 불러오기 방식 선택
 function InterviewPage() {
   const navigate = useNavigate();
 
