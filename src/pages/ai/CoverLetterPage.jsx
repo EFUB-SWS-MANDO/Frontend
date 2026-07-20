@@ -5,8 +5,11 @@ import ArrowLeftIcon from '../../asset/icons/ArrowLeftIcon';
 import CoverLetterStep1 from '../../features/coverLetter/components/CoverLetterStep1';
 import CoverLetterStep2 from '../../features/coverLetter/components/CoverLetterStep2';
 import CoverLetterStep3 from '../../features/coverLetter/components/CoverLetterStep3';
+import CoverLetterStep4 from '../../features/coverLetter/components/CoverLetterStep4';
+import CoverLetterStep5 from '../../features/coverLetter/components/CoverLetterStep5';
+import { buildMockDraftAnswers } from '../../features/coverLetter/mocks/drafts';
 
-const TOTAL_STEPS = 3;
+const TOTAL_STEPS = 4;
 
 const CoverLetterPage = () => {
   const navigate = useNavigate();
@@ -16,10 +19,31 @@ const CoverLetterPage = () => {
   const [questions, setQuestions] = useState([
     { id: 1, content: '', maxLength: '' },
   ]);
+  const [draftAnswers, setDraftAnswers] = useState({});
+  const [draftVariant, setDraftVariant] = useState(0);
+  const [activeQuestionId, setActiveQuestionId] = useState(null);
 
   const goNext = () => setStep((prev) => Math.min(prev + 1, TOTAL_STEPS));
+
+  const handleGenerateDrafts = () => {
+    setDraftAnswers(buildMockDraftAnswers(questions, draftVariant));
+    goNext();
+  };
+
+  const handleRegenerateDrafts = () => {
+    const nextVariant = draftVariant + 1;
+    setDraftVariant(nextVariant);
+    setDraftAnswers(buildMockDraftAnswers(questions, nextVariant));
+  };
+
+  const handleFinish = () => {
+    navigate('/ai');
+  };
+
   const goBack = () => {
-    if (step === 1) {
+    if (activeQuestionId !== null) {
+      setActiveQuestionId(null);
+    } else if (step === 1) {
       navigate(-1);
     } else {
       setStep((prev) => prev - 1);
@@ -43,9 +67,30 @@ const CoverLetterPage = () => {
           <CoverLetterStep3
             questions={questions}
             setQuestions={setQuestions}
-            onNext={goNext}
+            onNext={handleGenerateDrafts}
           />
         );
+      case 4: {
+        if (activeQuestionId !== null) {
+          const activeIndex = questions.findIndex((q) => q.id === activeQuestionId);
+          return (
+            <CoverLetterStep5
+              index={activeIndex}
+              question={questions[activeIndex]}
+              draft={draftAnswers[activeQuestionId]}
+            />
+          );
+        }
+        return (
+          <CoverLetterStep4
+            questions={questions}
+            draftAnswers={draftAnswers}
+            onSelectQuestion={setActiveQuestionId}
+            onRestart={handleRegenerateDrafts}
+            onFinish={handleFinish}
+          />
+        );
+      }
       default:
         return <PlaceholderText>아직 준비 중인 단계예요.</PlaceholderText>;
     }
