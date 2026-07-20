@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
 import LeafIcon from '@/asset/icons/LeafIcon';
 
-// AI 홈: 자소서/모의 면접/저장 목록 진입 화면
 function AiHomePage() {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -32,7 +31,6 @@ function AiHomePage() {
 const Container = styled.section`
   max-width: 756px;
   margin: 0 auto;
-  /* 시안: 헤더 아래 140px */
   padding-top: ${({ theme }) => theme.spacing(35)};
 `;
 
@@ -41,7 +39,6 @@ const GreetingArea = styled.div`
   flex-direction: column;
   align-items: center;
   gap: ${({ theme }) => theme.spacing(10)};
-  /* 시안: 인사 영역과 카드 사이 80px */
   margin-bottom: ${({ theme }) => theme.spacing(20)};
 `;
 
@@ -54,7 +51,6 @@ const Greeting = styled.h1`
 const CardGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  /* 시안: 카드끼리 24px, 카드-저장 목록 15px */
   column-gap: ${({ theme }) => theme.spacing(6)};
   row-gap: 15px;
 `;
