@@ -21,6 +21,9 @@ function AiHomePage() {
         <MenuCard type="button" onClick={() => navigate('/ai/interview')}>
           <CardLabel>모의 면접</CardLabel>
         </MenuCard>
+        <WideCard type="button" onClick={() => navigate('/ai/saved')}>
+          <CardLabel>저장 목록</CardLabel>
+        </WideCard>
       </CardGrid>
     </Container>
   );
@@ -66,6 +69,12 @@ const MenuCard = styled.button`
     border-color: ${({ theme }) => theme.colors.primary};
     background: ${({ theme }) => theme.colors.bgSub};
   }
+`;
+
+const WideCard = styled(MenuCard)`
+  grid-column: 1 / -1;
+  min-height: 0;
+  align-items: center;
 `;
 
 const CardLabel = styled.span`
