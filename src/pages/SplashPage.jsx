@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styled, { keyframes } from 'styled-components';
 import { useAuthStore } from '@/stores/authStore';
 import AuthLayout from '@/features/auth/components/AuthLayout';
 import SproutLogo from '@/features/auth/components/SproutLogo';
@@ -20,9 +21,32 @@ function SplashPage() {
 
   return (
     <AuthLayout>
-      <SproutLogo size="lg" />
+      <LogoArea>
+        <SproutLogo size="lg" />
+        <LoadingDot aria-hidden />
+      </LogoArea>
     </AuthLayout>
   );
 }
+
+const pulse = keyframes`
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+`;
+
+const LogoArea = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing(4)};
+`;
+
+const LoadingDot = styled.span`
+  width: 8px;
+  height: 8px;
+  border-radius: ${({ theme }) => theme.radius.full};
+  background: ${({ theme }) => theme.colors.primary};
+  animation: ${pulse} 1s ease-in-out infinite;
+`;
 
 export default SplashPage;

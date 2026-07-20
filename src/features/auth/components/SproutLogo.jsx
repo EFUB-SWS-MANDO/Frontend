@@ -5,24 +5,25 @@ import LeafIcon from '@/asset/icons/LeafIcon';
 function SproutLogo({ size = 'md' }) {
   const theme = useTheme();
   return (
-    <Wrapper>
+    <Wrapper $size={size}>
       <LeafIcon color={theme.colors.primary} size={sizes[size].icon} />
       <Wordmark $size={size}>SPROUT</Wordmark>
     </Wrapper>
   );
 }
 
+// lg는 시안 수치(리프 59, 워드마크 높이 33, 간격 32) 기준
 const sizes = {
-  sm: { icon: 28, font: 'md' },
-  md: { icon: 40, font: 'lg' },
-  lg: { icon: 56, font: 'xl' },
+  sm: { icon: 28, font: 'md', gap: 2 },
+  md: { icon: 40, font: 'lg', gap: 2 },
+  lg: { icon: 59, font: 'xl', gap: 8 },
 };
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing(2)};
+  gap: ${({ theme, $size }) => theme.spacing(sizes[$size].gap)};
 `;
 
 const Wordmark = styled.span`
