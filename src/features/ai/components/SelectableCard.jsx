@@ -21,12 +21,14 @@ const Card = styled.button`
   justify-content: space-between;
   gap: ${({ theme }) => theme.spacing(3)};
   width: 100%;
-  padding: ${({ theme }) => `${theme.spacing(3)} ${theme.spacing(4)}`};
+  /* 시안: 패딩 12/20, 그림자 */
+  padding: ${({ theme }) => `${theme.spacing(3)} ${theme.spacing(5)}`};
   border: 1px solid
     ${({ theme, $selected }) =>
       $selected ? theme.colors.primary : theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.md};
   background: ${({ theme }) => theme.colors.bg};
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   text-align: left;
 `;
 
@@ -50,8 +52,9 @@ const CheckCircle = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  /* 시안: 체크 아이콘 24 */
+  width: 24px;
+  height: 24px;
   flex-shrink: 0;
   border-radius: ${({ theme }) => theme.radius.full};
   font-size: ${({ theme }) => theme.fontSize.xs};

@@ -207,15 +207,18 @@ const TagChip = styled.button`
     $selected ? '#fff' : theme.colors.textSub};
 `;
 
+/* 시안: 초록 pill 버튼, 높이 52 */
 const SubmitButton = styled.button`
   display: block;
   margin: ${({ theme }) => `${theme.spacing(8)} auto 0`};
-  padding: ${({ theme }) => `${theme.spacing(2.5)} ${theme.spacing(12)}`};
+  height: 52px;
+  padding: ${({ theme }) => `0 ${theme.spacing(12)}`};
   border-radius: ${({ theme }) => theme.radius.full};
   background: ${({ theme }) => theme.colors.primary};
   color: #fff;
-  font-size: ${({ theme }) => theme.fontSize.sm};
+  font-size: ${({ theme }) => theme.fontSize.md};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 
   &:disabled {
     opacity: 0.5;
