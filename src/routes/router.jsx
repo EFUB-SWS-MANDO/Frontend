@@ -15,6 +15,7 @@ import InterviewPage from '@/pages/ai/InterviewPage';
 import InterviewSelectPage from '@/pages/ai/InterviewSelectPage';
 import InterviewSessionPage from '@/pages/ai/InterviewSessionPage';
 import InterviewResultPage from '@/pages/ai/InterviewResultPage';
+import HistoryPage from '@/pages/ai/HistoryPage';
 
 export const router = createBrowserRouter([
   { path: '/splash', element: <SplashPage /> },
@@ -39,6 +40,7 @@ export const router = createBrowserRouter([
           { path: 'interview/select/:mode', element: <InterviewSelectPage /> },
           { path: 'interview/session', element: <InterviewSessionPage /> },
           { path: 'interview/result', element: <InterviewResultPage /> },
+          { path: 'history', element: <HistoryPage /> },
         ],
       },
     ],
