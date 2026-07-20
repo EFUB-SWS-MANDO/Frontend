@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import AuthLayout from '@/features/auth/components/AuthLayout';
 import { TERMS } from '@/constants/terms';
 
-// 약관동의: 약관 전문 확인 후 다음 단계로 (시안: 박스 275×355 + 버튼 350×52)
 function TermsPage() {
   const navigate = useNavigate();
 
@@ -31,7 +30,6 @@ function TermsPage() {
   );
 }
 
-/* 시안: 약관 박스와 버튼 사이 62 */
 const Content = styled.div`
   display: flex;
   flex-direction: column;
@@ -39,7 +37,6 @@ const Content = styled.div`
   gap: 62px;
 `;
 
-/* 시안: 275×355, radius 30, 회색 배경 */
 const TermsBox = styled.div`
   width: 275px;
   height: 355px;
@@ -69,7 +66,6 @@ const TermBody = styled.pre`
   white-space: pre-wrap;
 `;
 
-/* 시안: 350×52, pill, 흰 배경 + 테두리 + 그림자 */
 const NextButton = styled.button`
   width: 350px;
   max-width: 100%;

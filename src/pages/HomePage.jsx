@@ -9,7 +9,6 @@ import PostSearch from '@/features/post/components/PostSearch';
 import Spinner from '@/components/Spinner/Spinner';
 import EmptyState from '@/components/EmptyState/EmptyState';
 
-// 메인(글목록): Welcome 헤더 + 탭 + 필터 + 검색 + 글 목록. 로딩/에러/빈 상태 항상 처리.
 function HomePage() {
   const [activeTab, setActiveTab] = useState('all');
   const [filters, setFilters] = useState({ recruitStatus: 'all', tags: [] });
@@ -71,7 +70,6 @@ function HomePage() {
 }
 
 const Container = styled.section`
-  /* 시안: 콘텐츠 폭 840, 상단 여백 48 */
   max-width: 840px;
   margin: 0 auto;
   padding-top: ${({ theme }) => theme.spacing(12)};
@@ -81,7 +79,6 @@ const TitleRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* 시안: Welcome 영역과 탭 사이 32 */
   margin-bottom: ${({ theme }) => theme.spacing(8)};
 `;
 

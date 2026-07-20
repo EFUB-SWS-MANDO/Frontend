@@ -36,7 +36,7 @@ export const theme = {
     textSub: '#9197AC',      // gray700
     border: '#E1E3ED',       // gray300
     error: '#E03131',        // 기존 유지
-    kakao: '#FFE607', // Figma 시안 카카오 버튼 색
+    kakao: '#FFE607',
     kakaoText: '#191919',
   },
   fontSize: {
@@ -46,7 +46,7 @@ export const theme = {
     lg: '20px',
     xl: '24px',
     xxl: '32px',
-    xxxl: '36px', // Figma --size-xxxxl (Welcome 등 페이지 대제목)
+    xxxl: '36px',
   },
   fontWeight: { regular: 400, medium: 500, semibold: 600, bold: 700 },
   radius: { sm: '8px', md: '12px', lg: '20px', full: '9999px' },

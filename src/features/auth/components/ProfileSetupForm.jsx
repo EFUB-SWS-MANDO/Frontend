@@ -5,7 +5,6 @@ import { useSignup } from '@/features/auth/api/useSignup';
 const NICKNAME_MIN = 2;
 const NICKNAME_MAX = 10;
 
-// 정보설정: 프로필 이미지(선택) + 닉네임 입력 → 가입 완료
 function ProfileSetupForm({ onSuccess }) {
   const fileInputRef = useRef(null);
   const [nickname, setNickname] = useState('');
@@ -93,7 +92,6 @@ const Form = styled.form`
 `;
 
 const AvatarButton = styled.button`
-  /* 시안: 프로필 이미지 116×116, 입력 영역과 64 간격 */
   width: 116px;
   height: 116px;
   margin-bottom: ${({ theme }) => theme.spacing(10)};
@@ -152,7 +150,6 @@ const ErrorText = styled.p`
   font-size: ${({ theme }) => theme.fontSize.sm};
 `;
 
-/* 시안: 초록 pill 버튼, 높이 52 */
 const SubmitButton = styled.button`
   height: 52px;
   border-radius: ${({ theme }) => theme.radius.full};

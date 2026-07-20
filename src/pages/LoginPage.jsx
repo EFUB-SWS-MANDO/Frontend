@@ -17,7 +17,6 @@ function LoginPage() {
   );
 }
 
-/* 시안: 콘텐츠 폭 384, 로고 영역과 버튼 사이 94 */
 const Content = styled.div`
   display: flex;
   flex-direction: column;

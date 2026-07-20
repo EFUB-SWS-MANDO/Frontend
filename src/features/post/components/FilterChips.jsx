@@ -6,7 +6,6 @@ export const RECRUIT_LABELS = {
   closed: '모집 완료',
 };
 
-// 적용된 필터 칩 목록 + 필터 모달 열기 버튼
 function FilterChips({ filters, onRemoveTag, onClearRecruit, onOpenModal }) {
   const theme = useTheme();
   const { tags, recruitStatus } = filters;
@@ -37,7 +36,6 @@ const Row = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: ${({ theme }) => theme.spacing(3)};
-  /* 시안: 탭 아래 32, 높이 36, 목록까지 32 */
   margin-top: ${({ theme }) => theme.spacing(8)};
   min-height: 36px;
 `;

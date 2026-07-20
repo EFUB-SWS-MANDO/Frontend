@@ -5,7 +5,6 @@ export const FEED_TABS = [
   { key: 'following', label: '팔로우 중' },
 ];
 
-// 메인 목록 상단 전체/팔로우 중 탭
 function FeedTabs({ activeTab, onChange }) {
   return (
     <TabList role="tablist">
@@ -27,7 +26,6 @@ function FeedTabs({ activeTab, onChange }) {
 
 const TabList = styled.div`
   display: flex;
-  /* 시안: 탭 높이 42, 하단 보더 2px */
   height: 42px;
   border-bottom: 2px solid ${({ theme }) => theme.colors.gray100};
 `;

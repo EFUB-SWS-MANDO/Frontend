@@ -11,7 +11,6 @@ function KakaoLoginButton() {
   );
 }
 
-/* 시안: 384×52, pill, #FFE607, 16px/500 grey-900 */
 const StyledButton = styled.button`
   display: flex;
   align-items: center;

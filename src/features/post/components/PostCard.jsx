@@ -34,7 +34,6 @@ function PostCard({ post }) {
 }
 
 const Card = styled.article`
-  /* 시안: 패딩 24, radius 12, 카드 간 20, 그림자 */
   padding: ${({ theme }) => theme.spacing(6)};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.md};
