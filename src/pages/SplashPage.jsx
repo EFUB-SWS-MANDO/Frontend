@@ -23,15 +23,20 @@ function SplashPage() {
     <AuthLayout>
       <LogoArea>
         <SproutLogo size="lg" />
-        <LoadingDot aria-hidden />
+        <LoadingDots aria-hidden>
+          <Dot />
+          <Dot $delay={0.4} />
+          <Dot $delay={0.8} />
+        </LoadingDots>
       </LogoArea>
     </AuthLayout>
   );
 }
 
-const pulse = keyframes`
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
+// 시안: 점 3개(12px, 간격 8px)가 1→2→3 순서로 green500으로 바뀜
+const cycle = keyframes`
+  0%, 27% { background: var(--dot-active); }
+  33%, 100% { background: var(--dot-base); }
 `;
 
 const LogoArea = styled.div`
@@ -41,12 +46,20 @@ const LogoArea = styled.div`
   gap: ${({ theme }) => theme.spacing(4)};
 `;
 
-const LoadingDot = styled.span`
-  width: 8px;
-  height: 8px;
+const LoadingDots = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing(2)};
+`;
+
+const Dot = styled.span`
+  --dot-base: ${({ theme }) => theme.colors.green100};
+  --dot-active: ${({ theme }) => theme.colors.green500};
+  width: 12px;
+  height: 12px;
   border-radius: ${({ theme }) => theme.radius.full};
-  background: ${({ theme }) => theme.colors.primary};
-  animation: ${pulse} 1s ease-in-out infinite;
+  background: var(--dot-base);
+  animation: ${cycle} 1.2s infinite;
+  animation-delay: ${({ $delay = 0 }) => $delay}s;
 `;
 
 export default SplashPage;
