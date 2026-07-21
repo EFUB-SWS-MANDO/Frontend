@@ -31,12 +31,12 @@ export const theme = {
     primaryLight: '#9CDDA9', // green200
     point: '#FF6B6B',        // Figma에 별도 값 없어서 기존 유지
     bg: '#FFFFFF',           // white
-    bgSub: '#F6F7FA',        // gray50
-    pageBg: '#FCFCFC',       // 사이드바/헤더 제외 전역 콘텐츠 배경
-    text: '#494D5A',         // gray900
-    textSub: '#9197AC',      // gray700
-    border: '#E1E3ED',       // gray300
-    error: '#E03131',        // 기존 유지
+    bgSub: '#F5F7FA',        // Figma grey-50
+    pageBg: '#FCFCFC',       // Figma grey-30, 사이드바/헤더 제외 전역 콘텐츠 배경
+    text: '#2C303D',         // Figma grey-900
+    textSub: '#656A7A',      // Figma grey-700
+    border: '#EAECF1',       // Figma grey-100
+    error: '#FF4747',        // Figma red-100
     kakao: '#FFE607',
     kakaoText: '#191919',
   },
