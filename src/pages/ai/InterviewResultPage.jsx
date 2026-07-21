@@ -26,7 +26,7 @@ function InterviewResultPage() {
 }
 
 const Container = styled.section`
-  max-width: 560px;
+  max-width: 838px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
