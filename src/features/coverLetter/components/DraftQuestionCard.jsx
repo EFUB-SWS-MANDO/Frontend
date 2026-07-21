@@ -92,7 +92,7 @@ const DraftBox = styled.div`
     ${({ theme, $selected }) => ($selected ? theme.colors.primary : theme.colors.border)};
   border-radius: ${({ theme }) => theme.radius.md};
   min-height: 90px;
-  background: none;
+  background: ${({ theme }) => theme.colors.bg};
   font-size: ${({ theme }) => theme.fontSize.xs};
   font-family: inherit;
   color: ${({ theme }) => theme.colors.text};

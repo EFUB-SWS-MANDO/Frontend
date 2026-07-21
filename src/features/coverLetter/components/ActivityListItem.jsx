@@ -30,6 +30,7 @@ const ItemWrapper = styled.div`
     ${({ theme, $selected }) =>
       $selected ? theme.colors.primary : theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.md};
+  background: ${({ theme }) => theme.colors.bg};
   cursor: pointer;
   transition: border-color 0.15s ease;
 

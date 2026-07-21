@@ -132,6 +132,7 @@ const SearchBox = styled.div`
   padding: ${({ theme }) => theme.spacing(3)} ${({ theme }) => theme.spacing(4)};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.full};
+  background: ${({ theme }) => theme.colors.bg};
 `;
 
 const SearchInput = styled.input`
