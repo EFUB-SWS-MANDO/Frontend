@@ -44,10 +44,11 @@
 
 ### Frontend
 
-| 이름 | 담당 영역 | GitHub |
-|:---:|:---|:---:|
-| 🍥 **최주희** | 진입 · 인증 플로우, 메인 피드, AI 모의면접 | [@dearosmar](https://github.com/dearosmar) |
-| 🧸 **오나연** | 마이페이지 · 프로필, 게시글 작성/상세, AI 자소서 | [@nayeon653](https://github.com/nayeon653) |
+| 구분 | 🍥 최주희 | 🧸 오나연 |
+| :--- | :--- | :--- |
+| **Image** | <img width="300" alt="IMG_3652" src="https://github.com/user-attachments/assets/ba32ca5f-cf2e-412a-b808-89d7e5643cc0" /> | <img width="300" alt="IMG_3651" src="https://github.com/user-attachments/assets/f737fcfe-0053-490c-8142-3285c766df0b" /> |
+| **담당 영역** | 진입 · 인증 플로우, 메인 피드, AI 모의면접 | 마이페이지 · 프로필, 게시글 작성/상세, AI 자소서 |
+| **GitHub** | [@dearosmar](https://github.com/dearosmar) | [@nayeon653](https://github.com/nayeon653) |
 
 <br/>
 
