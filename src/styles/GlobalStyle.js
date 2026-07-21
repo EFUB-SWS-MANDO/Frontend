@@ -4,7 +4,7 @@ export const GlobalStyle = createGlobalStyle`
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body, #root { height: 100%; }
   body {
-    font-family: 'Pretendard', -apple-system, sans-serif;
+    font-family: 'Wanted Sans Variable', 'Wanted Sans', 'Pretendard', -apple-system, sans-serif;
     color: ${({ theme }) => theme.colors.text};
     background: ${({ theme }) => theme.colors.pageBg};
     -webkit-font-smoothing: antialiased;
