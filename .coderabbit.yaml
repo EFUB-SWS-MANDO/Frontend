@@ -1,0 +1,83 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# SPROUT Frontend - CodeRabbit 설정
+# 검증: https://docs.coderabbit.ai/configuration/yaml-validator
+
+language: "ko-KR"
+
+tone_instructions: |
+  주니어 개발자로 구성된 2인 팀입니다.
+  단순히 문제만 지적하지 말고, 왜 문제인지와 어떻게 고치면 되는지를 함께 알려주세요.
+  트집 잡기보다 배울 수 있는 리뷰를 지향합니다.
+
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  review_status: true
+  collapse_walkthrough: false
+  poem: false
+
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - "develop"
+      - "main"
+
+  # 리뷰 대상에서 제외할 경로
+  path_filters:
+    - "!**/node_modules/**"
+    - "!**/dist/**"
+    - "!**/build/**"
+    - "!**/*.lock"
+    - "!package-lock.json"
+    - "!**/public/**"
+    - "!**/*.svg"
+    - "!**/*.png"
+    - "!**/*.jpg"
+
+  # 경로별 리뷰 기준
+  path_instructions:
+    - path: "src/**/*.{js,jsx}"
+      instructions: |
+        [네이밍]
+        - 변수/함수는 카멜케이스, 컴포넌트와 파일명은 파스칼케이스
+        - 커스텀 훅은 반드시 use 접두사
+        - Boolean 값은 is / has / should 로 시작
+        - 상수는 대문자 스네이크케이스
+
+        [React]
+        - useEffect의 의존성 배열 누락이나 불필요한 의존성을 지적해주세요
+        - key prop에 index를 사용한 경우 지적해주세요
+        - 불필요한 리렌더링을 유발하는 패턴(인라인 객체/함수를 props로 전달 등)을 확인해주세요
+        - 조건부 렌더링에서 && 사용 시 0이 렌더링되는 케이스를 확인해주세요
+
+    - path: "src/pages/**"
+      instructions: |
+        페이지 컴포넌트는 얇게 유지하는 것이 이 프로젝트의 원칙입니다.
+        비즈니스 로직이나 복잡한 UI가 페이지에 직접 들어 있으면
+        features/ 하위 도메인 폴더로 분리하도록 제안해주세요.
+
+    - path: "src/features/**/api/**"
+      instructions: |
+        서버 통신은 이 폴더의 커스텀 훅에서만 이루어져야 합니다.
+        로딩/에러 상태 처리가 누락되지 않았는지 확인하고,
+        axiosInstance를 거치지 않고 axios를 직접 import한 경우 지적해주세요.
+
+    - path: "src/components/**"
+      instructions: |
+        두 개 이상의 도메인에서 재사용되는 공통 UI만 위치해야 합니다.
+        특정 도메인에서만 쓰이는 컴포넌트라면 해당 features/ 폴더로 옮기도록 제안해주세요.
+        색상, 폰트, spacing은 theme에서 가져와야 하며 하드코딩된 값은 지적해주세요.
+
+    - path: "src/stores/**"
+      instructions: |
+        zustand 스토어는 전역 클라이언트 상태만 다룹니다.
+        서버 데이터를 스토어에 넣고 있다면 features/*/api 훅으로 옮기도록 제안해주세요.
+
+    - path: "**/*.{test,spec}.{js,jsx}"
+      instructions: |
+        테스트 코드는 가볍게 리뷰해주세요. 스타일 지적은 생략합니다.
+
+chat:
+  auto_reply: true
