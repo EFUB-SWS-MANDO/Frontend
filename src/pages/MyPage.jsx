@@ -4,6 +4,7 @@ import { useMyPageData } from '@/features/mypage/api/useMyPageData';
 import GoalMessageCard from '@/features/mypage/components/GoalMessageCard';
 import StatsSummary from '@/features/mypage/components/StatsSummary';
 import ActivityRecordList from '@/features/mypage/components/ActivityRecordList';
+import WithdrawButton from '@/features/auth/components/WithdrawButton';
 import Spinner from '@/components/Spinner/Spinner';
 import EmptyState from '@/components/EmptyState/EmptyState';
 
@@ -24,6 +25,7 @@ function MyPage() {
         <StatsSummary stats={stats} />
         <ActivityRecordList records={records} />
       </StatsSection>
+      <WithdrawButton />
     </Wrapper>
   );
 }
