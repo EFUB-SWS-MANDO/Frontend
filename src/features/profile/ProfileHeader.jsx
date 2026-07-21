@@ -26,8 +26,6 @@ function ProfileHeader({ user, isOwner }) {
 
   return (
     <Wrapper>
-      {isOwner && <EditPhotoMenu onClick={handleEditPhoto} />}
-
       <TopRow>
         <ProfileInfo>
           {user?.profileImage ? (
@@ -38,7 +36,6 @@ function ProfileHeader({ user, isOwner }) {
           <TextGroup>
             <NameRow>
               <Name>{user?.name}</Name>
-              <LeafEmoji>🌱</LeafEmoji>
             </NameRow>
             <Intro>{user?.intro}</Intro>
             <FollowCounts>
@@ -49,6 +46,7 @@ function ProfileHeader({ user, isOwner }) {
         </ProfileInfo>
 
         <ActionArea>
+          {isOwner && <EditPhotoMenu onClick={handleEditPhoto} />}
           {isOwner ? (
             <EditIntroButton onClick={handleEditIntro} />
           ) : (
@@ -61,15 +59,13 @@ function ProfileHeader({ user, isOwner }) {
 }
 
 const Wrapper = styled.section`
-  position: relative;
-  background: ${({ theme }) => theme.colors.bg};
   padding: ${({ theme }) => theme.spacing(10)} ${({ theme }) => theme.spacing(6)} ${({ theme }) => theme.spacing(8)};
 `;
 
 const TopRow = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 `;
 
 const ProfileInfo = styled.div`
@@ -79,8 +75,8 @@ const ProfileInfo = styled.div`
 `;
 
 const Avatar = styled.img`
-  width: 120px;
-  height: 120px;
+  width: 104px;
+  height: 104px;
   border-radius: ${({ theme }) => theme.radius.full};
   object-fit: cover;
   background: ${({ theme }) => theme.colors.bgSub};
@@ -89,8 +85,8 @@ const Avatar = styled.img`
 `;
 
 const AvatarPlaceholder = styled.div`
-  width: 120px;
-  height: 120px;
+  width: 104px;
+  height: 104px;
   border-radius: ${({ theme }) => theme.radius.full};
   background: ${({ theme }) => theme.colors.bgSub};
   border: 1px solid ${({ theme }) => theme.colors.border};
@@ -115,10 +111,6 @@ const Name = styled.h2`
   color: ${({ theme }) => theme.colors.text};
 `;
 
-const LeafEmoji = styled.span`
-  font-size: ${({ theme }) => theme.fontSize.xl};
-`;
-
 const Intro = styled.p`
   font-size: ${({ theme }) => theme.fontSize.sm};
   color: ${({ theme }) => theme.colors.textSub};
@@ -135,6 +127,10 @@ const FollowCounts = styled.div`
 `;
 
 const ActionArea = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: ${({ theme }) => theme.spacing(3)};
   flex-shrink: 0;
 `;
 

@@ -1,5 +1,6 @@
 // src/pages/ProfilePage.jsx
 import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
 import { useProfile } from '@/features/profile/api/useProfile';
 import { usePosts } from '@/features/post/api/usePosts';
 import ProfileHeader from '@/features/profile/ProfileHeader';
@@ -23,14 +24,27 @@ function ProfilePage() {
   return (
     <div>
       <ProfileHeader user={profile} isOwner={isOwner} />
-      <h3>{isOwner ? '내가 쓴 글' : `${profile?.name}님의 글`}</h3>
-      {posts.length === 0 ? (
-        <EmptyState />
-      ) : (
-        posts.map((post) => <PostCard key={post.id} post={post} />)
-      )}
+      <PostSection>
+        <SectionTitle>{isOwner ? '내가 쓴 글' : `${profile?.name}님의 글`}</SectionTitle>
+        {posts.length === 0 ? (
+          <EmptyState />
+        ) : (
+          posts.map((post) => <PostCard key={post.id} post={post} />)
+        )}
+      </PostSection>
     </div>
   );
 }
+
+const PostSection = styled.div`
+  padding: ${({ theme }) => theme.spacing(6)};
+`;
+
+const SectionTitle = styled.h3`
+  font-size: ${({ theme }) => theme.fontSize.lg};
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  color: ${({ theme }) => theme.colors.text};
+  margin-bottom: ${({ theme }) => theme.spacing(4)};
+`;
 
 export default ProfilePage;
