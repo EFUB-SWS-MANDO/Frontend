@@ -9,6 +9,7 @@ export const useAuthStore = create(
       isLoggedIn: false,
       setAuth: ({ accessToken, user }) =>
         set({ accessToken, user, isLoggedIn: true }),
+      setAccessToken: (accessToken) => set({ accessToken }),
       logout: () => set({ accessToken: null, user: null, isLoggedIn: false }),
     }),
     { name: 'sprout-auth' },

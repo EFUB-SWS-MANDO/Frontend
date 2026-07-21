@@ -1,22 +1,52 @@
-// API 경로를 한 곳에서 관리 (오타/중복 방지)
 export const ENDPOINTS = {
   auth: {
-    kakaoLogin: '/auth/kakao',
-    signup: '/auth/signup', // 약관 동의 + 닉네임/프로필 설정 완료
-    me: '/auth/me',
+    signIn: '/api/auth/sign-in',
+    signOut: '/api/auth/sign-out',
+    refresh: '/api/auth/refresh',
   },
-  posts: {
-    list: '/posts',
-    detail: (id) => `/posts/${id}`,
-    like: (id) => `/posts/${id}/like`,
-    comments: (id) => `/posts/${id}/comments`,
+  member: {
+    withdraw: '/api/members',
   },
   profile: {
-    detail: (userId) => `/users/${userId}`,
-    follow: (userId) => `/users/${userId}/follow`,
+    create: '/api/me/profiles',
+    update: '/api/me/profiles',
+    detail: (memberId) => `/api/members/${memberId}/profiles`,
   },
-  ai: {
-    coverLetter: '/ai/cover-letter',
-    interview: '/ai/interview',
+  posts: {
+    list: '/api/posts',
+    create: '/api/posts',
+    detail: (postId) => `/api/posts/${postId}`,
+    update: (postId) => `/api/posts/${postId}`,
+    remove: (postId) => `/api/posts/${postId}`,
+    likes: (postId) => `/api/posts/${postId}/likes`,
+    comments: (postId) => `/api/posts/${postId}/comments`,
+  },
+  comments: {
+    update: (commentId) => `/api/comments/${commentId}`,
+    remove: (commentId) => `/api/comments/${commentId}`,
+  },
+  follow: {
+    toggle: (memberId) => `/api/members/${memberId}/follow`,
+  },
+  resumes: {
+    list: '/api/resumes',
+    create: '/api/resumes',
+    detail: (resumeId) => `/api/resumes/${resumeId}`,
+    remove: (resumeId) => `/api/resumes/${resumeId}`,
+  },
+  interviews: {
+    list: '/api/interviews',
+    create: '/api/interviews',
+    detail: (sessionId) => `/api/interviews/${sessionId}`,
+    remove: (sessionId) => `/api/interviews/${sessionId}`,
+    question: (sessionId) => `/api/interviews/${sessionId}/question`,
+    stream: (sessionId) => `/api/interviews/${sessionId}/stream`,
+    feedback: (sessionId) => `/api/interviews/${sessionId}/feedback`,
+  },
+  templates: {
+    list: '/api/templates',
+  },
+  categories: {
+    list: '/api/categories',
   },
 };
