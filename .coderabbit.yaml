@@ -41,7 +41,8 @@ reviews:
     - path: "src/**/*.{js,jsx}"
       instructions: |
         [네이밍]
-        - 변수/함수는 카멜케이스, 컴포넌트와 파일명은 파스칼케이스
+        - 변수/함수는 카멜케이스
+        - 컴포넌트 파일명은 파스칼케이스(PascalCase), 커스텀 훅/스토어/유틸 등 일반 로직 파일명은 카멜케이스(camelCase)를 사용
         - 커스텀 훅은 반드시 use 접두사
         - Boolean 값은 is / has / should 로 시작
         - 상수는 대문자 스네이크케이스
@@ -62,7 +63,8 @@ reviews:
       instructions: |
         서버 통신은 이 폴더의 커스텀 훅에서만 이루어져야 합니다.
         로딩/에러 상태 처리가 누락되지 않았는지 확인하고,
-        axiosInstance를 거치지 않고 axios를 직접 import한 경우 지적해주세요.
+        내부 백엔드 API 호출 시 axiosInstance를 거치지 않고 axios를 직접 import한 경우 지적해주세요.
+        (단, 카카오 로그인 등 외부 OAuth 토큰 엔드포인트를 직접 호출하는 경우는 예외로 허용합니다.)
 
     - path: "src/components/**"
       instructions: |
