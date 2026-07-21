@@ -42,7 +42,7 @@ const TermsBox = styled.div`
   height: 355px;
   padding: ${({ theme }) => theme.spacing(5)};
   border-radius: 30px;
-  background: ${({ theme }) => theme.colors.bgSub};
+  background: ${({ theme }) => theme.colors.gray100};
   overflow-y: auto;
   display: flex;
   flex-direction: column;
