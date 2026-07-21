@@ -109,7 +109,7 @@ function InterviewSessionPage() {
 }
 
 const Container = styled.section`
-  max-width: 560px;
+  max-width: 838px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -224,9 +224,8 @@ const SubButton = styled.button`
 
 const PrimaryButton = styled.button`
   display: block;
-  margin: 0 auto;
+  width: 100%;
   height: 52px;
-  padding: ${({ theme }) => `0 ${theme.spacing(12)}`};
   border-radius: ${({ theme }) => theme.radius.full};
   background: ${({ theme }) => theme.colors.primary};
   color: #fff;
