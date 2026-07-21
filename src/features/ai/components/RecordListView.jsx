@@ -80,17 +80,18 @@ const Container = styled.section`
 
 const TabList = styled.div`
   display: flex;
-  margin-bottom: ${({ theme }) => theme.spacing(4)};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  height: 42px;
+  margin-bottom: ${({ theme }) => theme.spacing(8)};
+  border-bottom: 2px solid ${({ theme }) => theme.colors.border};
 `;
 
 const Tab = styled.button`
   flex: 1;
-  padding: ${({ theme }) => theme.spacing(2.5)};
-  margin-bottom: -1px;
+  padding: 0;
+  margin-bottom: -2px;
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme, $active }) =>
-    $active ? theme.fontWeight.bold : theme.fontWeight.regular};
+    $active ? theme.fontWeight.semibold : theme.fontWeight.regular};
   color: ${({ theme, $active }) =>
     $active ? theme.colors.primary : theme.colors.textSub};
   border-bottom: 2px solid
