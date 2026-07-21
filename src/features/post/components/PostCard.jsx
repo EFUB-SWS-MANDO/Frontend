@@ -1,9 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import CommentIcon from '@/asset/icons/CommentIcon';
 import LeafIcon from '@/asset/icons/LeafIcon';
 
 function PostCard({ post }) {
+  const theme = useTheme();
   const navigate = useNavigate();
 
   const handleCardClick = () => {
@@ -25,8 +26,12 @@ function PostCard({ post }) {
           <CreatedAt>{post.createdAt}</CreatedAt>
         </AuthorInfo>
         <Stats>
-          <span><CommentIcon color="#6B7280" size={16} /> {post.commentCount}</span>
-          <span><LeafIcon color="#6B7280" size={16} /> {post.likeCount}</span>
+          <span>
+            <CommentIcon color={theme.colors.textSub} size={16} /> {post.commentCount}
+          </span>
+          <span>
+            <LeafIcon color={theme.colors.textSub} size={16} /> {post.likeCount}
+          </span>
         </Stats>
       </Footer>
     </Card>
