@@ -63,7 +63,7 @@ function PostDetailPage() {
 }
 
 const Wrapper = styled.div`
-  background: ${({ theme }) => theme.colors.bg};
+  background: ${({ theme }) => theme.colors.pageBg};
   display: flex;
   flex-direction: column;
 `;

@@ -16,6 +16,7 @@ const Content = styled.div`
   padding: ${({ theme }) => theme.spacing(6)};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.lg};
+  background-color: ${({ theme }) => theme.colors.bg};
   font-size: ${({ theme }) => theme.fontSize.md};
   color: ${({ theme }) => theme.colors.text};
   line-height: 1.7;
