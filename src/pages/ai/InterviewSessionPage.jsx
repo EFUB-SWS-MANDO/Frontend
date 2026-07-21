@@ -18,8 +18,7 @@ function InterviewSessionPage() {
     isSubmitting,
     submitAnswer,
     nextQuestion,
-    prevQuestion,
-    hasPrevQuestion,
+    followUpQuestion,
   } = useInterview();
 
   const isFeedbackStep = feedback !== null;
@@ -35,8 +34,8 @@ function InterviewSessionPage() {
     resetAnswerState();
   };
 
-  const handlePrevQuestion = () => {
-    prevQuestion();
+  const handleFollowUpQuestion = () => {
+    followUpQuestion();
     resetAnswerState();
   };
 
@@ -89,12 +88,8 @@ function InterviewSessionPage() {
       ) : (
         <>
           <ButtonRow>
-            <SubButton
-              type="button"
-              disabled={!hasPrevQuestion}
-              onClick={handlePrevQuestion}
-            >
-              이전질문 받기
+            <SubButton type="button" onClick={handleFollowUpQuestion}>
+              꼬리질문 받기
             </SubButton>
             <SubButton type="button" onClick={handleNextQuestion}>
               추가질문 받기

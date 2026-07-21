@@ -26,9 +26,9 @@ export function useInterview() {
     setQuestionIndex((prev) => (prev + 1) % MOCK_INTERVIEW_QUESTIONS.length);
   };
 
-  const prevQuestion = () => {
+  const followUpQuestion = () => {
     setFeedback(null);
-    setQuestionIndex((prev) => Math.max(prev - 1, 0));
+    setQuestionIndex((prev) => (prev + 1) % MOCK_INTERVIEW_QUESTIONS.length);
   };
 
   return {
@@ -37,8 +37,7 @@ export function useInterview() {
     isSubmitting,
     submitAnswer,
     nextQuestion,
-    prevQuestion,
-    hasPrevQuestion: questionIndex > 0,
+    followUpQuestion,
     summary: MOCK_INTERVIEW_SUMMARY,
   };
 }
