@@ -1,5 +1,11 @@
 import styled from 'styled-components';
 
+const FIELDS = [
+  { key: 'basicInfo', placeholder: '기본 정보' },
+  { key: 'activity', placeholder: '활동 내용' },
+  { key: 'reflection', placeholder: '성찰 및 성장' },
+];
+
 function TemplateWriteForm({ value, onChange }) {
   const handleFieldChange = (field, fieldValue) => {
     onChange({ ...value, [field]: fieldValue });
@@ -7,77 +13,54 @@ function TemplateWriteForm({ value, onChange }) {
 
   return (
     <Wrapper>
-      <Field>
-        <Label>기본정보</Label>
-        <Input
-          placeholder="텍스트를 입력하세요"
-          value={value.basicInfo}
-          onChange={(e) => handleFieldChange('basicInfo', e.target.value)}
+      {FIELDS.map((field) => (
+        <FieldArea
+          key={field.key}
+          placeholder={field.placeholder}
+          value={value[field.key]}
+          onChange={(e) => handleFieldChange(field.key, e.target.value)}
         />
-      </Field>
-      <Field>
-        <Label>활동 내용</Label>
-        <Input
-          placeholder="텍스트를 입력하세요"
-          value={value.activity}
-          onChange={(e) => handleFieldChange('activity', e.target.value)}
-        />
-      </Field>
-      <Field>
-        <Label>성찰 및 성장</Label>
-        <Input
-          placeholder="텍스트를 입력하세요"
-          value={value.reflection}
-          onChange={(e) => handleFieldChange('reflection', e.target.value)}
-        />
-      </Field>
-      <Field>
-        <Label>증빙자료</Label>
-        <UploadRow>업로드하기</UploadRow>
-      </Field>
+      ))}
+      <UploadArea type="button">증빙자료</UploadArea>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  height: 100%;
+  border: 1px solid ${({ theme }) => theme.colors.gray100};
   border-radius: ${({ theme }) => theme.radius.lg};
-  padding: ${({ theme }) => theme.spacing(5)};
+  background: ${({ theme }) => theme.colors.bg};
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing(5)};
 `;
 
-const Field = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing(1)};
-`;
-
-const Label = styled.span`
-  font-size: ${({ theme }) => theme.fontSize.sm};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.text};
-`;
-
-const Input = styled.input`
+const FieldArea = styled.textarea`
+  width: 100%;
+  min-height: 96px;
+  padding: ${({ theme }) => theme.spacing(4)};
   border: none;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  padding: ${({ theme }) => theme.spacing(1)} 0;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray100};
+  background: ${({ theme }) => theme.colors.bg};
   font-size: ${({ theme }) => theme.fontSize.sm};
   color: ${({ theme }) => theme.colors.text};
+  font-family: inherit;
+  resize: none;
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.textSub};
   }
 `;
 
-const UploadRow = styled.button`
+const UploadArea = styled.button`
+  flex: 1;
+  min-height: 96px;
+  padding: ${({ theme }) => theme.spacing(4)};
+  background: ${({ theme }) => theme.colors.bg};
   text-align: left;
-  padding: ${({ theme }) => theme.spacing(1)} 0;
   font-size: ${({ theme }) => theme.fontSize.sm};
   color: ${({ theme }) => theme.colors.textSub};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 export default TemplateWriteForm;

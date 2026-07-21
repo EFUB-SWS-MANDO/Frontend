@@ -48,6 +48,7 @@ function PostTypeDropdown({ value, onChange }) {
 
 const Wrapper = styled.div`
   position: relative;
+  flex: 1;
 `;
 
 const Trigger = styled.button`
@@ -56,12 +57,13 @@ const Trigger = styled.button`
   justify-content: space-between;
   width: 100%;
   padding: ${({ theme }) => theme.spacing(4)};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.lg};
+  border: 1px solid ${({ theme }) => theme.colors.gray100};
+  border-radius: ${({ theme }) => theme.radius.full};
   background-color: ${({ theme }) => theme.colors.bg} !important;
   font-size: ${({ theme }) => theme.fontSize.md};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme }) => theme.colors.text};
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 `;
 
 const Arrow = styled.span`

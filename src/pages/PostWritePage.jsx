@@ -8,6 +8,7 @@ import AttachmentButtons from '@/features/post/components/AttachmentButtons';
 import CategorySelector from '@/features/post/components/CategorySelector';
 import VisibilityToggle from '@/features/post/components/VisibilityToggle';
 import CompletionToast from '@/features/post/components/CompletionToast';
+import ArrowRightIcon from '@/asset/icons/ArrowRightIcon';
 
 function PostWritePage() {
   const navigate = useNavigate();
@@ -51,13 +52,12 @@ function PostWritePage() {
 
   return (
     <Wrapper>
-      <TopRow>
-        <CloseButton onClick={handleClose} aria-label="닫기">✕</CloseButton>
-      </TopRow>
-
       {step === 1 && (
         <>
-          <PostTypeDropdown value={postType} onChange={setPostType} />
+          <TopRow>
+            <CloseButton onClick={handleClose} aria-label="닫기">✕</CloseButton>
+            <PostTypeDropdown value={postType} onChange={setPostType} />
+          </TopRow>
 
           <FormArea>
             {postType === 'free' ? (
@@ -69,13 +69,20 @@ function PostWritePage() {
 
           <BottomRow>
             <AttachmentButtons onPhotoSelect={setPhotos} onFileSelect={setFiles} />
-            <NextButton onClick={handleNext}>다음 →</NextButton>
+            <NextButton onClick={handleNext}>
+              다음
+              <ArrowRightIcon color="#494D5A" size={16} />
+            </NextButton>
           </BottomRow>
         </>
       )}
 
       {step === 2 && (
         <>
+          <TopRow>
+            <CloseButton onClick={handleClose} aria-label="닫기">✕</CloseButton>
+          </TopRow>
+
           <SectionTitle>내가 쓴 글</SectionTitle>
           <PreviewBox>{postType === 'free' ? freeContent : templateContent.activity}</PreviewBox>
 
@@ -104,15 +111,23 @@ const Wrapper = styled.div`
 
 const TopRow = styled.div`
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing(4)};
 `;
 
 const CloseButton = styled.button`
+  flex-shrink: 0;
   font-size: ${({ theme }) => theme.fontSize.lg};
   color: ${({ theme }) => theme.colors.text};
 `;
 
-const FormArea = styled.div``;
+const FormArea = styled.div`
+  flex: 1;
+
+  & > * {
+    min-height: 380px;
+  }
+`;
 
 const BottomRow = styled.div`
   display: flex;
@@ -123,13 +138,15 @@ const BottomRow = styled.div`
 const NextButton = styled.button`
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing(1)};
+  gap: ${({ theme }) => theme.spacing(2)};
   padding: ${({ theme }) => theme.spacing(3)} ${({ theme }) => theme.spacing(6)};
   border-radius: ${({ theme }) => theme.radius.full};
-  background-color: ${({ theme }) => theme.colors.text} !important;
-  color: ${({ theme }) => theme.colors.bg};
+  border: 1px solid ${({ theme }) => theme.colors.gray100};
+  background-color: ${({ theme }) => theme.colors.bg} !important;
+  color: ${({ theme }) => theme.colors.text};
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 `;
 
 const SectionTitle = styled.h3`
