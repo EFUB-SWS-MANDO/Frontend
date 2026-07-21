@@ -59,7 +59,7 @@ const Heading = styled.h2`
 const CardList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing(4)};
+  gap: ${({ theme }) => theme.spacing(6)};
   max-width: 838px;
   margin: 0 auto;
 `;
