@@ -40,6 +40,7 @@ const CardWrapper = styled.div`
   padding: ${({ theme }) => theme.spacing(4)};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.md};
+  background: ${({ theme }) => theme.colors.bg};
 
   & + & {
     margin-top: ${({ theme }) => theme.spacing(3)};
