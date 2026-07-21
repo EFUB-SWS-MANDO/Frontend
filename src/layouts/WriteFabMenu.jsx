@@ -1,10 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import writeFabIcon from '@/asset/write-fab.svg';
+import writeFreeIcon from '@/asset/write-free.svg';
+import writeTemplateIcon from '@/asset/write-template.svg';
 
 const WRITE_OPTIONS = [
-  { postType: 'free', label: '자유글' },
-  { postType: 'template', label: '템플릿' },
+  { postType: 'free', label: '자유글', icon: writeFreeIcon },
+  { postType: 'template', label: '템플릿', icon: writeTemplateIcon },
 ];
 
 function WriteFabMenu() {
@@ -31,17 +34,24 @@ function WriteFabMenu() {
     <Wrapper ref={wrapperRef}>
       {isOpen &&
         WRITE_OPTIONS.map((option) => (
-          <OptionButton key={option.postType} onClick={() => handleSelect(option.postType)}>
-            {option.label}
-          </OptionButton>
+          <IconButton
+            key={option.postType}
+            onClick={() => handleSelect(option.postType)}
+            aria-label={option.label}
+          >
+            <img src={option.icon} alt="" />
+          </IconButton>
         ))}
-      <FabButton onClick={() => setIsOpen((prev) => !prev)}>글쓰기 +</FabButton>
+      <IconButton onClick={() => setIsOpen((prev) => !prev)} aria-label="글쓰기">
+        <img src={writeFabIcon} alt="" />
+      </IconButton>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
   position: fixed;
+  /* 시안 Development 노트: 항상 화면 하단 52px, 오른쪽 40px 위치 */
   right: 40px;
   bottom: 52px;
   display: flex;
@@ -51,25 +61,16 @@ const Wrapper = styled.div`
   z-index: 15;
 `;
 
-const FabButton = styled.button`
-  padding: ${({ theme }) => `${theme.spacing(3)} ${theme.spacing(5)}`};
-  border-radius: ${({ theme }) => theme.radius.full};
-  background: ${({ theme }) => theme.colors.text};
-  color: ${({ theme }) => theme.colors.white};
-  font-size: ${({ theme }) => theme.fontSize.sm};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-`;
+const IconButton = styled.button`
+  display: block;
+  padding: 0;
+  border: none;
+  background: none;
+  line-height: 0;
 
-const OptionButton = styled.button`
-  padding: ${({ theme }) => `${theme.spacing(2)} ${theme.spacing(4)}`};
-  border: 1px solid ${({ theme }) => theme.colors.gray100};
-  border-radius: ${({ theme }) => theme.radius.full};
-  background: ${({ theme }) => theme.colors.bg};
-  color: ${({ theme }) => theme.colors.text};
-  font-size: ${({ theme }) => theme.fontSize.sm};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  img {
+    display: block;
+  }
 `;
 
 export default WriteFabMenu;
