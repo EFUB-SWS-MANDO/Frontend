@@ -50,25 +50,26 @@ function InterviewPage() {
 const Heading = styled.h2`
   margin: ${({ theme }) => `${theme.spacing(10)} 0`};
   text-align: center;
-  font-size: ${({ theme }) => theme.fontSize.lg};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.text};
-  line-height: 1.5;
+  font-size: ${({ theme }) => theme.fontSize.xl};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  color: ${({ theme }) => theme.colors.black};
+  line-height: ${29 / 24};
 `;
 
 const CardList = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing(4)};
-  max-width: 480px;
+  max-width: 838px;
   margin: 0 auto;
 `;
 
 const ModeCard = styled.button`
-  padding: ${({ theme }) => `${theme.spacing(4)} ${theme.spacing(5)}`};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.md};
+  padding: ${({ theme }) => `${theme.spacing(4)} ${theme.spacing(16)}`};
+  border: 1px solid ${({ theme }) => theme.colors.gray100};
+  border-radius: 24px;
   background: ${({ theme }) => theme.colors.bg};
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   text-align: center;
 
   &:hover {
@@ -78,7 +79,7 @@ const ModeCard = styled.button`
 `;
 
 const ModeLabel = styled.p`
-  font-size: ${({ theme }) => theme.fontSize.sm};
+  font-size: ${({ theme }) => theme.fontSize.md};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: ${({ theme }) => theme.spacing(1)};

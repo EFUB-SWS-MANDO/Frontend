@@ -163,7 +163,7 @@ function InterviewSelectPage() {
 }
 
 const Container = styled.section`
-  max-width: 560px;
+  max-width: 838px;
   margin: 0 auto;
 `;
 
