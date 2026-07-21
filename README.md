@@ -1,4 +1,4 @@
-# 🌱 SPROUT
+# 🍃 SPROUT
 
 > AI와 함께 쌓아가는 커리어 아카이브
 > EFUB SWS(Summer Web Surf) MANDO 팀 프로젝트
