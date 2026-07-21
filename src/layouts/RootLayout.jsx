@@ -1,10 +1,15 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from './Header';
 import Navbar from './Navbar';
 import WriteFabMenu from './WriteFabMenu';
 
+const WRITE_FAB_PATHS = [/^\/$/, /^\/profile\//];
+
 function RootLayout() {
+  const { pathname } = useLocation();
+  const showWriteFab = WRITE_FAB_PATHS.some((pattern) => pattern.test(pathname));
+
   return (
     <Wrapper>
       <Header />
@@ -12,7 +17,7 @@ function RootLayout() {
       <Content>
         <Outlet />
       </Content>
-      <WriteFabMenu />
+      {showWriteFab && <WriteFabMenu />}
     </Wrapper>
   );
 }

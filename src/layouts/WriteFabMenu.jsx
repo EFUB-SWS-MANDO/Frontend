@@ -50,7 +50,6 @@ function WriteFabMenu() {
 }
 
 const Wrapper = styled.div`
-  position: fixed;
   right: 40px;
   bottom: 52px;
   display: flex;

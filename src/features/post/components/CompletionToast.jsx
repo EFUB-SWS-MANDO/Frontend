@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
+import TickCircleBulkIcon from '@/asset/icons/TickCircleBulkIcon';
 
 function CompletionToast({ onDone }) {
   useEffect(() => {
@@ -12,7 +13,7 @@ function CompletionToast({ onDone }) {
   return (
     <Overlay>
       <Card>
-        <CheckCircle>✓</CheckCircle>
+        <TickCircleBulkIcon color="#00BF63" size={50} />
         <Text>글 작성이 완료되었어요!</Text>
       </Card>
     </Overlay>
@@ -30,6 +31,8 @@ const Overlay = styled.div`
 `;
 
 const Card = styled.div`
+  width: 407px;
+  max-width: calc(100vw - ${({ theme }) => theme.spacing(8)});
   background: ${({ theme }) => theme.colors.bg};
   border-radius: ${({ theme }) => theme.radius.lg};
   padding: ${({ theme }) => theme.spacing(8)};
@@ -37,19 +40,7 @@ const Card = styled.div`
   flex-direction: column;
   align-items: center;
   gap: ${({ theme }) => theme.spacing(4)};
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-`;
-
-const CheckCircle = styled.div`
-  width: 48px;
-  height: 48px;
-  border-radius: ${({ theme }) => theme.radius.full};
-  background: ${({ theme }) => theme.colors.primaryLight};
-  color: ${({ theme }) => theme.colors.primaryDark};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: ${({ theme }) => theme.fontSize.xl};
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
 `;
 
 const Text = styled.p`

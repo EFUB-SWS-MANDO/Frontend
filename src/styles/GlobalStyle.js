@@ -6,7 +6,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     font-family: 'Pretendard', -apple-system, sans-serif;
     color: ${({ theme }) => theme.colors.text};
-    background: ${({ theme }) => theme.colors.bg};
+    background: ${({ theme }) => theme.colors.pageBg};
     -webkit-font-smoothing: antialiased;
   }
   a { color: inherit; text-decoration: none; }
