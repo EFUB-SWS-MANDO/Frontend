@@ -1,24 +1,42 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import PageHeader from '@/components/PageHeader/PageHeader';
+import CopyIcon from '@/asset/icons/CopyIcon';
+import SaveIcon from '@/asset/icons/SaveIcon';
 import { useInterview } from '@/features/ai/api/useInterview';
 
 function InterviewSessionPage() {
+  const theme = useTheme();
   const navigate = useNavigate();
   const [answer, setAnswer] = useState('');
   const [isSaved, setIsSaved] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
-  const { question, feedback, isSubmitting, submitAnswer, nextQuestion } =
-    useInterview();
+  const {
+    question,
+    feedback,
+    isSubmitting,
+    submitAnswer,
+    nextQuestion,
+    followUpQuestion,
+  } = useInterview();
 
   const isFeedbackStep = feedback !== null;
 
-  const handleNextQuestion = () => {
-    nextQuestion();
+  const resetAnswerState = () => {
     setAnswer('');
     setIsSaved(false);
     setIsCopied(false);
+  };
+
+  const handleNextQuestion = () => {
+    nextQuestion();
+    resetAnswerState();
+  };
+
+  const handleFollowUpQuestion = () => {
+    followUpQuestion();
+    resetAnswerState();
   };
 
   const handleCopy = async () => {
@@ -52,9 +70,11 @@ function InterviewSessionPage() {
           </FeedbackBox>
           <ActionRow>
             <ActionButton type="button" onClick={handleCopy}>
+              <CopyIcon size={20} color={theme.colors.textSub} />
               {isCopied ? '복사됨' : '복사하기'}
             </ActionButton>
             <ActionButton type="button" onClick={() => setIsSaved(true)}>
+              <SaveIcon size={20} color={theme.colors.textSub} />
               {isSaved ? '저장됨' : '저장하기'}
             </ActionButton>
           </ActionRow>
@@ -68,6 +88,9 @@ function InterviewSessionPage() {
       ) : (
         <>
           <ButtonRow>
+            <SubButton type="button" onClick={handleFollowUpQuestion}>
+              꼬리질문 받기
+            </SubButton>
             <SubButton type="button" onClick={handleNextQuestion}>
               추가질문 받기
             </SubButton>
@@ -86,11 +109,11 @@ function InterviewSessionPage() {
 }
 
 const Container = styled.section`
-  max-width: 560px;
+  max-width: 838px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing(4)};
+  gap: ${({ theme }) => theme.spacing(6)};
 `;
 
 const QuestionRow = styled.div`
@@ -157,10 +180,14 @@ const FeedbackBox = styled.div`
 const ActionRow = styled.div`
   display: flex;
   justify-content: center;
-  gap: ${({ theme }) => theme.spacing(6)};
+  gap: ${({ theme }) => theme.spacing(10)};
 `;
 
 const ActionButton = styled.button`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing(1)};
   font-size: ${({ theme }) => theme.fontSize.xs};
   color: ${({ theme }) => theme.colors.textSub};
 
@@ -171,22 +198,34 @@ const ActionButton = styled.button`
 
 const ButtonRow = styled.div`
   display: flex;
-  justify-content: flex-end;
+  gap: ${({ theme }) => theme.spacing(4)};
 `;
 
 const SubButton = styled.button`
-  padding: ${({ theme }) => `${theme.spacing(2)} ${theme.spacing(4)}`};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  flex: 1;
+  height: 52px;
+  border: 1px solid ${({ theme }) => theme.colors.gray100};
   border-radius: ${({ theme }) => theme.radius.full};
-  font-size: ${({ theme }) => theme.fontSize.sm};
+  background: ${({ theme }) => theme.colors.bg};
+  font-size: ${({ theme }) => theme.fontSize.md};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme }) => theme.colors.text};
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.bgSub};
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;
 
 const PrimaryButton = styled.button`
   display: block;
-  margin: 0 auto;
+  width: 100%;
   height: 52px;
-  padding: ${({ theme }) => `0 ${theme.spacing(12)}`};
   border-radius: ${({ theme }) => theme.radius.full};
   background: ${({ theme }) => theme.colors.primary};
   color: #fff;

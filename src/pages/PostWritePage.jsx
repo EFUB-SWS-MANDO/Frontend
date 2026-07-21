@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import PostTypeDropdown from '@/features/post/components/PostTypeDropdown';
 import FreeWriteForm from '@/features/post/components/FreeWriteForm';
@@ -12,9 +12,10 @@ import ArrowRightIcon from '@/asset/icons/ArrowRightIcon';
 
 function PostWritePage() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [step, setStep] = useState(1);
-  const [postType, setPostType] = useState('free');
+  const [postType, setPostType] = useState(location.state?.postType ?? 'free');
   const [freeContent, setFreeContent] = useState('');
   const [templateContent, setTemplateContent] = useState({
     basicInfo: '',

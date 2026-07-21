@@ -26,12 +26,18 @@ export function useInterview() {
     setQuestionIndex((prev) => (prev + 1) % MOCK_INTERVIEW_QUESTIONS.length);
   };
 
+  const followUpQuestion = () => {
+    setFeedback(null);
+    setQuestionIndex((prev) => (prev + 1) % MOCK_INTERVIEW_QUESTIONS.length);
+  };
+
   return {
     question: current.question,
     feedback,
     isSubmitting,
     submitAnswer,
     nextQuestion,
+    followUpQuestion,
     summary: MOCK_INTERVIEW_SUMMARY,
   };
 }

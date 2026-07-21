@@ -3,6 +3,7 @@ import { useAuthStore } from '@/stores/authStore';
 import RootLayout from '@/layouts/RootLayout';
 import SplashPage from '@/pages/SplashPage';
 import LoginPage from '@/pages/LoginPage';
+import KakaoCallbackPage from '@/pages/KakaoCallbackPage';
 import TermsPage from '@/pages/TermsPage';
 import ProfileSetupPage from '@/pages/ProfileSetupPage';
 import HomePage from '@/pages/HomePage';
@@ -28,6 +29,7 @@ function HomeGate() {
 export const router = createBrowserRouter([
   { path: '/splash', element: <SplashPage /> },
   { path: '/login', element: <LoginPage /> },
+  { path: '/auth/kakao/callback', element: <KakaoCallbackPage /> },
   { path: '/signup/terms', element: <TermsPage /> },
   { path: '/signup/profile', element: <ProfileSetupPage /> },
   {

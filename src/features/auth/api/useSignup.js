@@ -29,10 +29,17 @@ export function useSignup() {
       formData.append('nickname', nickname);
       if (profileImageFile) formData.append('profileImage', profileImageFile);
 
-      const { data } = await api.post(ENDPOINTS.auth.signup, formData, {
+      const data = await api.post(ENDPOINTS.profile.create, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      setAuth({ accessToken: data.accessToken, user: data.user });
+      setAuth({
+        accessToken: useAuthStore.getState().accessToken,
+        user: {
+          id: data.memberId,
+          nickname: data.nickname,
+          profileImage: data.profileImage ?? null,
+        },
+      });
       return true;
     } catch (e) {
       setError(e);
