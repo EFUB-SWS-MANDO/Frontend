@@ -51,7 +51,6 @@ function WriteFabMenu() {
 
 const Wrapper = styled.div`
   position: fixed;
-  /* 시안 Development 노트: 항상 화면 하단 52px, 오른쪽 40px 위치 */
   right: 40px;
   bottom: 52px;
   display: flex;
