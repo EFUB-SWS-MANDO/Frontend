@@ -27,7 +27,7 @@ function FeedTabs({ activeTab, onChange }) {
 const TabList = styled.div`
   display: flex;
   height: 42px;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.gray100};
+  border-bottom: 2px solid ${({ theme }) => theme.colors.border};
 `;
 
 const Tab = styled.button`

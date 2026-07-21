@@ -66,7 +66,7 @@ const CardList = styled.div`
 
 const ModeCard = styled.button`
   padding: ${({ theme }) => `${theme.spacing(4)} ${theme.spacing(16)}`};
-  border: 1px solid ${({ theme }) => theme.colors.gray100};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 24px;
   background: ${({ theme }) => theme.colors.bg};
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);

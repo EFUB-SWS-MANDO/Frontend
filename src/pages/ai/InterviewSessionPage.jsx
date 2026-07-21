@@ -204,7 +204,7 @@ const ButtonRow = styled.div`
 const SubButton = styled.button`
   flex: 1;
   height: 52px;
-  border: 1px solid ${({ theme }) => theme.colors.gray100};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.full};
   background: ${({ theme }) => theme.colors.bg};
   font-size: ${({ theme }) => theme.fontSize.md};
