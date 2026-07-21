@@ -34,10 +34,10 @@ function PostCard({ post }) {
 }
 
 const Card = styled.article`
-  padding: ${({ theme }) => theme.spacing(5)};
+  padding: ${({ theme }) => theme.spacing(6)};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.md};
-  margin-bottom: ${({ theme }) => theme.spacing(4)};
+  margin-bottom: ${({ theme }) => theme.spacing(5)};
   background: ${({ theme }) => theme.colors.bg};
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   cursor: pointer;
@@ -49,16 +49,16 @@ const Card = styled.article`
 
 const Title = styled.h3`
   font-size: ${({ theme }) => theme.fontSize.md};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  font-weight: ${({ theme }) => theme.fontWeight.semibold};
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: ${({ theme }) => theme.spacing(2)};
 `;
 
 const Content = styled.p`
   font-size: ${({ theme }) => theme.fontSize.sm};
-  color: ${({ theme }) => theme.colors.textSub};
-  margin-bottom: ${({ theme }) => theme.spacing(3)};
-  line-height: 1.5;
+  color: ${({ theme }) => theme.colors.text};
+  margin-bottom: ${({ theme }) => theme.spacing(5)};
+  line-height: ${20 / 14};
 `;
 
 const Footer = styled.div`

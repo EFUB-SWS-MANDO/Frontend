@@ -36,7 +36,7 @@ export const theme = {
     textSub: '#9197AC',      // gray700
     border: '#E1E3ED',       // gray300
     error: '#E03131',        // 기존 유지
-    kakao: '#FEE500',
+    kakao: '#FFE607',
     kakaoText: '#191919',
   },
   fontSize: {
@@ -46,8 +46,9 @@ export const theme = {
     lg: '20px',
     xl: '24px',
     xxl: '32px',
+    xxxl: '36px',
   },
-  fontWeight: { regular: 400, medium: 500, bold: 700 },
+  fontWeight: { regular: 400, medium: 500, semibold: 600, bold: 700 },
   radius: { sm: '8px', md: '12px', lg: '20px', full: '9999px' },
   spacing: (n) => `${n * 4}px`, // spacing(4) -> 16px
   breakpoints: { mobile: '480px', tablet: '768px' },

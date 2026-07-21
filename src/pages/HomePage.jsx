@@ -9,7 +9,6 @@ import PostSearch from '@/features/post/components/PostSearch';
 import Spinner from '@/components/Spinner/Spinner';
 import EmptyState from '@/components/EmptyState/EmptyState';
 
-// 메인(글목록): Welcome 헤더 + 탭 + 필터 + 검색 + 글 목록. 로딩/에러/빈 상태 항상 처리.
 function HomePage() {
   const [activeTab, setActiveTab] = useState('all');
   const [filters, setFilters] = useState({ recruitStatus: 'all', tags: [] });
@@ -22,7 +21,7 @@ function HomePage() {
   });
 
   return (
-    <section>
+    <Container>
       <TitleRow>
         <Title>Welcome</Title>
         <PostSearch keyword={keyword} onSearch={setKeyword} />
@@ -66,25 +65,31 @@ function HomePage() {
           posts.map((post) => <PostCard key={post.id} post={post} />)
         )}
       </ListArea>
-    </section>
+    </Container>
   );
 }
+
+const Container = styled.section`
+  max-width: 840px;
+  margin: 0 auto;
+  padding-top: ${({ theme }) => theme.spacing(12)};
+`;
 
 const TitleRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: ${({ theme }) => `${theme.spacing(4)} 0`};
+  margin-bottom: ${({ theme }) => theme.spacing(8)};
 `;
 
 const Title = styled.h1`
-  font-size: ${({ theme }) => theme.fontSize.xl};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  font-size: ${({ theme }) => theme.fontSize.xxxl};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme }) => theme.colors.text};
 `;
 
 const ListArea = styled.div`
-  padding-top: ${({ theme }) => theme.spacing(4)};
+  padding-top: ${({ theme }) => theme.spacing(8)};
 `;
 
 export default HomePage;
