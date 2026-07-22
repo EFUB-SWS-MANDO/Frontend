@@ -9,7 +9,7 @@ function FollowButton({ isFollowing, onClick }) {
 }
 
 const Button = styled.button`
-  padding: ${({ theme }) => theme.spacing(2)} ${({ theme }) => theme.spacing(4)};
+  padding: ${({ theme }) => theme.spacing(1)} ${({ theme }) => theme.spacing(4)};
   border-radius: ${({ theme }) => theme.radius.full};
   border: 1px solid ${({ theme }) => theme.colors.primary};
   background-color: ${({ $active, theme }) => ($active ? theme.colors.bg : theme.colors.primary)};
