@@ -42,7 +42,7 @@ const TermsBox = styled.div`
   height: 355px;
   padding: ${({ theme }) => theme.spacing(5)};
   border-radius: 30px;
-  background: ${({ theme }) => theme.colors.bgSub};
+  background: ${({ theme }) => theme.colors.gray100};
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -71,7 +71,7 @@ const NextButton = styled.button`
   max-width: 100%;
   height: 52px;
   border-radius: ${({ theme }) => theme.radius.full};
-  border: 1px solid ${({ theme }) => theme.colors.gray100};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   background: ${({ theme }) => theme.colors.bg};
   color: ${({ theme }) => theme.colors.text};
   font-size: ${({ theme }) => theme.fontSize.md};

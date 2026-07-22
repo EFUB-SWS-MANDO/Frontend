@@ -59,14 +59,14 @@ const Heading = styled.h2`
 const CardList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing(4)};
+  gap: ${({ theme }) => theme.spacing(6)};
   max-width: 838px;
   margin: 0 auto;
 `;
 
 const ModeCard = styled.button`
   padding: ${({ theme }) => `${theme.spacing(4)} ${theme.spacing(16)}`};
-  border: 1px solid ${({ theme }) => theme.colors.gray100};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 24px;
   background: ${({ theme }) => theme.colors.bg};
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);

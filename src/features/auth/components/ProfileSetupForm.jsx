@@ -123,8 +123,9 @@ const Field = styled.div`
   width: 100%;
 
   label {
-    font-size: ${({ theme }) => theme.fontSize.sm};
+    font-size: ${({ theme }) => theme.fontSize.md};
     font-weight: ${({ theme }) => theme.fontWeight.medium};
+    line-height: ${22 / 16};
   }
 
   input {

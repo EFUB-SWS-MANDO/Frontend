@@ -41,7 +41,7 @@ const LogoArea = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing(4)};
+  gap: ${({ theme }) => theme.spacing(8)};
 `;
 
 const LoadingDots = styled.div`
