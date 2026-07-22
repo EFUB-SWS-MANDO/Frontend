@@ -79,7 +79,7 @@ const Label = styled.span`
 
 const itemStyle = `
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   height: 36px;
   padding: 6px;
   align-self: stretch;
