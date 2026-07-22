@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAuthStore } from '@/stores/authStore';
 import { useLogout } from '@/features/auth/api/useLogout';
+import LogoutIcon from '@/asset/icons/LogoutIcon';
 
 function Header() {
   const user = useAuthStore((state) => state.user);
@@ -19,9 +20,14 @@ function Header() {
         )}
         <Nickname>{user?.nickname ?? '게스트'}</Nickname>
         {isLoggedIn && (
-          <LogoutButton type="button" disabled={isLoggingOut} onClick={logout}>
-            로그아웃
-          </LogoutButton>
+          <LogoutIconButton
+            type="button"
+            disabled={isLoggingOut}
+            onClick={logout}
+            aria-label="로그아웃"
+          >
+            <LogoutIcon size={20} />
+          </LogoutIconButton>
         )}
       </UserInfo>
     </Wrapper>
@@ -78,21 +84,24 @@ const Nickname = styled.span`
   color: ${({ theme }) => theme.colors.text};
 `;
 
-const LogoutButton = styled.button`
-  margin-left: ${({ theme }) => theme.spacing(2)};
-  padding: ${({ theme }) => `${theme.spacing(1)} ${theme.spacing(3)}`};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.full};
-  font-size: ${({ theme }) => theme.fontSize.xs};
-  color: ${({ theme }) => theme.colors.textSub};
+const LogoutIconButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: ${({ theme }) => theme.spacing(1)};
+  padding: 0;
+  border: none;
+  background: none;
+  line-height: 0;
+  cursor: pointer;
 
   &:hover {
-    color: ${({ theme }) => theme.colors.text};
-    background: ${({ theme }) => theme.colors.bgSub};
+    opacity: 0.7;
   }
 
   &:disabled {
     opacity: 0.5;
+    cursor: default;
   }
 `;
 
