@@ -17,7 +17,7 @@ const CoverLetterPage = () => {
 
   const [selectedActivities, setSelectedActivities] = useState([]);
   const [questions, setQuestions] = useState([
-    { id: 1, content: '', maxLength: '' },
+    { id: 1, content: '', maxLength: '500' },
   ]);
   const [draftAnswers, setDraftAnswers] = useState({});
   const [draftVariant, setDraftVariant] = useState(0);
