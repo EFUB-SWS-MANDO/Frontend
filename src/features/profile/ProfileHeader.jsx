@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import DropdownMenu from '@/components/DropdownMenu/DropdownMenu';
 import EditIntroButton from './EditIntroButton';
-import EditPhotoMenu from './EditPhotoMenu';
 import FollowButton from './FollowButton';
 
 function ProfileHeader({ user, isOwner }) {
@@ -13,10 +13,6 @@ function ProfileHeader({ user, isOwner }) {
 
   const handleEditIntro = () => {
     // TODO: 소개글 수정 화면 열기
-  };
-
-  const handleEditPhoto = () => {
-    // TODO: 프로필 사진 수정 - 버튼만 우선 생성
   };
 
   const handleFollowToggle = () => {
@@ -46,7 +42,11 @@ function ProfileHeader({ user, isOwner }) {
         </ProfileInfo>
 
         <ActionArea>
-          {isOwner && <EditPhotoMenu onClick={handleEditPhoto} />}
+          {isOwner && (
+            <DropdownMenu
+              options={[{ label: '프로필 수정하기', onClick: handleEditIntro }]}
+            />
+          )}
           {isOwner ? (
             <EditIntroButton onClick={handleEditIntro} />
           ) : (
