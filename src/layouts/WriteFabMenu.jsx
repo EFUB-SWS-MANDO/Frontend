@@ -31,23 +31,33 @@ function WriteFabMenu() {
   };
 
   return (
-    <Wrapper ref={wrapperRef}>
-      {isOpen &&
-        WRITE_OPTIONS.map((option) => (
-          <IconButton
-            key={option.postType}
-            onClick={() => handleSelect(option.postType)}
-            aria-label={option.label}
-          >
-            <img src={option.icon} alt="" />
-          </IconButton>
-        ))}
-      <IconButton onClick={() => setIsOpen((prev) => !prev)} aria-label="글쓰기">
-        <img src={writeFabIcon} alt="" />
-      </IconButton>
-    </Wrapper>
+    <>
+      {isOpen && <Overlay aria-hidden="true" />}
+      <Wrapper ref={wrapperRef}>
+        {isOpen &&
+          WRITE_OPTIONS.map((option) => (
+            <IconButton
+              key={option.postType}
+              onClick={() => handleSelect(option.postType)}
+              aria-label={option.label}
+            >
+              <img src={option.icon} alt="" />
+            </IconButton>
+          ))}
+        <IconButton onClick={() => setIsOpen((prev) => !prev)} aria-label="글쓰기">
+          <img src={writeFabIcon} alt="" />
+        </IconButton>
+      </Wrapper>
+    </>
   );
 }
+
+const Overlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 21;
+`;
 
 const Wrapper = styled.div`
   position: fixed;
@@ -57,7 +67,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: flex-end;
   gap: ${({ theme }) => theme.spacing(3)};
-  z-index: 15;
+  z-index: 22;
 `;
 
 const IconButton = styled.button`
