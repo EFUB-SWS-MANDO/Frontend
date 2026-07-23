@@ -70,7 +70,7 @@ function ProfileSetupForm({ onSuccess }) {
         </Helper>
       </Field>
 
-      {error && <ErrorText>가입에 실패했어요. 다시 시도해 주세요.</ErrorText>}
+      {error && <ErrorText>{error.message || '가입에 실패했어요. 다시 시도해 주세요.'}</ErrorText>}
 
       <SubmitButton type="submit" disabled={!isValidNickname || isSubmitting}>
         {isSubmitting ? '가입 중...' : '시작하기'}
