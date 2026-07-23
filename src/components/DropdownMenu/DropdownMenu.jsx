@@ -1,9 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import styled, { useTheme } from 'styled-components';
 import MoreIcon from '@/asset/icons/MoreIcon';
-
-// options: { label, onClick, danger? } | { type: 'toggle', label, checked, onChange }
-// 토글 옵션은 클릭해도 메뉴가 닫히지 않고, 나머지 옵션은 클릭 시 메뉴가 닫힘
 function DropdownMenu({ options }) {
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef(null);
