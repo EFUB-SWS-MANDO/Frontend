@@ -9,7 +9,7 @@ const CoverLetterStep3 = ({ questions, setQuestions, onNext }) => {
     if (questions.length >= MAX_QUESTIONS) return;
     setQuestions((prev) => [
       ...prev,
-      { id: Date.now(), content: '', maxLength: '' },
+      { id: Date.now(), content: '', maxLength: '500' },
     ]);
   };
 
