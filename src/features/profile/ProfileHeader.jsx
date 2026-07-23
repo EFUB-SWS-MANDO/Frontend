@@ -1,15 +1,12 @@
-import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useFollow } from './api/useFollow';
 import EditIntroButton from './EditIntroButton';
 import EditPhotoMenu from './EditPhotoMenu';
 import FollowButton from './FollowButton';
 
 function ProfileHeader({ user, isOwner }) {
-  const [isFollowing, setIsFollowing] = useState(user?.isFollowing ?? false);
-
-  useEffect(() => {
-    setIsFollowing(user?.isFollowing ?? false);
-  }, [user?.isFollowing]);
+  // 프로필 조회 응답에 현재 팔로우 여부 필드가 없어 초기값은 false로 시작 (백엔드 확인 필요)
+  const { isFollowing, isToggling, toggleFollow } = useFollow(user?.memberId, false);
 
   const handleEditIntro = () => {
     // TODO: 소개글 수정 화면 열기
@@ -17,11 +14,6 @@ function ProfileHeader({ user, isOwner }) {
 
   const handleEditPhoto = () => {
     // TODO: 프로필 사진 수정 - 버튼만 우선 생성
-  };
-
-  const handleFollowToggle = () => {
-    // TODO: 팔로우/언팔로우 API 연동 (나중에)
-    setIsFollowing((prev) => !prev);
   };
 
   return (
@@ -50,7 +42,7 @@ function ProfileHeader({ user, isOwner }) {
           {isOwner ? (
             <EditIntroButton onClick={handleEditIntro} />
           ) : (
-            <FollowButton isFollowing={isFollowing} onClick={handleFollowToggle} />
+            <FollowButton isFollowing={isFollowing} onClick={toggleFollow} disabled={isToggling} />
           )}
         </ActionArea>
       </TopRow>
