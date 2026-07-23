@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-function FollowButton({ isFollowing, onClick }) {
+function FollowButton({ isFollowing, onClick, disabled }) {
   return (
-    <Button $active={isFollowing} onClick={onClick}>
+    <Button $active={isFollowing} onClick={onClick} disabled={disabled}>
       {isFollowing ? '팔로잉' : '팔로우'}
     </Button>
   );
@@ -17,6 +17,11 @@ const Button = styled.button`
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;
 
 export default FollowButton;

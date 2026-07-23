@@ -26,6 +26,9 @@ export const ENDPOINTS = {
     remove: (commentId) => `/api/comments/${commentId}`,
   },
   follow: {
+    // 팔로우 생성(POST)/취소(DELETE) 공용. 팔로우_취소.md 문서상 DELETE 경로가
+    // 본문(/api/members/{memberId}/follow)과 URI 섹션(/api/follows)이 서로 달라
+    // 아직 확정되지 않음 — 백엔드 확인 후 다르면 이 경로만 수정하면 됨.
     toggle: (memberId) => `/api/members/${memberId}/follow`,
   },
   resumes: {

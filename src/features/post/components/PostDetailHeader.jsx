@@ -1,11 +1,16 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import FollowButton from '@/features/profile/FollowButton';
+import { useFollow } from '@/features/profile/api/useFollow';
 import EditPostButton from './EditPostButton';
 import DropdownMenu from './DropdownMenu';
 
 function PostDetailHeader({ post, isOwner }) {
   const navigate = useNavigate();
+  const { isFollowing, isToggling, toggleFollow } = useFollow(
+    post.author.id,
+    post.author.isFollowing ?? false,
+  );
 
   const menuOptions = isOwner
     ? [
@@ -34,7 +39,11 @@ function PostDetailHeader({ post, isOwner }) {
         </AuthorInfo>
 
         <ActionArea>
-          {isOwner ? <EditPostButton onClick={() => {}} /> : <FollowButton isFollowing={false} onClick={() => {}} />}
+          {isOwner ? (
+            <EditPostButton onClick={() => {}} />
+          ) : (
+            <FollowButton isFollowing={isFollowing} onClick={toggleFollow} disabled={isToggling} />
+          )}
           <DropdownMenu options={menuOptions} />
         </ActionArea>
       </AuthorRow>
