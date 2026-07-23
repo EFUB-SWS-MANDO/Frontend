@@ -9,9 +9,9 @@ function WithdrawButton() {
   if (!isConfirming) {
     return (
       <Wrapper>
-        <TextButton type="button" onClick={() => setIsConfirming(true)}>
-          회원 탈퇴
-        </TextButton>
+        <TriggerButton type="button" onClick={() => setIsConfirming(true)}>
+          회원탈퇴
+        </TriggerButton>
       </Wrapper>
     );
   }
@@ -54,6 +54,20 @@ const TextButton = styled.button`
 
   &:hover {
     color: ${({ theme }) => theme.colors.text};
+  }
+`;
+
+const TriggerButton = styled.button`
+  padding: ${({ theme }) => theme.spacing(1)} ${({ theme }) => theme.spacing(4)};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.full};
+  background: ${({ theme }) => theme.colors.bg};
+  color: ${({ theme }) => theme.colors.textSub};
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  cursor: pointer;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.bgSub};
   }
 `;
 
