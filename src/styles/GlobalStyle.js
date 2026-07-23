@@ -11,5 +11,6 @@ export const GlobalStyle = createGlobalStyle`
   }
   a { color: inherit; text-decoration: none; }
   button { font-family: inherit; cursor: pointer; border: none; background: none; }
+  input, textarea { font-family: inherit; }
   ul, li { list-style: none; }
 `;
