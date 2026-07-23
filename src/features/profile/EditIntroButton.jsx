@@ -5,7 +5,7 @@ function EditIntroButton({ onClick }) {
 }
 
 const Button = styled.button`
-  padding: ${({ theme }) => theme.spacing(2)} ${({ theme }) => theme.spacing(4)};
+  padding: ${({ theme }) => theme.spacing(1)} ${({ theme }) => theme.spacing(4)};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.full};
   background: ${({ theme }) => theme.colors.bg};

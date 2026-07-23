@@ -130,7 +130,7 @@ const ActionArea = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: ${({ theme }) => theme.spacing(3)};
+  gap: ${({ theme }) => theme.spacing(5)};
   flex-shrink: 0;
 `;
 
