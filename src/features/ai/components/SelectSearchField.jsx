@@ -32,6 +32,7 @@ const Wrapper = styled.div`
   padding: ${({ theme }) => `${theme.spacing(2.5)} ${theme.spacing(4)}`};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.md};
+  background: ${({ theme }) => theme.colors.bg};
   margin-bottom: ${({ theme }) => theme.spacing(4)};
 `;
 
@@ -39,6 +40,7 @@ const Input = styled.input`
   flex: 1;
   border: none;
   outline: none;
+  background: transparent;
   font-size: ${({ theme }) => theme.fontSize.sm};
   color: ${({ theme }) => theme.colors.text};
 

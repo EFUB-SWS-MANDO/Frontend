@@ -136,6 +136,7 @@ const QuestionBox = styled.div`
   padding: ${({ theme }) => theme.spacing(4)};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.md};
+  background: ${({ theme }) => theme.colors.bg};
 `;
 
 const BoxLabel = styled.p`
@@ -156,6 +157,7 @@ const AnswerBox = styled.textarea`
   padding: ${({ theme }) => theme.spacing(4)};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.md};
+  background: ${({ theme }) => theme.colors.bg};
   font-size: ${({ theme }) => theme.fontSize.sm};
   color: ${({ theme }) => theme.colors.text};
   line-height: 1.6;
@@ -175,6 +177,7 @@ const FeedbackBox = styled.div`
   padding: ${({ theme }) => theme.spacing(4)};
   border: 1px solid ${({ theme }) => theme.colors.primary};
   border-radius: ${({ theme }) => theme.radius.md};
+  background: ${({ theme }) => theme.colors.bg};
 `;
 
 const ActionRow = styled.div`

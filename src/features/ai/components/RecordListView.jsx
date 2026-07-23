@@ -79,23 +79,44 @@ const Container = styled.section`
 `;
 
 const TabList = styled.div`
+  position: relative;
   display: flex;
   height: 42px;
   margin-bottom: ${({ theme }) => theme.spacing(8)};
-  border-bottom: 2px solid ${({ theme }) => theme.colors.border};
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: ${({ theme }) => theme.colors.border};
+  }
 `;
 
 const Tab = styled.button`
+  position: relative;
   flex: 1;
+  height: 100%;
   padding: 0;
-  margin-bottom: -2px;
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme, $active }) =>
     $active ? theme.fontWeight.semibold : theme.fontWeight.regular};
   color: ${({ theme, $active }) =>
     $active ? theme.colors.primary : theme.colors.textSub};
-  border-bottom: 2px solid
-    ${({ theme, $active }) => ($active ? theme.colors.primary : 'transparent')};
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: ${({ theme, $active }) =>
+      $active ? theme.colors.primary : 'transparent'};
+    z-index: 1;
+  }
 `;
 
 const Group = styled.div`
