@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import DropdownMenu from '@/components/DropdownMenu/DropdownMenu';
-import EditIntroButton from './EditIntroButton';
 import FollowButton from './FollowButton';
 
 function ProfileHeader({ user, isOwner }) {
@@ -47,9 +46,7 @@ function ProfileHeader({ user, isOwner }) {
               options={[{ label: '프로필 수정하기', onClick: handleEditIntro }]}
             />
           )}
-          {isOwner ? (
-            <EditIntroButton onClick={handleEditIntro} />
-          ) : (
+          {!isOwner && (
             <FollowButton isFollowing={isFollowing} onClick={handleFollowToggle} />
           )}
         </ActionArea>

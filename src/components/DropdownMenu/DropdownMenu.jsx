@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import MoreIcon from '@/asset/icons/MoreIcon';
 
 // options: { label, onClick, danger? } | { type: 'toggle', label, checked, onChange }
@@ -7,6 +7,7 @@ import MoreIcon from '@/asset/icons/MoreIcon';
 function DropdownMenu({ options }) {
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef(null);
+  const theme = useTheme();
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -20,8 +21,8 @@ function DropdownMenu({ options }) {
 
   return (
     <Wrapper ref={wrapperRef}>
-      <IconButton onClick={() => setIsOpen((prev) => !prev)} aria-label="더보기 메뉴">
-        <MoreIcon color="#1A1A1A" size={20} />
+      <IconButton type="button" onClick={() => setIsOpen((prev) => !prev)} aria-label="더보기 메뉴">
+        <MoreIcon color={theme.colors.text} size={20} />
       </IconButton>
       {isOpen && (
         <Menu>
@@ -42,6 +43,7 @@ function DropdownMenu({ options }) {
               </ToggleRow>
             ) : (
               <MenuItem
+                type="button"
                 key={option.label}
                 $danger={option.danger}
                 onClick={() => {
@@ -107,8 +109,8 @@ const ToggleRow = styled.div`
 
 const Switch = styled.button`
   position: relative;
-  width: 34px;
-  height: 20px;
+  width: ${({ theme }) => theme.spacing(9)};
+  height: ${({ theme }) => theme.spacing(5)};
   flex-shrink: 0;
   border: none;
   border-radius: ${({ theme }) => theme.radius.full};
@@ -118,10 +120,10 @@ const Switch = styled.button`
 
 const SwitchKnob = styled.span`
   position: absolute;
-  top: 2px;
-  left: ${({ $checked }) => ($checked ? '16px' : '2px')};
-  width: 16px;
-  height: 16px;
+  top: ${({ theme }) => theme.spacing(0.5)};
+  left: ${({ $checked, theme }) => ($checked ? theme.spacing(4.5) : theme.spacing(0.5))};
+  width: ${({ theme }) => theme.spacing(4)};
+  height: ${({ theme }) => theme.spacing(4)};
   border-radius: ${({ theme }) => theme.radius.full};
   background: ${({ theme }) => theme.colors.bg};
   transition: left 0.15s ease;
