@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import styled from 'styled-components';
-import SearchIcon from '../../../asset/icons/SearchIcon';
-import CloseIcon from '../../../asset/icons/CloseIcon';
+import SendIcon from '../../../asset/icons/SendIcon';
+import CloseCircleIcon from '../../../asset/icons/CloseCircleIcon';
 import ActivityListItem from './ActivityListItem';
 import { mockActivities } from '../mocks/activities';
 
@@ -57,11 +57,11 @@ const CoverLetterStep2 = ({ selectedActivities, setSelectedActivities, onNext })
         />
         {searchTerm && (
           <IconButton onClick={handleClearSearch} aria-label="검색어 지우기">
-            <CloseIcon color="#9197AC" size={16} />
+            <CloseCircleIcon size={24} />
           </IconButton>
         )}
         <IconButton aria-label="검색">
-          <SearchIcon color="#9197AC" size={20} />
+          <SendIcon size={36} />
         </IconButton>
       </SearchBox>
 
