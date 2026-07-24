@@ -28,7 +28,7 @@ export function useProfile(userId) {
     try {
       // TODO: 백엔드 연동 후 api.get(ENDPOINTS.profile.detail(userId)) 사용, mapMockProfileToApiShape 제거
       await new Promise((resolve) => setTimeout(resolve, 300));
-      const isMe = String(userId) === String(myUserId);
+      const isMe = userId != null && myUserId != null && String(userId) === String(myUserId);
       setProfile(mapMockProfileToApiShape(MOCK_PROFILE, isMe));
     } catch (e) {
       setError(e);

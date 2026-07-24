@@ -1,5 +1,5 @@
 export const MOCK_PROFILE = {
-  id: 1,
+  id: 0,
   name: '이름',
   intro: '소개글소개글소개글소개글',
   profileImage: '',
