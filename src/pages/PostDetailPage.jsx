@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-import { useRef } from 'react';
 import styled from 'styled-components';
 import { usePostDetail } from '@/features/post/api/usePostDetail';
 import { useComments } from '@/features/post/api/useComments';
@@ -15,27 +14,48 @@ import { useAuthStore } from '@/stores/authStore';
 function PostDetailPage() {
   const { postId } = useParams();
   const myUser = useAuthStore((state) => state.user);
-  const commentInputRef = useRef(null);
 
   const { post, isLoading: postLoading, error: postError } = usePostDetail(postId);
-  const { comments, isLoading: commentsLoading, error: commentsError, addComment } = useComments(postId);
+  const {
+    comments,
+    isLoading: commentsLoading,
+    error: commentsError,
+    addComment,
+    addReply,
+    updateComment,
+    deleteComment,
+  } = useComments(postId);
 
   if (postLoading || commentsLoading) return <Spinner />;
   if (postError || commentsError || !post) return <EmptyState message="불러오지 못했어요. 다시 시도해 주세요." />;
 
   const isPostOwner = String(post.author.id) === String(myUser?.id);
 
-  const handleReplyClick = () => {
-    commentInputRef.current?.focus();
-  };
+  const buildAuthor = () => ({
+    id: myUser?.id,
+    name: myUser?.nickname ?? '나',
+    profileImage: myUser?.profileImage ?? '',
+  });
 
   const handleCommentSubmit = ({ content, isPrivate }) => {
     addComment({
       id: Date.now(),
-      author: { id: myUser?.id, name: myUser?.nickname ?? '나', profileImage: myUser?.profileImage ?? '' },
+      author: buildAuthor(),
       createdAt: new Date().toLocaleString(),
       content,
       isPrivate,
+      isDeleted: false,
+    });
+  };
+
+  const handleReplySubmit = (parentId, content) => {
+    addReply(parentId, {
+      id: Date.now(),
+      author: buildAuthor(),
+      createdAt: new Date().toLocaleString(),
+      content,
+      isPrivate: false,
+      isDeleted: false,
     });
   };
 
@@ -51,13 +71,15 @@ function PostDetailPage() {
           <CommentItem
             key={comment.id}
             comment={comment}
-            isOwner={String(comment.author.id) === String(myUser?.id)}
-            onReplyClick={handleReplyClick}
+            myUserId={myUser?.id}
+            onUpdate={updateComment}
+            onDelete={deleteComment}
+            onReplySubmit={handleReplySubmit}
           />
         ))}
       </CommentSection>
 
-      <CommentInput ref={commentInputRef} onSubmit={handleCommentSubmit} />
+      <CommentInput onSubmit={handleCommentSubmit} />
     </Wrapper>
   );
 }
