@@ -38,7 +38,6 @@ export function useComments(postId) {
     );
   };
 
-  // commentId가 최상위 댓글이든 대댓글이든 상관없이 찾아서 갱신
   const updateComment = (commentId, updates) => {
     // TODO: 백엔드 연동 후 API 호출로 대체
     setComments((prev) =>
@@ -55,7 +54,6 @@ export function useComments(postId) {
     );
   };
 
-  // 완전 삭제 대신 soft delete: 목록/스레드 구조는 유지하고 "삭제된 댓글입니다"로 표시
   const deleteComment = (commentId) => updateComment(commentId, { isDeleted: true });
 
   return {

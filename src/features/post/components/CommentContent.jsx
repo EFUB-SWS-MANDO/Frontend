@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import DropdownMenu from '@/components/DropdownMenu/DropdownMenu';
 
-// 댓글/대댓글이 공유하는 헤더(아바타·이름·날짜·더보기 메뉴) + 본문(일반/수정중/삭제됨) 렌더링.
 function CommentContent({
   item,
   isOwner,
