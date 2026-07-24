@@ -4,8 +4,6 @@ import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
 import { useAuthStore } from '@/stores/authStore';
 
-// presigned URL 발급 후 스토리지에 직접 PUT 업로드, 업로드된 파일의 최종 URL 반환.
-// presignedUrl로의 PUT은 스토리지(S3 등) 대상이라 우리 서버 인증 헤더가 붙으면 안 되므로 axios를 직접 사용.
 async function uploadProfileImage(file) {
   const { presignedUrl, fileUrl } = await api.post(ENDPOINTS.files.presignedUrl, {
     fileName: file.name,
