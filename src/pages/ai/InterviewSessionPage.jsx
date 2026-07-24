@@ -159,6 +159,7 @@ const AnswerBox = styled.textarea`
   border-radius: ${({ theme }) => theme.radius.md};
   background: ${({ theme }) => theme.colors.bg};
   font-size: ${({ theme }) => theme.fontSize.sm};
+  font-family: inherit;
   color: ${({ theme }) => theme.colors.text};
   line-height: 1.6;
   resize: vertical;

@@ -1,11 +1,20 @@
+import { useState } from 'react';
 import styled from 'styled-components';
-import DropdownMenu from './DropdownMenu';
+import DropdownMenu from '@/components/DropdownMenu/DropdownMenu';
 
 function CommentItem({ comment, isOwner, onReplyClick }) {
+  const [isPrivate, setIsPrivate] = useState(comment.isPrivate ?? false);
+
   const menuOptions = isOwner
     ? [
-        { label: '수정', onClick: () => {/* TODO: 댓글 수정 */} },
-        { label: '삭제', onClick: () => {/* TODO: 댓글 삭제 */}, danger: true },
+        {
+          type: 'toggle',
+          label: '공개',
+          checked: !isPrivate,
+          onChange: () => setIsPrivate((prev) => !prev),
+        },
+        { label: '수정하기', onClick: () => {/* TODO: 댓글 수정 */} },
+        { label: '삭제하기', onClick: () => {/* TODO: 댓글 삭제 */}, danger: true },
       ]
     : [{ label: '차단하기', onClick: () => {/* TODO: 차단 API 연동 */}, danger: true }];
 

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import FollowButton from '@/features/profile/FollowButton';
 import { useFollow } from '@/features/profile/api/useFollow';
 import EditPostButton from './EditPostButton';
-import DropdownMenu from './DropdownMenu';
+import DropdownMenu from '@/components/DropdownMenu/DropdownMenu';
 
 function PostDetailHeader({ post, isOwner }) {
   const navigate = useNavigate();
