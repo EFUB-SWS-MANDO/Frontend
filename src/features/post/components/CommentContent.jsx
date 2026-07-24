@@ -27,7 +27,7 @@ function CommentContent({
           { label: '수정하기', onClick: onStartEdit },
           { label: '삭제하기', onClick: onDelete, danger: true },
         ]
-      : [{ label: '차단하기', onClick: () => {/* TODO: 차단 API 연동 */}, danger: true }];
+      : [{ label: '차단하기', onClick: () => {/* TODO: 차단 API 연동 */}, danger: true, disabled: true }];
 
   return (
     <>
@@ -136,8 +136,9 @@ const EditInput = styled.textarea`
   color: ${({ theme }) => theme.colors.text};
   resize: vertical;
 
-  &:focus {
-    outline: none;
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 2px;
   }
 `;
 

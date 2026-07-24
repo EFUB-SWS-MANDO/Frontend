@@ -43,7 +43,9 @@ function DropdownMenu({ options }) {
                 type="button"
                 key={option.label}
                 $danger={option.danger}
+                disabled={option.disabled}
                 onClick={() => {
+                  if (option.disabled) return;
                   option.onClick();
                   setIsOpen(false);
                 }}
@@ -91,6 +93,15 @@ const MenuItem = styled.button`
 
   &:hover {
     background: ${({ theme }) => theme.colors.bgSub};
+  }
+
+  &:disabled {
+    color: ${({ theme }) => theme.colors.textSub};
+    cursor: not-allowed;
+  }
+
+  &:disabled:hover {
+    background: none;
   }
 `;
 

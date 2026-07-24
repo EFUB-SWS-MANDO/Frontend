@@ -39,7 +39,7 @@ function PostDetailPage() {
 
   const handleCommentSubmit = ({ content, isPrivate }) => {
     addComment({
-      id: Date.now(),
+      id: crypto.randomUUID(),
       author: buildAuthor(),
       createdAt: new Date().toLocaleString(),
       content,
@@ -50,7 +50,7 @@ function PostDetailPage() {
 
   const handleReplySubmit = (parentId, content) => {
     addReply(parentId, {
-      id: Date.now(),
+      id: crypto.randomUUID(),
       author: buildAuthor(),
       createdAt: new Date().toLocaleString(),
       content,
