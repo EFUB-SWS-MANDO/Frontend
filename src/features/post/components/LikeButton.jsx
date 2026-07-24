@@ -1,21 +1,14 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 import LeafIcon from '@/asset/icons/LeafIcon';
+import { useLike } from '@/features/post/api/useLike';
 
-function LikeButton({ initialCount, initialLiked }) {
-  const [isLiked, setIsLiked] = useState(initialLiked ?? false);
-  const [count, setCount] = useState(initialCount ?? 0);
-
-  const handleClick = () => {
-    // TODO: 백엔드 연동 후 API 호출로 대체
-    setIsLiked((prev) => !prev);
-    setCount((prev) => (isLiked ? prev - 1 : prev + 1));
-  };
+function LikeButton({ postId, initialCount, initialLiked }) {
+  const { isLiked, count, toggleLike } = useLike(postId, initialLiked ?? false, initialCount ?? 0);
 
   return (
     <Wrapper>
       <Text>추천해요</Text>
-      <Button $active={isLiked} onClick={handleClick}>
+      <Button $active={isLiked} onClick={toggleLike}>
         <LeafIcon color={isLiked ? '#4CAF50' : '#6B7280'} size={16} />
         {count}
       </Button>
