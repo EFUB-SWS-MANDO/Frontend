@@ -1,96 +1,80 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import DropdownMenu from '@/components/DropdownMenu/DropdownMenu';
+import CommentContent from './CommentContent';
+import ReplyItem from './ReplyItem';
+import ReplyComposer from './ReplyComposer';
 
-function CommentItem({ comment, isOwner, onReplyClick }) {
-  const [isPrivate, setIsPrivate] = useState(comment.isPrivate ?? false);
+function CommentItem({ comment, myUserId, onUpdate, onDelete, onReplySubmit }) {
+  const isOwner = String(comment.author.id) === String(myUserId);
+  const [isEditing, setIsEditing] = useState(false);
+  const [draftContent, setDraftContent] = useState(comment.content);
+  const [isReplying, setIsReplying] = useState(false);
 
-  const menuOptions = isOwner
-    ? [
-        {
-          type: 'toggle',
-          label: '공개',
-          checked: !isPrivate,
-          onChange: () => setIsPrivate((prev) => !prev),
-        },
-        { label: '수정하기', onClick: () => {/* TODO: 댓글 수정 */} },
-        { label: '삭제하기', onClick: () => {/* TODO: 댓글 삭제 */}, danger: true },
-      ]
-    : [{ label: '차단하기', onClick: () => {/* TODO: 차단 API 연동 */}, danger: true }];
+  const handleStartEdit = () => {
+    setDraftContent(comment.content);
+    setIsEditing(true);
+  };
+
+  const handleSaveEdit = () => {
+    if (!draftContent.trim()) return;
+    onUpdate(comment.id, { content: draftContent });
+    setIsEditing(false);
+  };
+
+  const handleReplySubmit = (content) => {
+    onReplySubmit(comment.id, content);
+    setIsReplying(false);
+  };
+
+  const replyCount = comment.replies?.length ?? 0;
 
   return (
     <Wrapper>
-      <TopRow>
-        <AuthorInfo>
-          {comment.author.profileImage ? (
-            <Avatar src={comment.author.profileImage} alt={`${comment.author.name} 프로필`} />
-          ) : (
-            <AvatarPlaceholder />
-          )}
-          <AuthorName>{comment.author.name}</AuthorName>
-          <CreatedAt>{comment.createdAt}</CreatedAt>
-        </AuthorInfo>
-        <DropdownMenu options={menuOptions} />
-      </TopRow>
+      <CommentContent
+        item={comment}
+        isOwner={isOwner}
+        avatarSize={32}
+        isEditing={isEditing}
+        draftContent={draftContent}
+        onDraftChange={(e) => setDraftContent(e.target.value)}
+        onStartEdit={handleStartEdit}
+        onSaveEdit={handleSaveEdit}
+        onCancelEdit={() => setIsEditing(false)}
+        onTogglePrivate={() => onUpdate(comment.id, { isPrivate: !comment.isPrivate })}
+        onDelete={() => onDelete(comment.id)}
+      />
 
-      <Content>{comment.content}</Content>
+      <ReplyLink onClick={() => setIsReplying((prev) => !prev)}>
+        답글 달기{replyCount > 0 && ` · 대댓글 ${replyCount}개`}
+      </ReplyLink>
 
-      <ReplyLink onClick={onReplyClick}>답글 달기</ReplyLink>
+      {isReplying && (
+        <ReplyComposer onSubmit={handleReplySubmit} onCancel={() => setIsReplying(false)} />
+      )}
+
+      {replyCount > 0 && (
+        <ReplyList>
+          {comment.replies.map((reply) => (
+            <ReplyItem
+              key={reply.id}
+              reply={reply}
+              myUserId={myUserId}
+              onUpdate={onUpdate}
+              onDelete={onDelete}
+              onReplyClick={() => setIsReplying(true)}
+            />
+          ))}
+        </ReplyList>
+      )}
     </Wrapper>
   );
 }
 
+export default CommentItem;
+
 const Wrapper = styled.div`
   padding: ${({ theme }) => theme.spacing(4)} 0;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-`;
-
-const TopRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: ${({ theme }) => theme.spacing(2)};
-`;
-
-const AuthorInfo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing(2)};
-`;
-
-const Avatar = styled.img`
-  width: 32px;
-  height: 32px;
-  border-radius: ${({ theme }) => theme.radius.full};
-  object-fit: cover;
-  background: ${({ theme }) => theme.colors.bgSub};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-`;
-
-const AvatarPlaceholder = styled.div`
-  width: 32px;
-  height: 32px;
-  border-radius: ${({ theme }) => theme.radius.full};
-  background: ${({ theme }) => theme.colors.bgSub};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-`;
-
-const AuthorName = styled.span`
-  font-size: ${({ theme }) => theme.fontSize.sm};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.text};
-`;
-
-const CreatedAt = styled.span`
-  font-size: ${({ theme }) => theme.fontSize.xs};
-  color: ${({ theme }) => theme.colors.textSub};
-`;
-
-const Content = styled.p`
-  font-size: ${({ theme }) => theme.fontSize.sm};
-  color: ${({ theme }) => theme.colors.text};
-  line-height: 1.5;
-  margin-bottom: ${({ theme }) => theme.spacing(2)};
 `;
 
 const ReplyLink = styled.button`
@@ -99,4 +83,10 @@ const ReplyLink = styled.button`
   text-decoration: underline;
 `;
 
-export default CommentItem;
+const ReplyList = styled.div`
+  margin-top: ${({ theme }) => theme.spacing(3)};
+  padding-left: ${({ theme }) => theme.spacing(8)};
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing(3)};
+`;
