@@ -6,7 +6,7 @@ import FollowButton from './FollowButton';
 
 function ProfileHeader({ user, isOwner }) {
   // 프로필 조회 응답에 현재 팔로우 여부 필드가 없어 초기값은 false로 시작 (백엔드 확인 필요)
-  const { isFollowing, isToggling, toggleFollow } = useFollow(user?.memberId, false);
+  const { isFollowing, isToggling, error: followError, toggleFollow } = useFollow(user?.memberId, false);
 
   const handleEditIntro = () => {
     // TODO: 소개글 수정 화면 열기
@@ -42,7 +42,10 @@ function ProfileHeader({ user, isOwner }) {
           {isOwner ? (
             <EditIntroButton onClick={handleEditIntro} />
           ) : (
-            <FollowButton isFollowing={isFollowing} onClick={toggleFollow} disabled={isToggling} />
+            <>
+              <FollowButton isFollowing={isFollowing} onClick={toggleFollow} disabled={isToggling} />
+              {followError && <FollowErrorText>{followError.message}</FollowErrorText>}
+            </>
           )}
         </ActionArea>
       </TopRow>
@@ -124,6 +127,11 @@ const ActionArea = styled.div`
   align-items: flex-end;
   gap: ${({ theme }) => theme.spacing(5)};
   flex-shrink: 0;
+`;
+
+const FollowErrorText = styled.p`
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.error};
 `;
 
 export default ProfileHeader;

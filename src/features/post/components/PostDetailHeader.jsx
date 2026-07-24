@@ -7,7 +7,7 @@ import DropdownMenu from './DropdownMenu';
 
 function PostDetailHeader({ post, isOwner }) {
   const navigate = useNavigate();
-  const { isFollowing, isToggling, toggleFollow } = useFollow(
+  const { isFollowing, isToggling, error: followError, toggleFollow } = useFollow(
     post.author.id,
     post.author.isFollowing ?? false,
   );
@@ -47,6 +47,8 @@ function PostDetailHeader({ post, isOwner }) {
           <DropdownMenu options={menuOptions} />
         </ActionArea>
       </AuthorRow>
+
+      {!isOwner && followError && <FollowErrorText>{followError.message}</FollowErrorText>}
     </Wrapper>
   );
 }
@@ -114,6 +116,13 @@ const ActionArea = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing(3)};
+`;
+
+const FollowErrorText = styled.p`
+  margin-top: ${({ theme }) => theme.spacing(2)};
+  text-align: right;
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.error};
 `;
 
 export default PostDetailHeader;

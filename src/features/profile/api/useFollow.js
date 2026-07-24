@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
 
@@ -7,13 +7,18 @@ export function useFollow(memberId, initialIsFollowing) {
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
   const [isToggling, setIsToggling] = useState(false);
   const [error, setError] = useState(null);
+  // memberId가 바뀌면 이전에 날아간 요청의 응답이 뒤늦게 와도 최신 상태를 덮어쓰지 않도록 무시
+  const requestIdRef = useRef(0);
 
   useEffect(() => {
+    requestIdRef.current += 1;
     setIsFollowing(initialIsFollowing);
+    setError(null);
   }, [memberId, initialIsFollowing]);
 
   const toggleFollow = async () => {
     if (isToggling || !memberId) return;
+    const requestId = ++requestIdRef.current;
     const nextIsFollowing = !isFollowing;
     setIsToggling(true);
     setError(null);
@@ -28,10 +33,14 @@ export function useFollow(memberId, initialIsFollowing) {
         }
       }
     } catch (e) {
-      setIsFollowing(!nextIsFollowing);
-      setError(e);
+      if (requestIdRef.current === requestId) {
+        setIsFollowing(!nextIsFollowing);
+        setError(e);
+      }
     } finally {
-      setIsToggling(false);
+      if (requestIdRef.current === requestId) {
+        setIsToggling(false);
+      }
     }
   };
 
