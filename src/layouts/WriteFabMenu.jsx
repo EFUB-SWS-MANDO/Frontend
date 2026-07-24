@@ -34,16 +34,18 @@ function WriteFabMenu() {
     <>
       {isOpen && <Overlay aria-hidden="true" />}
       <Wrapper ref={wrapperRef}>
-        {isOpen &&
-          WRITE_OPTIONS.map((option) => (
-            <IconButton
-              key={option.postType}
-              onClick={() => handleSelect(option.postType)}
-              aria-label={option.label}
-            >
-              <img src={option.icon} alt="" />
-            </IconButton>
-          ))}
+        {WRITE_OPTIONS.map((option, index) => (
+          <OptionButton
+            key={option.postType}
+            onClick={() => handleSelect(option.postType)}
+            aria-label={option.label}
+            tabIndex={isOpen ? 0 : -1}
+            $open={isOpen}
+            $delay={(WRITE_OPTIONS.length - 1 - index) * 40}
+          >
+            <img src={option.icon} alt="" />
+          </OptionButton>
+        ))}
         <IconButton onClick={() => setIsOpen((prev) => !prev)} aria-label="글쓰기">
           <img src={writeFabIcon} alt="" />
         </IconButton>
@@ -80,6 +82,14 @@ const IconButton = styled.button`
   img {
     display: block;
   }
+`;
+
+const OptionButton = styled(IconButton)`
+  opacity: ${({ $open }) => ($open ? 1 : 0)};
+  transform: ${({ $open }) => ($open ? 'translateY(0) scale(1)' : 'translateY(16px) scale(0.85)')};
+  pointer-events: ${({ $open }) => ($open ? 'auto' : 'none')};
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition-delay: ${({ $open, $delay }) => ($open ? `${$delay}ms` : '0ms')};
 `;
 
 export default WriteFabMenu;
