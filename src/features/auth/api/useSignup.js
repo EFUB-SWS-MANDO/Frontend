@@ -5,14 +5,16 @@ import { ENDPOINTS } from '@/apis/endpoints';
 import { useAuthStore } from '@/stores/authStore';
 
 async function uploadProfileImage(file) {
-  const { presignedUrl, fileUrl } = await api.post(ENDPOINTS.files.presignedUrl, {
+  const { uploadUrl, fileKey } = await api.post(ENDPOINTS.files.presignedUrl, {
     fileName: file.name,
     contentType: file.type,
+    uploadType: 'PROFILE',
   });
-  await axios.put(presignedUrl, file, {
+  await axios.put(uploadUrl, file, {
     headers: { 'Content-Type': file.type },
   });
-  return fileUrl;
+  // TODO: 프로필 생성/수정 요청 필드명이 profileImage인지 fileKey인지 백엔드 확인 필요
+  return fileKey;
 }
 
 // 정보설정(닉네임/프로필 이미지) 제출. 성공 시 로그인 상태로 전환.
