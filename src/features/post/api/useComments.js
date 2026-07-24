@@ -26,8 +26,46 @@ export function useComments(postId) {
 
   const addComment = (newComment) => {
     // TODO: 백엔드 연동 후 API 호출로 대체, 지금은 화면에서만 추가
-    setComments((prev) => [...prev, newComment]);
+    setComments((prev) => [...prev, { ...newComment, replies: [] }]);
   };
 
-  return { comments, isLoading, error, refetch: fetchComments, addComment };
+  const addReply = (parentId, newReply) => {
+    // TODO: 백엔드 연동 후 API 호출로 대체, 지금은 화면에서만 추가
+    setComments((prev) =>
+      prev.map((c) =>
+        c.id === parentId ? { ...c, replies: [...(c.replies ?? []), newReply] } : c,
+      ),
+    );
+  };
+
+  // commentId가 최상위 댓글이든 대댓글이든 상관없이 찾아서 갱신
+  const updateComment = (commentId, updates) => {
+    // TODO: 백엔드 연동 후 API 호출로 대체
+    setComments((prev) =>
+      prev.map((c) => {
+        if (c.id === commentId) return { ...c, ...updates };
+        if (c.replies?.some((r) => r.id === commentId)) {
+          return {
+            ...c,
+            replies: c.replies.map((r) => (r.id === commentId ? { ...r, ...updates } : r)),
+          };
+        }
+        return c;
+      }),
+    );
+  };
+
+  // 완전 삭제 대신 soft delete: 목록/스레드 구조는 유지하고 "삭제된 댓글입니다"로 표시
+  const deleteComment = (commentId) => updateComment(commentId, { isDeleted: true });
+
+  return {
+    comments,
+    isLoading,
+    error,
+    refetch: fetchComments,
+    addComment,
+    addReply,
+    updateComment,
+    deleteComment,
+  };
 }
