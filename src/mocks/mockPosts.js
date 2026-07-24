@@ -11,6 +11,7 @@ export const MOCK_POSTS = [
     likeCount: 789012,
     tags: ['스터디'],
     recruitStatus: 'recruiting',
+    isLiked: false,
   },
   {
     id: 2,
@@ -23,6 +24,7 @@ export const MOCK_POSTS = [
     likeCount: 987654,
     tags: ['프로젝트'],
     recruitStatus: 'recruiting',
+    isLiked: false,
   },
   {
     id: 3,
@@ -35,6 +37,7 @@ export const MOCK_POSTS = [
     likeCount: 456789,
     tags: ['대외활동'],
     recruitStatus: 'closed',
+    isLiked: false,
   },
   {
     id: 4,
@@ -47,6 +50,7 @@ export const MOCK_POSTS = [
     likeCount: 768013,
     tags: ['스터디'],
     recruitStatus: 'closed',
+    isLiked: false,
   },
   {
     id: 5,
@@ -59,6 +63,7 @@ export const MOCK_POSTS = [
     likeCount: 768013,
     tags: ['공모전'],
     recruitStatus: 'recruiting',
+    isLiked: false,
   },
   {
     id: 6,
@@ -71,5 +76,6 @@ export const MOCK_POSTS = [
     likeCount: 768013,
     tags: ['인턴'],
     recruitStatus: 'closed',
+    isLiked: false,
   },
 ];

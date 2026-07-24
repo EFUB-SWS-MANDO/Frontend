@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { MOCK_POST_DETAIL } from '@/mocks/mockPostDetail';
+import { MOCK_POSTS } from '@/mocks/mockPosts';
 
 export function useLike(postId, initialLiked, initialCount) {
   const [isLiked, setIsLiked] = useState(initialLiked);
@@ -18,6 +19,12 @@ export function useLike(postId, initialLiked, initialCount) {
     setCount(nextCount);
     MOCK_POST_DETAIL.isLiked = nextIsLiked;
     MOCK_POST_DETAIL.likeCount = nextCount;
+
+    const listPost = MOCK_POSTS.find((p) => p.id === postId);
+    if (listPost) {
+      listPost.isLiked = nextIsLiked;
+      listPost.likeCount = nextCount;
+    }
   };
 
   return { isLiked, count, toggleLike };
