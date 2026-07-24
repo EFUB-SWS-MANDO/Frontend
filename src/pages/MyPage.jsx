@@ -31,7 +31,7 @@ function MyPage() {
 }
 
 const Wrapper = styled.div`
-  background: ${({ theme }) => theme.colors.bg};
+  background: ${({ theme }) => theme.colors.pageBg};
 `;
 
 const StatsSection = styled.section`
