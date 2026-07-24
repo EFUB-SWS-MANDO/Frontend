@@ -9,10 +9,21 @@ import CategorySelector from '@/features/post/components/CategorySelector';
 import VisibilityToggle from '@/features/post/components/VisibilityToggle';
 import CompletionToast from '@/features/post/components/CompletionToast';
 import ArrowRightIcon from '@/asset/icons/ArrowRightIcon';
+import { useCreatePost } from '@/features/post/api/useCreatePost';
+import { MOCK_CATEGORIES } from '@/mocks/mockCategories';
+import { useAuthStore } from '@/stores/authStore';
+
+function buildTitle(content) {
+  const firstLine = content.trim().split('\n')[0];
+  if (!firstLine) return '제목 없음';
+  return firstLine.length > 30 ? `${firstLine.slice(0, 30)}...` : firstLine;
+}
 
 function PostWritePage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const myUser = useAuthStore((state) => state.user);
+  const { createPost } = useCreatePost();
 
   const [step, setStep] = useState(1);
   const [postType, setPostType] = useState(location.state?.postType ?? 'free');
@@ -42,9 +53,29 @@ function PostWritePage() {
     );
   };
 
-  const handleUpload = () => {
-    // TODO: 백엔드 연동 후 실제 게시글 생성 API 호출
-    setShowToast(true);
+  const handleUpload = async () => {
+    const content = postType === 'free' ? freeContent : templateContent.activity;
+    const tags = MOCK_CATEGORIES.filter((c) => selectedCategories.includes(c.id)).map((c) => c.name);
+
+    const ok = await createPost({
+      id: crypto.randomUUID(),
+      title: buildTitle(content),
+      content,
+      author: {
+        id: myUser?.id,
+        name: myUser?.nickname ?? '나',
+        profileImage: myUser?.profileImage ?? '',
+        isFollowing: false,
+      },
+      createdAt: new Date().toLocaleString(),
+      commentCount: 0,
+      likeCount: 0,
+      tags,
+      recruitStatus: 'recruiting',
+      isPrivate: visibility === 'private',
+    });
+
+    if (ok) setShowToast(true);
   };
 
   const handleToastDone = () => {
