@@ -5,7 +5,6 @@ import EditPhotoMenu from './EditPhotoMenu';
 import FollowButton from './FollowButton';
 
 function ProfileHeader({ user, isOwner }) {
-  // 프로필 조회 응답에 현재 팔로우 여부 필드가 없어 초기값은 false로 시작 (백엔드 확인 필요)
   const { isFollowing, isToggling, error: followError, toggleFollow } = useFollow(user?.memberId, false);
 
   const handleEditIntro = () => {
