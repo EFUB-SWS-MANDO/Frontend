@@ -17,8 +17,8 @@ function AttachmentPreviewList({ photos, files }) {
       {photoUrls.map((url, index) => (
         <PhotoThumbnail key={url} src={url} alt={`첨부 사진 ${index + 1}`} />
       ))}
-      {files.map((file, index) => (
-        <FileChip key={`${file.name}-${index}`}>{file.name}</FileChip>
+      {files.map((attachment) => (
+        <FileChip key={attachment.id}>{attachment.file.name}</FileChip>
       ))}
     </Wrapper>
   );

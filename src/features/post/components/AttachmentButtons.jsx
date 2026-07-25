@@ -27,7 +27,9 @@ function AttachmentButtons({ onPhotoSelect, onFileSelect }) {
           ref={fileInputRef}
           type="file"
           multiple
-          onChange={(e) => onFileSelect(Array.from(e.target.files))}
+          onChange={(e) =>
+            onFileSelect(Array.from(e.target.files).map((file) => ({ id: crypto.randomUUID(), file })))
+          }
         />
       </Item>
     </Wrapper>
