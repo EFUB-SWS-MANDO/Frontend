@@ -22,9 +22,11 @@ function PostCard({ post }) {
     <Card onClick={handleCardClick}>
       <TitleRow>
         <Title>{post.title}</Title>
-        {post.isPrivate && <LockIcon color={theme.colors.textSub} size={18} />}
+        {post.isPrivate && (
+          <LockIcon color={theme.colors.textSub} size={18} role="img" aria-label="비밀글" />
+        )}
         {tags.map((tag, index) => (
-          <Tag key={`${tag}-${index}`} label={tag} color={tagColors[index]} />
+          <Tag key={tag} label={tag} color={tagColors[index]} />
         ))}
       </TitleRow>
       <Content>{post.content}</Content>
@@ -46,7 +48,7 @@ function PostCard({ post }) {
             <LeafIcon
               color={post.isLiked ? '#00BF63' : theme.colors.textSub}
               size={16}
-              filled={post.isLiked}
+              isFilled={post.isLiked}
             />{' '}
             {post.likeCount}
           </span>

@@ -1,6 +1,13 @@
-function LockIcon({ color = '#494D5A', size = 18 }) {
+function LockIcon({ color = '#494D5A', size = 18, ...props }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 18 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
       <rect x="3" y="6.75" width="12" height="9" rx="3" stroke={color} strokeWidth="1.125" />
       <path d="M9 12L9 10.5" stroke={color} strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round" />
       <path

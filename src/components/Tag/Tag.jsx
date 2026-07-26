@@ -1,22 +1,17 @@
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
-// Figma 태그 색상 팔레트 (6종)
-export const TAG_COLOR_VARIANTS = [
-  { bg: '#ECFCEF', text: '#008947' },
-  { bg: '#E7F0FF', text: '#2E6FF2' },
-  { bg: '#FDEAF3', text: '#D6409F' },
-  { bg: '#FFE9E9', text: '#E4483C' },
-  { bg: '#FFF3E0', text: '#C9760C' },
-  { bg: '#F2F3F5', text: '#494D5A' },
-];
+export const TAG_COLOR_VARIANTS = ['green', 'blue', 'pink', 'red', 'orange', 'gray'];
 
 export function randomTagColor() {
   return TAG_COLOR_VARIANTS[Math.floor(Math.random() * TAG_COLOR_VARIANTS.length)];
 }
 
 function Tag({ label, color = TAG_COLOR_VARIANTS[0] }) {
+  const theme = useTheme();
+  const variant = theme.colors.tag[color] ?? theme.colors.tag[TAG_COLOR_VARIANTS[0]];
+
   return (
-    <Chip $bg={color.bg} $text={color.text}>
+    <Chip $bg={variant.bg} $text={variant.text}>
       {label}
     </Chip>
   );

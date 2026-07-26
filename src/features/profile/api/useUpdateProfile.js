@@ -16,18 +16,20 @@ export function useUpdateProfile() {
     setError(null);
 
     try {
-      let profileImage = MOCK_PROFILE.profileImage;
+      let profileImage = useAuthStore.getState().user?.profileImage ?? MOCK_PROFILE.profileImage;
 
       // VITE_MOCK_AUTH=true면 API 호출 없이 목 데이터만 갱신 (시연/개발용)
       if (import.meta.env.VITE_MOCK_AUTH === 'true') {
         await new Promise((resolve) => setTimeout(resolve, 500));
         if (profileImageFile) profileImage = URL.createObjectURL(profileImageFile);
       } else {
+        const payload = { nickname, bio };
         if (profileImageFile) {
-          profileImage = await uploadProfileImage(profileImageFile);
+          payload.profileImage = await uploadProfileImage(profileImageFile);
         }
         // TODO: 백엔드 연동 후 응답 필드명 확인되면 매핑 보정
-        await api.patch(ENDPOINTS.profile.update, { nickname, bio, profileImage });
+        const data = await api.patch(ENDPOINTS.profile.update, payload);
+        profileImage = data?.profileImage ?? profileImage;
       }
 
       MOCK_PROFILE.name = nickname;

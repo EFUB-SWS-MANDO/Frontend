@@ -109,7 +109,7 @@ function ProfileEditModal({ profile, onClose, onUpdated }) {
 const Overlay = styled.div`
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.3);
+  background: ${({ theme }) => theme.colors.overlay};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -237,7 +237,7 @@ const SubmitButton = styled.button`
   border: none;
   border-radius: ${({ theme }) => theme.radius.full};
   background: ${({ theme }) => theme.colors.primary};
-  color: #fff;
+  color: ${({ theme }) => theme.colors.white};
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
 

@@ -104,7 +104,7 @@ const WideCard = styled(MenuCard)`
   border-radius: ${({ theme }) => theme.radius.full};
 `;
 
-const CardContent = styled.div`
+const CardContent = styled.span`
   display: flex;
   flex-direction: column;
   align-items: center;

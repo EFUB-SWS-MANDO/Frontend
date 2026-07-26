@@ -8,7 +8,11 @@ function LikeButton({ postId, initialCount, initialLiked }) {
   return (
     <Wrapper>
       <Text>추천해요</Text>
-      <Button $active={isLiked} onClick={toggleLike}>
+      <Button
+        $active={isLiked}
+        onClick={toggleLike}
+        aria-label={isLiked ? '추천 취소' : '추천하기'}
+      >
         <LeafIcon color={isLiked ? '#4CAF50' : '#6B7280'} size={16} />
         {count}
       </Button>
