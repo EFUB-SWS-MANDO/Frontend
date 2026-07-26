@@ -29,6 +29,8 @@ const CoverLetterStep4 = ({ questions, setQuestions, onNext }) => {
     );
   };
 
+  const hasContent = questions.some((q) => q.content.trim() !== '');
+
   const handleGenerateDraft = () => {
     // TODO: 백엔드 연동 시 AI 초안 생성 API 요청
     onNext();
@@ -62,7 +64,7 @@ const CoverLetterStep4 = ({ questions, setQuestions, onNext }) => {
       )}
 
       <BottomArea>
-        <PrimaryButton onClick={handleGenerateDraft}>
+        <PrimaryButton onClick={handleGenerateDraft} disabled={!hasContent}>
           자소서 초안 생성하기
           <MagicpenIcon color="#FFFFFF" size={18} />
         </PrimaryButton>
@@ -140,5 +142,10 @@ const PrimaryButton = styled.button`
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.primaryDark};
+  }
+
+  &:disabled {
+    background-color: ${({ theme }) => theme.colors.gray400};
+    cursor: not-allowed;
   }
 `;
