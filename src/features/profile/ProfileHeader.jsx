@@ -1,14 +1,15 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useFollow } from './api/useFollow';
 import DropdownMenu from '@/components/DropdownMenu/DropdownMenu';
 import FollowButton from './FollowButton';
+import ProfileEditModal from './ProfileEditModal';
 
-function ProfileHeader({ user, isOwner }) {
+function ProfileHeader({ user, isOwner, onProfileUpdated }) {
   const { isFollowing, isToggling, error: followError, toggleFollow } = useFollow(user?.memberId, false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
-  const handleEditIntro = () => {
-    // TODO: 소개글 수정 화면 열기
-  };
+  const menuOptions = [{ label: '차단하기', onClick: () => {/* TODO: 차단 API 연동 */}, danger: true }];
 
   return (
     <Wrapper>
@@ -32,19 +33,29 @@ function ProfileHeader({ user, isOwner }) {
         </ProfileInfo>
 
         <ActionArea>
-          {isOwner && (
-            <DropdownMenu
-              options={[{ label: '프로필 수정하기', onClick: handleEditIntro }]}
-            />
-          )}
-          {!isOwner && (
+          {isOwner ? (
+            <EditButton type="button" onClick={() => setIsEditOpen(true)}>
+              수정하기
+            </EditButton>
+          ) : (
             <>
-              <FollowButton isFollowing={isFollowing} onClick={toggleFollow} disabled={isToggling} />
+              <FollowRow>
+                <FollowButton isFollowing={isFollowing} onClick={toggleFollow} disabled={isToggling} />
+                <DropdownMenu options={menuOptions} />
+              </FollowRow>
               {followError && <FollowErrorText>{followError.message}</FollowErrorText>}
             </>
           )}
         </ActionArea>
       </TopRow>
+
+      {isEditOpen && (
+        <ProfileEditModal
+          profile={user}
+          onClose={() => setIsEditOpen(false)}
+          onUpdated={onProfileUpdated}
+        />
+      )}
     </Wrapper>
   );
 }
@@ -128,6 +139,25 @@ const ActionArea = styled.div`
 const FollowErrorText = styled.p`
   font-size: ${({ theme }) => theme.fontSize.xs};
   color: ${({ theme }) => theme.colors.error};
+`;
+
+const FollowRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing(2)};
+`;
+
+const EditButton = styled.button`
+  padding: ${({ theme }) => theme.spacing(2)} ${({ theme }) => theme.spacing(4)};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.full};
+  background-color: ${({ theme }) => theme.colors.bg} !important;
+  color: ${({ theme }) => theme.colors.text};
+  font-size: ${({ theme }) => theme.fontSize.sm};
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.bgSub} !important;
+  }
 `;
 
 export default ProfileHeader;
