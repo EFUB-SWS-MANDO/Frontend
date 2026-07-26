@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
 import LeafIcon from '@/asset/icons/LeafIcon';
+import coverLetterImage from '@/asset/images/ai-cover-letter.webp';
+import interviewImage from '@/asset/images/ai-interview.webp';
 
 function AiHomePage() {
   const theme = useTheme();
@@ -15,10 +17,16 @@ function AiHomePage() {
 
       <CardGrid>
         <MenuCard type="button" onClick={() => navigate('/ai/cover-letter')}>
-          <CardLabel>자소서</CardLabel>
+          <CardContent>
+            <CardImage src={coverLetterImage} alt="" />
+            <CardLabel>자소서</CardLabel>
+          </CardContent>
         </MenuCard>
         <MenuCard type="button" onClick={() => navigate('/ai/interview')}>
-          <CardLabel>모의 면접</CardLabel>
+          <CardContent>
+            <CardImage src={interviewImage} alt="" />
+            <CardLabel>모의 면접</CardLabel>
+          </CardContent>
         </MenuCard>
         <WideCard type="button" onClick={() => navigate('/ai/saved')}>
           <CardLabel>저장 목록</CardLabel>
@@ -32,6 +40,12 @@ const Container = styled.section`
   max-width: 756px;
   margin: 0 auto;
   padding-top: ${({ theme }) => theme.spacing(35)};
+  background: radial-gradient(
+    ellipse 70% 55% at 50% 55%,
+    ${({ theme }) => theme.colors.green100} 0%,
+    ${({ theme }) => theme.colors.green50} 45%,
+    transparent 75%
+  );
 `;
 
 const GreetingArea = styled.div`
@@ -77,6 +91,19 @@ const WideCard = styled(MenuCard)`
   height: 52px;
   align-items: center;
   border-radius: ${({ theme }) => theme.radius.full};
+`;
+
+const CardContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing(3)};
+`;
+
+const CardImage = styled.img`
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
 `;
 
 const CardLabel = styled.span`
