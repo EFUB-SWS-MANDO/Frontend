@@ -73,8 +73,10 @@ function PostWritePage() {
               <FreeWriteForm value={freeContent} onChange={setFreeContent} />
             ) : templateLoading ? (
               <Spinner />
-            ) : templateError || templateFields.length === 0 ? (
+            ) : templateError ? (
               <EmptyState message="템플릿을 불러오지 못했어요. 다시 시도해 주세요." />
+            ) : templateFields.length === 0 ? (
+              <EmptyState message="사용할 수 있는 템플릿이 없어요." />
             ) : (
               <TemplateWriteForm
                 fields={templateFields}
