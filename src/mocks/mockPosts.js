@@ -9,9 +9,10 @@ export const MOCK_POSTS = [
     createdAt: '2026.06.15 18:20',
     commentCount: 52,
     likeCount: 789012,
-    tags: ['스터디'],
+    tags: ['스터디', '리더십', '기획력'],
     recruitStatus: 'recruiting',
     isLiked: false,
+    isPrivate: true,
   },
   {
     id: 2,
@@ -35,9 +36,10 @@ export const MOCK_POSTS = [
     createdAt: '2026.06.18 14:02',
     commentCount: 45,
     likeCount: 456789,
-    tags: ['대외활동'],
+    tags: ['대외활동', '기획력'],
     recruitStatus: 'closed',
     isLiked: false,
+    isPrivate: true,
   },
   {
     id: 4,
