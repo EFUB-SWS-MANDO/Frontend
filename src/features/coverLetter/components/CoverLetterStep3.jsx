@@ -15,12 +15,14 @@ const CoverLetterStep3 = ({ title, setTitle, onNext }) => {
         <SubText>입력한 제목으로 저장돼요.</SubText>
       </GuideArea>
 
-      <TitleBox
-        placeholder="삼성전자 2026 하반기 공개채용"
-        value={title}
-        onChange={handleChange}
-        maxLength={TITLE_MAX_LENGTH}
-      />
+      <TitleCard>
+        <TitleInput
+          placeholder="삼성전자 2026 하반기 공개채용"
+          value={title}
+          onChange={handleChange}
+          maxLength={TITLE_MAX_LENGTH}
+        />
+      </TitleCard>
 
       <BottomArea>
         <PrimaryButton onClick={onNext} disabled={title.trim() === ''}>
@@ -58,18 +60,24 @@ const SubText = styled.p`
   color: ${({ theme }) => theme.colors.textSub};
 `;
 
-const TitleBox = styled.textarea`
+const TitleCard = styled.div`
+  flex: 1;
+  display: flex;
+  padding: ${({ theme }) => theme.spacing(4)};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+  background: ${({ theme }) => theme.colors.bg};
+`;
+
+const TitleInput = styled.textarea`
   flex: 1;
   width: 100%;
-  min-height: 240px;
-  padding: ${({ theme }) => theme.spacing(4)};
-  border: 1px solid ${({ theme }) => theme.colors.gray100};
-  border-radius: ${({ theme }) => theme.radius.lg};
-  background: ${({ theme }) => theme.colors.bg};
-  font-size: ${({ theme }) => theme.fontSize.md};
+  resize: none;
+  border: none;
+  outline: none;
+  font-size: ${({ theme }) => theme.fontSize.sm};
   color: ${({ theme }) => theme.colors.text};
   font-family: inherit;
-  resize: none;
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.textSub};
