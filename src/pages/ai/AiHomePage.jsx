@@ -39,9 +39,13 @@ function AiHomePage() {
 }
 
 const PageWrapper = styled.div`
+  position: relative;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
   min-height: 70vh;
   background: radial-gradient(
-    ellipse 85% 65% at 50% 100%,
+    ellipse 65% 60% at 50% 100%,
     ${({ theme }) => theme.colors.green100} 0%,
     ${({ theme }) => theme.colors.green50} 45%,
     transparent 75%
@@ -52,6 +56,7 @@ const Container = styled.section`
   max-width: 756px;
   margin: 0 auto;
   padding-top: ${({ theme }) => theme.spacing(35)};
+  padding-bottom: ${({ theme }) => theme.spacing(35)};
 `;
 
 const GreetingArea = styled.div`
@@ -107,8 +112,8 @@ const CardContent = styled.div`
 `;
 
 const CardImage = styled.img`
-  width: 76px;
-  height: 76px;
+  width: 96px;
+  height: 96px;
   object-fit: contain;
 `;
 
