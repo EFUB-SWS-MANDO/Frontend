@@ -23,7 +23,7 @@ function PostWritePage() {
   const [templateContent, setTemplateContent] = useState({});
   const {
     values: templateFields,
-    isLoading: templateLoading,
+    isLoading: isTemplateLoading,
     error: templateError,
   } = useTemplates();
   const [photos, setPhotos] = useState([]);
@@ -33,7 +33,7 @@ function PostWritePage() {
   const [showToast, setShowToast] = useState(false);
 
   const isTemplateUnavailable =
-    postType !== 'free' && (templateLoading || templateError || templateFields.length === 0);
+    postType !== 'free' && (isTemplateLoading || templateError || templateFields.length === 0);
 
   const handleClose = () => {
     navigate(-1);
@@ -74,7 +74,7 @@ function PostWritePage() {
           <FormArea>
             {postType === 'free' ? (
               <FreeWriteForm value={freeContent} onChange={setFreeContent} />
-            ) : templateLoading ? (
+            ) : isTemplateLoading ? (
               <Spinner />
             ) : templateError ? (
               <EmptyState message="템플릿을 불러오지 못했어요. 다시 시도해 주세요." />

@@ -10,28 +10,28 @@ export function useTemplates(type = 'BASIC') {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    let ignore = false;
+    let isIgnored = false;
     (async () => {
       setIsLoading(true);
       setError(null);
       try {
         if (USE_MOCK) {
           await new Promise((resolve) => setTimeout(resolve, 300));
-          if (!ignore) setValues(MOCK_TEMPLATE.values);
+          if (!isIgnored) setValues(MOCK_TEMPLATE.values);
           return;
         }
         const data = await api.get(ENDPOINTS.templates.list, {
           params: { type },
         });
-        if (!ignore) setValues(data.values ?? []);
+        if (!isIgnored) setValues(data.values ?? []);
       } catch (e) {
-        if (!ignore) setError(e);
+        if (!isIgnored) setError(e);
       } finally {
-        if (!ignore) setIsLoading(false);
+        if (!isIgnored) setIsLoading(false);
       }
     })();
     return () => {
-      ignore = true;
+      isIgnored = true;
     };
   }, [type]);
 
