@@ -43,6 +43,7 @@ const TabList = styled.div`
 
 const Tab = styled.button`
   position: relative;
+  flex: 1;
   height: 100%;
   padding: ${({ theme }) => `0 ${theme.spacing(5)}`};
   font-size: ${({ theme }) => theme.fontSize.sm};
