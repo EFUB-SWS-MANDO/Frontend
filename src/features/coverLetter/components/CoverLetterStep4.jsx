@@ -1,57 +1,71 @@
-import { useState } from 'react';
 import styled from 'styled-components';
-import DraftQuestionCard from './DraftQuestionCard';
+import MagicpenIcon from '../../../asset/icons/MagicpenIcon';
+import QuestionInputCard from './QuestionInputCard';
 
-const CoverLetterStep4 = ({ questions, draftAnswers, onSelectQuestion, onRestart, onFinish }) => {
-  const [selectedIds, setSelectedIds] = useState([]);
+const MAX_QUESTIONS = 5;
 
-  const isAllSelected =
-    questions.length > 0 && selectedIds.length === questions.length;
-
-  const handleToggleSelectAll = () => {
-    setSelectedIds(isAllSelected ? [] : questions.map((question) => question.id));
+const CoverLetterStep4 = ({ questions, setQuestions, onNext }) => {
+  const handleAddQuestion = () => {
+    if (questions.length >= MAX_QUESTIONS) return;
+    setQuestions((prev) => [
+      ...prev,
+      { id: Date.now(), content: '', maxLength: '500' },
+    ]);
   };
 
-  const handleCopy = (id) => {
-    const draft = draftAnswers[id];
-    if (!draft) return;
-    navigator.clipboard.writeText(draft.content);
+  const handleRemoveQuestion = (id) => {
+    setQuestions((prev) => prev.filter((q) => q.id !== id));
   };
 
-  const handleSave = () => {
-    // TODO: 백엔드 연동 시 자소서 저장 API 요청
+  const handleChangeContent = (id, value) => {
+    setQuestions((prev) =>
+      prev.map((q) => (q.id === id ? { ...q, content: value } : q))
+    );
+  };
+
+  const handleChangeMaxLength = (id, value) => {
+    setQuestions((prev) =>
+      prev.map((q) => (q.id === id ? { ...q, maxLength: value } : q))
+    );
+  };
+
+  const handleGenerateDraft = () => {
+    // TODO: 백엔드 연동 시 AI 초안 생성 API 요청
+    onNext();
   };
 
   return (
     <StepWrapper>
       <GuideArea>
-        <GuideText>초안 작성이 완료되었어요!</GuideText>
-        <SubRow>
-          <SubText>클릭하면 답변의 상세 설명을 확인할 수 있어요.</SubText>
-          <SelectAllButton onClick={handleToggleSelectAll}>
-            {isAllSelected ? '모두 해제' : '모두 선택'}
-          </SelectAllButton>
-        </SubRow>
+        <GuideText>자소서 문항과 글자 수를 입력해주세요.</GuideText>
+        <SubText>구체적으로 입력할수록 정확도가 높아져요! (최대 5개)</SubText>
       </GuideArea>
 
-      <DraftList>
+      <QuestionList>
         {questions.map((question, index) => (
-          <DraftQuestionCard
+          <QuestionInputCard
             key={question.id}
             index={index}
             question={question}
-            draft={draftAnswers[question.id]}
-            selected={selectedIds.includes(question.id)}
-            onSelect={onSelectQuestion}
-            onCopy={handleCopy}
-            onSave={handleSave}
+            onChangeContent={handleChangeContent}
+            onChangeMaxLength={handleChangeMaxLength}
+            onRemove={handleRemoveQuestion}
+            canRemove={questions.length > 1}
           />
         ))}
-      </DraftList>
+      </QuestionList>
+
+      {questions.length < MAX_QUESTIONS && (
+        <AddButton type="button" onClick={handleAddQuestion}>
+          문항 추가하기
+        </AddButton>
+      )}
 
       <BottomArea>
-        <SecondaryButton onClick={onRestart}>다시 작성하기</SecondaryButton>
-        <PrimaryButton onClick={onFinish}>끝내기</PrimaryButton>
+        <PrimaryButton onClick={handleGenerateDraft}>
+          자소서 초안 생성하기
+          <MagicpenIcon color="#FFFFFF" size={18} />
+        </PrimaryButton>
       </BottomArea>
     </StepWrapper>
   );
@@ -78,50 +92,25 @@ const GuideText = styled.p`
   color: ${({ theme }) => theme.colors.text};
 `;
 
-const SubRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const SubText = styled.span`
+const SubText = styled.p`
   font-size: ${({ theme }) => theme.fontSize.xs};
   color: ${({ theme }) => theme.colors.textSub};
 `;
 
-const SelectAllButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: ${({ theme }) => theme.fontSize.xs};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
-  color: ${({ theme }) => theme.colors.textSub};
-  padding: 0;
-`;
-
-const DraftList = styled.div`
+const QuestionList = styled.div`
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing(5)};
   overflow-y: auto;
 `;
 
-const BottomArea = styled.div`
-  display: flex;
-  gap: ${({ theme }) => theme.spacing(3)};
+const AddButton = styled.button`
   width: 100%;
-`;
-
-const SecondaryButton = styled.button`
-  flex: 1;
   padding: ${({ theme }) => theme.spacing(3.5)};
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.full};
+  border-radius: ${({ theme }) => theme.radius.md};
   background: ${({ theme }) => theme.colors.bg};
   cursor: pointer;
   font-size: ${({ theme }) => theme.fontSize.sm};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme }) => theme.colors.textSub};
 
   &:hover {
@@ -130,11 +119,19 @@ const SecondaryButton = styled.button`
   }
 `;
 
+const BottomArea = styled.div`
+  width: 100%;
+`;
+
 const PrimaryButton = styled.button`
-  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing(1.5)};
   padding: ${({ theme }) => theme.spacing(3.5)};
   border: none;
-  border-radius: ${({ theme }) => theme.radius.full};
+  border-radius: ${({ theme }) => theme.radius.md};
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.bg};
   font-size: ${({ theme }) => theme.fontSize.sm};
