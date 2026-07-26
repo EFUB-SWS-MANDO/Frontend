@@ -35,13 +35,14 @@ const ButtonRow = styled.div`
 `;
 
 const OptionButton = styled.button`
-  padding: ${({ theme }) => theme.spacing(2.5)} ${({ theme }) => theme.spacing(6)};
+  min-width: 220px;
+  padding: ${({ theme }) => theme.spacing(7)} ${({ theme }) => theme.spacing(6)};
   border-radius: ${({ theme }) => theme.radius.full};
   border: 1px solid ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.border)};
   background-color: ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.bg)} !important;
   color: ${({ $active, theme }) => ($active ? theme.colors.bg : theme.colors.text)};
-  font-size: ${({ theme }) => theme.fontSize.sm};
-  font-weight: ${({ $active, theme }) => ($active ? theme.fontWeight.bold : theme.fontWeight.regular)};
+  font-size: ${({ theme }) => theme.fontSize.md};
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
 `;
 
 export default VisibilityToggle;
