@@ -4,7 +4,7 @@ import { ENDPOINTS } from '@/apis/endpoints';
 import { USE_MOCK } from '@/apis/config';
 import { MOCK_TEMPLATE } from '@/mocks/mockTemplates';
 
-export function useTemplates(type) {
+export function useTemplates(type = 'BASIC') {
   const [values, setValues] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,7 +21,7 @@ export function useTemplates(type) {
           return;
         }
         const data = await api.get(ENDPOINTS.templates.list, {
-          params: type ? { type } : undefined,
+          params: { type },
         });
         if (!ignore) setValues(data.values ?? []);
       } catch (e) {
