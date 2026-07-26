@@ -8,9 +8,9 @@ function LikeButton({ postId, initialCount, initialLiked }) {
   return (
     <Wrapper>
       <Text>추천해요</Text>
-      <Button type="button" onClick={toggleLike} aria-pressed={isLiked}>
-        <LeafIcon color={isLiked ? '#4CAF50' : '#6B7280'} size={20} />
-        <Count $active={isLiked}>{count}</Count>
+      <Button $active={isLiked} onClick={toggleLike}>
+        <LeafIcon color={isLiked ? '#4CAF50' : '#6B7280'} size={16} />
+        {count}
       </Button>
     </Wrapper>
   );
@@ -33,16 +33,12 @@ const Button = styled.button`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing(1)};
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-`;
-
-const Count = styled.span`
+  padding: ${({ theme }) => theme.spacing(2)} ${({ theme }) => theme.spacing(5)};
+  border: 1px solid ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.border)};
+  border-radius: ${({ theme }) => theme.radius.full};
+  background-color: ${({ theme }) => theme.colors.bg} !important;
   font-size: ${({ theme }) => theme.fontSize.sm};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
-  color: ${({ $active, theme }) => ($active ? '#4CAF50' : theme.colors.text)};
+  color: ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.text)};
 `;
 
 export default LikeButton;

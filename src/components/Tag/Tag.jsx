@@ -25,8 +25,8 @@ function Tag({ label, color = TAG_COLOR_VARIANTS[0] }) {
 const Chip = styled.span`
   display: inline-flex;
   align-items: center;
-  padding: ${({ theme }) => theme.spacing(1)} ${({ theme }) => theme.spacing(2.5)};
-  border-radius: ${({ theme }) => theme.radius.full};
+  padding: ${({ theme }) => theme.spacing(1)} ${({ theme }) => theme.spacing(2)};
+  border-radius: ${({ theme }) => theme.radius.sm};
   background: ${({ $bg }) => $bg};
   color: ${({ $text }) => $text};
   font-size: ${({ theme }) => theme.fontSize.xs};

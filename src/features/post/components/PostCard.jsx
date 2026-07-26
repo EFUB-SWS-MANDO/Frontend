@@ -23,14 +23,10 @@ function PostCard({ post }) {
       <TitleRow>
         <Title>{post.title}</Title>
         {post.isPrivate && <LockIcon color={theme.colors.textSub} size={18} />}
+        {tags.map((tag, index) => (
+          <Tag key={`${tag}-${index}`} label={tag} color={tagColors[index]} />
+        ))}
       </TitleRow>
-      {tags.length > 0 && (
-        <TagRow>
-          {tags.map((tag, index) => (
-            <Tag key={`${tag}-${index}`} label={tag} color={tagColors[index]} />
-          ))}
-        </TagRow>
-      )}
       <Content>{post.content}</Content>
       <Footer>
         <AuthorInfo>
@@ -71,22 +67,16 @@ const Card = styled.article`
 
 const TitleRow = styled.div`
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: ${({ theme }) => theme.spacing(1.5)};
-  margin-bottom: ${({ theme }) => theme.spacing(2)};
+  margin-bottom: ${({ theme }) => theme.spacing(3)};
 `;
 
 const Title = styled.h3`
   font-size: ${({ theme }) => theme.fontSize.md};
   font-weight: ${({ theme }) => theme.fontWeight.semibold};
   color: ${({ theme }) => theme.colors.text};
-`;
-
-const TagRow = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${({ theme }) => theme.spacing(1.5)};
-  margin-bottom: ${({ theme }) => theme.spacing(3)};
 `;
 
 const Content = styled.p`
