@@ -63,7 +63,7 @@ function PostDetailPage() {
     <Wrapper>
       <PostDetailHeader post={post} isOwner={isPostOwner} />
       <PostBody content={post.content} />
-      <LikeButton initialCount={post.likeCount} initialLiked={post.isLiked} />
+      <LikeButton postId={post.id} initialCount={post.likeCount} initialLiked={post.isLiked} />
 
       <CommentSection>
         <SectionTitle>댓글 {comments.length}개</SectionTitle>

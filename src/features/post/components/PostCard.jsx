@@ -30,7 +30,7 @@ function PostCard({ post }) {
             <CommentIcon color={theme.colors.textSub} size={16} /> {post.commentCount}
           </span>
           <span>
-            <LeafIcon color={theme.colors.textSub} size={16} /> {post.likeCount}
+            <LeafIcon color={post.isLiked ? '#4CAF50' : theme.colors.textSub} size={16} /> {post.likeCount}
           </span>
         </Stats>
       </Footer>
