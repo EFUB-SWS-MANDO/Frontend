@@ -2,17 +2,26 @@ import styled from 'styled-components';
 
 const isUploadField = (field) => field.replace(/\s/g, '').includes('증빙');
 
-function TemplateWriteForm({ fields = [], value, onChange }) {
+function TemplateWriteForm({ fields = [], value, onChange, uploadedFiles = [], onUpload }) {
   const handleFieldChange = (field, fieldValue) => {
     onChange({ ...value, [field]: fieldValue });
+  };
+
+  const handleFileChange = (e) => {
+    onUpload?.(Array.from(e.target.files));
+    e.target.value = '';
   };
 
   return (
     <Wrapper>
       {fields.map((field) =>
         isUploadField(field) ? (
-          <UploadArea key={field} type="button">
+          <UploadArea key={field}>
             {field}
+            {uploadedFiles.length > 0 && (
+              <FileList>{uploadedFiles.map((file) => file.name).join(', ')}</FileList>
+            )}
+            <HiddenInput type="file" multiple onChange={handleFileChange} />
           </UploadArea>
         ) : (
           <FieldArea
@@ -54,7 +63,7 @@ const FieldArea = styled.textarea`
   }
 `;
 
-const UploadArea = styled.button`
+const UploadArea = styled.label`
   flex: 1;
   min-height: 96px;
   padding: ${({ theme }) => theme.spacing(4)};
@@ -62,6 +71,20 @@ const UploadArea = styled.button`
   text-align: left;
   font-size: ${({ theme }) => theme.fontSize.sm};
   color: ${({ theme }) => theme.colors.textSub};
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing(2)};
+`;
+
+const FileList = styled.span`
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.text};
+  word-break: break-all;
+`;
+
+const HiddenInput = styled.input`
+  display: none;
 `;
 
 export default TemplateWriteForm;

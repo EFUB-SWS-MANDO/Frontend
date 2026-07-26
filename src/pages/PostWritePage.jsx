@@ -40,6 +40,10 @@ function PostWritePage() {
     setStep(2);
   };
 
+  const handleEvidenceUpload = (newFiles) => {
+    setFiles((prev) => [...prev, ...newFiles]);
+  };
+
   const handleToggleCategory = (categoryId) => {
     setSelectedCategories((prev) =>
       prev.includes(categoryId) ? prev.filter((id) => id !== categoryId) : [...prev, categoryId]
@@ -76,6 +80,8 @@ function PostWritePage() {
                 fields={templateFields}
                 value={templateContent}
                 onChange={setTemplateContent}
+                uploadedFiles={files}
+                onUpload={handleEvidenceUpload}
               />
             )}
           </FormArea>
