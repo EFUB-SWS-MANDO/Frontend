@@ -24,18 +24,18 @@ function ProfileHeader({ user, isOwner }) {
       <TopRow>
         <ProfileInfo>
           {user?.profileImage ? (
-            <Avatar src={user.profileImage} alt={`${user?.name} 프로필 사진`} />
+            <Avatar src={user.profileImage} alt={`${user?.nickname} 프로필 사진`} />
           ) : (
             <AvatarPlaceholder />
           )}
           <TextGroup>
             <NameRow>
-              <Name>{user?.name}</Name>
+              <Name>{user?.nickname}</Name>
             </NameRow>
-            <Intro>{user?.intro}</Intro>
+            <Intro>{user?.bio}</Intro>
             <FollowCounts>
               <span>팔로워 {user?.followerCount}</span>
-              <span>팔로잉 {user?.followingCount}</span>
+              <span>팔로잉 {user?.followeeCount}</span>
             </FollowCounts>
           </TextGroup>
         </ProfileInfo>

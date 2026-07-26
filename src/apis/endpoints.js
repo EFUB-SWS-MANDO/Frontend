@@ -12,6 +12,9 @@ export const ENDPOINTS = {
     update: '/api/me/profiles',
     detail: (memberId) => `/api/members/${memberId}/profiles`,
   },
+  files: {
+    presignedUrl: '/api/files/presigned-url',
+  },
   posts: {
     list: '/api/posts',
     create: '/api/posts',
