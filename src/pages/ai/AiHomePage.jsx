@@ -9,43 +9,49 @@ function AiHomePage() {
   const navigate = useNavigate();
 
   return (
-    <Container>
-      <GreetingArea>
-        <LeafIcon size={59} color={theme.colors.primary} />
-        <Greeting>오늘은 어떤 걸 해볼까?</Greeting>
-      </GreetingArea>
+    <PageWrapper>
+      <Container>
+        <GreetingArea>
+          <LeafIcon size={59} color={theme.colors.primary} />
+          <Greeting>오늘은 어떤 걸 해볼까?</Greeting>
+        </GreetingArea>
 
-      <CardGrid>
-        <MenuCard type="button" onClick={() => navigate('/ai/cover-letter')}>
-          <CardContent>
-            <CardImage src={coverLetterImage} alt="" />
-            <CardLabel>자소서</CardLabel>
-          </CardContent>
-        </MenuCard>
-        <MenuCard type="button" onClick={() => navigate('/ai/interview')}>
-          <CardContent>
-            <CardImage src={interviewImage} alt="" />
-            <CardLabel>모의 면접</CardLabel>
-          </CardContent>
-        </MenuCard>
-        <WideCard type="button" onClick={() => navigate('/ai/saved')}>
-          <CardLabel>저장 목록</CardLabel>
-        </WideCard>
-      </CardGrid>
-    </Container>
+        <CardGrid>
+          <MenuCard type="button" onClick={() => navigate('/ai/cover-letter')}>
+            <CardContent>
+              <CardImage src={coverLetterImage} alt="" />
+              <CardLabel>자소서</CardLabel>
+            </CardContent>
+          </MenuCard>
+          <MenuCard type="button" onClick={() => navigate('/ai/interview')}>
+            <CardContent>
+              <CardImage src={interviewImage} alt="" />
+              <CardLabel>모의 면접</CardLabel>
+            </CardContent>
+          </MenuCard>
+          <WideCard type="button" onClick={() => navigate('/ai/saved')}>
+            <CardLabel>저장 목록</CardLabel>
+          </WideCard>
+        </CardGrid>
+      </Container>
+    </PageWrapper>
   );
 }
+
+const PageWrapper = styled.div`
+  min-height: 70vh;
+  background: radial-gradient(
+    ellipse 85% 65% at 50% 100%,
+    ${({ theme }) => theme.colors.green100} 0%,
+    ${({ theme }) => theme.colors.green50} 45%,
+    transparent 75%
+  );
+`;
 
 const Container = styled.section`
   max-width: 756px;
   margin: 0 auto;
   padding-top: ${({ theme }) => theme.spacing(35)};
-  background: radial-gradient(
-    ellipse 70% 55% at 50% 55%,
-    ${({ theme }) => theme.colors.green100} 0%,
-    ${({ theme }) => theme.colors.green50} 45%,
-    transparent 75%
-  );
 `;
 
 const GreetingArea = styled.div`
@@ -101,8 +107,8 @@ const CardContent = styled.div`
 `;
 
 const CardImage = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 76px;
+  height: 76px;
   object-fit: contain;
 `;
 
