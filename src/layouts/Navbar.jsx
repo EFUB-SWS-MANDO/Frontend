@@ -135,6 +135,8 @@ const Nav = styled.nav`
 
   &:hover {
     width: ${NAV_WIDTH_EXPANDED};
+    padding-left: ${({ theme }) => theme.spacing(6)};
+    padding-right: ${({ theme }) => theme.spacing(6)};
 
     ${Label} {
       max-width: 160px;
