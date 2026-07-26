@@ -62,6 +62,7 @@ const SearchRow = styled.div`
 const SearchInput = styled.input`
   flex: 1;
   border: none;
+  outline: none;
   font-size: ${({ theme }) => theme.fontSize.sm};
   color: ${({ theme }) => theme.colors.text};
 
