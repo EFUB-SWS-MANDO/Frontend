@@ -1,22 +1,13 @@
-import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useFollow } from './api/useFollow';
 import DropdownMenu from '@/components/DropdownMenu/DropdownMenu';
 import FollowButton from './FollowButton';
 
 function ProfileHeader({ user, isOwner }) {
-  const [isFollowing, setIsFollowing] = useState(user?.isFollowing ?? false);
-
-  useEffect(() => {
-    setIsFollowing(user?.isFollowing ?? false);
-  }, [user?.isFollowing]);
+  const { isFollowing, isToggling, error: followError, toggleFollow } = useFollow(user?.memberId, false);
 
   const handleEditIntro = () => {
     // TODO: 소개글 수정 화면 열기
-  };
-
-  const handleFollowToggle = () => {
-    // TODO: 팔로우/언팔로우 API 연동 (나중에)
-    setIsFollowing((prev) => !prev);
   };
 
   return (
@@ -47,7 +38,10 @@ function ProfileHeader({ user, isOwner }) {
             />
           )}
           {!isOwner && (
-            <FollowButton isFollowing={isFollowing} onClick={handleFollowToggle} />
+            <>
+              <FollowButton isFollowing={isFollowing} onClick={toggleFollow} disabled={isToggling} />
+              {followError && <FollowErrorText>{followError.message}</FollowErrorText>}
+            </>
           )}
         </ActionArea>
       </TopRow>
@@ -129,6 +123,11 @@ const ActionArea = styled.div`
   align-items: flex-end;
   gap: ${({ theme }) => theme.spacing(5)};
   flex-shrink: 0;
+`;
+
+const FollowErrorText = styled.p`
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.error};
 `;
 
 export default ProfileHeader;
