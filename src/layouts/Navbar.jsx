@@ -108,6 +108,7 @@ const MenuList = styled.div`
   display: flex;
   flex-direction: column;
   align-self: stretch;
+  width: 100%;
   gap: ${({ theme }) => theme.spacing(8)};
 `;
 
