@@ -35,9 +35,8 @@ const ButtonRow = styled.div`
 `;
 
 const OptionButton = styled.button`
-  width: 72px;
-  height: 72px;
-  border-radius: ${({ theme }) => theme.radius.lg};
+  padding: ${({ theme }) => theme.spacing(2.5)} ${({ theme }) => theme.spacing(6)};
+  border-radius: ${({ theme }) => theme.radius.full};
   border: 1px solid ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.border)};
   background-color: ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.bg)} !important;
   color: ${({ $active, theme }) => ($active ? theme.colors.bg : theme.colors.text)};

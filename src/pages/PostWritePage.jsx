@@ -166,6 +166,7 @@ const PreviewBox = styled.div`
   padding: ${({ theme }) => theme.spacing(5)};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.lg};
+  background: ${({ theme }) => theme.colors.bg};
   min-height: 160px;
   font-size: ${({ theme }) => theme.fontSize.sm};
   color: ${({ theme }) => theme.colors.text};

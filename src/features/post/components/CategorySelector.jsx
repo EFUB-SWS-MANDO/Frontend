@@ -5,7 +5,16 @@ import { MOCK_CATEGORIES } from '@/mocks/mockCategories';
 function CategorySelector({ selected, onToggle }) {
   const [search, setSearch] = useState('');
 
-  const filtered = MOCK_CATEGORIES.filter((c) => c.name.includes(search));
+  const selectedCategories = MOCK_CATEGORIES.filter((c) => selected.includes(c.id));
+  const trimmedSearch = search.trim();
+  const suggestions = trimmedSearch
+    ? MOCK_CATEGORIES.filter((c) => !selected.includes(c.id) && c.name.includes(trimmedSearch))
+    : [];
+
+  const handleSelectSuggestion = (id) => {
+    onToggle(id);
+    setSearch('');
+  };
 
   return (
     <Wrapper>
@@ -18,16 +27,30 @@ function CategorySelector({ selected, onToggle }) {
         />
         <SearchButton aria-label="검색">➤</SearchButton>
       </SearchRow>
-      <ChipList>
-        {filtered.map((category) => {
-          const isSelected = selected.includes(category.id);
-          return (
-            <Chip key={category.id} $selected={isSelected} onClick={() => onToggle(category.id)}>
+
+      {suggestions.length > 0 && (
+        <SuggestionList>
+          {suggestions.map((category) => (
+            <SuggestionItem
+              key={category.id}
+              type="button"
+              onClick={() => handleSelectSuggestion(category.id)}
+            >
               {category.name}
+            </SuggestionItem>
+          ))}
+        </SuggestionList>
+      )}
+
+      {selectedCategories.length > 0 && (
+        <ChipList>
+          {selectedCategories.map((category) => (
+            <Chip key={category.id} type="button" onClick={() => onToggle(category.id)}>
+              {category.name} <span aria-hidden>×</span>
             </Chip>
-          );
-        })}
-      </ChipList>
+          ))}
+        </ChipList>
+      )}
     </Wrapper>
   );
 }
@@ -69,6 +92,25 @@ const SearchButton = styled.button`
   color: ${({ theme }) => theme.colors.textSub};
 `;
 
+const SuggestionList = styled.div`
+  display: flex;
+  flex-direction: column;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.sm};
+  overflow: hidden;
+`;
+
+const SuggestionItem = styled.button`
+  padding: ${({ theme }) => theme.spacing(2)} ${({ theme }) => theme.spacing(3)};
+  text-align: left;
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  color: ${({ theme }) => theme.colors.text};
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.bgSub};
+  }
+`;
+
 const ChipList = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -76,12 +118,16 @@ const ChipList = styled.div`
 `;
 
 const Chip = styled.button`
-  padding: ${({ theme }) => theme.spacing(2)} ${({ theme }) => theme.spacing(4)};
+  display: inline-flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing(1)};
+  padding: ${({ theme }) => theme.spacing(1)} ${({ theme }) => theme.spacing(3)};
   border-radius: ${({ theme }) => theme.radius.full};
-  border: 1px solid ${({ $selected, theme }) => ($selected ? theme.colors.primary : theme.colors.border)};
-  background-color: ${({ $selected, theme }) => ($selected ? theme.colors.primary : theme.colors.bg)} !important;
-  color: ${({ $selected, theme }) => ($selected ? theme.colors.bg : theme.colors.text)};
-  font-size: ${({ theme }) => theme.fontSize.sm};
+  border: none;
+  background-color: ${({ theme }) => theme.colors.primary} !important;
+  color: #fff;
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
 `;
 
 export default CategorySelector;
