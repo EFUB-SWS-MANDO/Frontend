@@ -32,6 +32,9 @@ function PostWritePage() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [showToast, setShowToast] = useState(false);
 
+  const isTemplateUnavailable =
+    postType !== 'free' && (templateLoading || templateError || templateFields.length === 0);
+
   const handleClose = () => {
     navigate(-1);
   };
@@ -90,7 +93,7 @@ function PostWritePage() {
 
           <BottomRow>
             <AttachmentButtons onPhotoSelect={setPhotos} onFileSelect={setFiles} />
-            <NextButton onClick={handleNext}>
+            <NextButton onClick={handleNext} disabled={isTemplateUnavailable}>
               다음
               <ArrowRightIcon color="#494D5A" size={16} />
             </NextButton>
@@ -175,6 +178,11 @@ const NextButton = styled.button`
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;
 
 const SectionTitle = styled.h3`
