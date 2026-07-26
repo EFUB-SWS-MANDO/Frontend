@@ -1,27 +1,28 @@
 import styled from 'styled-components';
 
-const FIELDS = [
-  { key: 'basicInfo', placeholder: '기본 정보' },
-  { key: 'activity', placeholder: '활동 내용' },
-  { key: 'reflection', placeholder: '성찰 및 성장' },
-];
+const isUploadField = (field) => field.replace(/\s/g, '').includes('증빙');
 
-function TemplateWriteForm({ value, onChange }) {
+function TemplateWriteForm({ fields = [], value, onChange }) {
   const handleFieldChange = (field, fieldValue) => {
     onChange({ ...value, [field]: fieldValue });
   };
 
   return (
     <Wrapper>
-      {FIELDS.map((field) => (
-        <FieldArea
-          key={field.key}
-          placeholder={field.placeholder}
-          value={value[field.key]}
-          onChange={(e) => handleFieldChange(field.key, e.target.value)}
-        />
-      ))}
-      <UploadArea type="button">증빙자료</UploadArea>
+      {fields.map((field) =>
+        isUploadField(field) ? (
+          <UploadArea key={field} type="button">
+            {field}
+          </UploadArea>
+        ) : (
+          <FieldArea
+            key={field}
+            placeholder={field}
+            value={value[field] ?? ''}
+            onChange={(e) => handleFieldChange(field, e.target.value)}
+          />
+        )
+      )}
     </Wrapper>
   );
 }
