@@ -27,6 +27,7 @@ function FeedTabs({ activeTab, onChange }) {
 const TabList = styled.div`
   position: relative;
   display: flex;
+  width: 100%;
   height: 42px;
 
   &::after {
