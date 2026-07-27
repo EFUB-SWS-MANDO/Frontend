@@ -119,8 +119,7 @@ export function useComments(postId) {
     }
   };
 
-  const updateComment = (commentId, updates) => {
-    // TODO: 백엔드 연동 후 API 호출로 대체
+  const applyCommentUpdate = (commentId, updates) => {
     setComments((prev) =>
       prev.map((c) => {
         if (c.id === commentId) return { ...c, ...updates };
@@ -133,6 +132,33 @@ export function useComments(postId) {
         return c;
       }),
     );
+  };
+
+  const findComment = (commentId) => {
+    for (const c of comments) {
+      if (c.id === commentId) return c;
+      const reply = c.replies?.find((r) => r.id === commentId);
+      if (reply) return reply;
+    }
+    return null;
+  };
+
+  const updateComment = async (commentId, updates) => {
+    if (USE_MOCK) {
+      applyCommentUpdate(commentId, updates);
+      return;
+    }
+    const current = findComment(commentId);
+    if (!current) return;
+    try {
+      const data = await api.patch(ENDPOINTS.comments.update(commentId), {
+        content: updates.content ?? current.content,
+        isPrivate: updates.isPrivate ?? current.isPrivate,
+      });
+      applyCommentUpdate(commentId, mapComment(data));
+    } catch (e) {
+      setError(e);
+    }
   };
 
   const deleteComment = (commentId) => updateComment(commentId, { isDeleted: true });
