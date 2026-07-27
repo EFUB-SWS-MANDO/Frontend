@@ -18,15 +18,15 @@ function PostCard({ post }) {
       <TitleRow>
         <Title>{post.title}</Title>
         {post.onlyMe && <LockIcon size={18} />}
+        {post.tags?.length > 0 && (
+          <TagArea>
+            {post.tags.slice(0, 3).map((tag) => (
+              <Tag key={tag} label={tag} />
+            ))}
+          </TagArea>
+        )}
       </TitleRow>
       <Content>{post.content}</Content>
-      {post.tags?.length > 0 && (
-        <TagRow>
-          {post.tags.slice(0, 3).map((tag) => (
-            <Tag key={tag} label={tag} />
-          ))}
-        </TagRow>
-      )}
       <Footer>
         <AuthorInfo>
           {post.author.profileImage ? (
@@ -88,11 +88,11 @@ const Content = styled.p`
   line-height: ${20 / 14};
 `;
 
-const TagRow = styled.div`
+const TagArea = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  gap: ${({ theme }) => theme.spacing(2)};
-  margin-bottom: ${({ theme }) => theme.spacing(4)};
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing(1)};
+  margin-left: ${({ theme }) => theme.spacing(3)};
 `;
 
 const Footer = styled.div`
