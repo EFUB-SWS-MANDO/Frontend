@@ -17,7 +17,7 @@ function PostCard({ post }) {
     <Card onClick={handleCardClick}>
       <TitleRow>
         <Title>{post.title}</Title>
-        {post.onlyMe && <LockIcon size={18} />}
+        {post.onlyMe && <LockIcon size={18} label="비공개 게시물" />}
         {post.tags?.length > 0 && (
           <TagArea>
             {post.tags.slice(0, 3).map((tag) => (
