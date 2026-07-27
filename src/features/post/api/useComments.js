@@ -1,5 +1,41 @@
 import { useState, useEffect, useCallback } from 'react';
+import { api } from '@/apis/axiosInstance';
+import { ENDPOINTS } from '@/apis/endpoints';
+import { USE_MOCK } from '@/apis/config';
 import { MOCK_COMMENTS } from '@/mocks/mockComments';
+
+const formatDateTime = (isoString) => {
+  const date = new Date(isoString);
+  if (Number.isNaN(date.getTime())) return isoString;
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${date.getFullYear()}.${pad(date.getMonth() + 1)}.${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
+
+const mapComment = (raw) => ({
+  id: raw.commentId,
+  author: {
+    id: raw.author?.memberId,
+    name: raw.author?.nickname ?? '알 수 없음',
+    profileImage: raw.author?.profileImage ?? '',
+  },
+  parentId: raw.parentId ?? null,
+  content: raw.content,
+  isPrivate: raw.isPrivate ?? false,
+  isDeleted: raw.deleted ?? false,
+  isEdited: raw.edited ?? false,
+  createdAt: formatDateTime(raw.createdAt),
+});
+
+const buildCommentTree = (flatComments) => {
+  const parents = flatComments.filter((c) => c.parentId === null).map((c) => ({ ...c, replies: [] }));
+  const parentById = new Map(parents.map((p) => [p.id, p]));
+  flatComments
+    .filter((c) => c.parentId !== null)
+    .forEach((reply) => {
+      parentById.get(reply.parentId)?.replies.push(reply);
+    });
+  return parents;
+};
 
 export function useComments(postId) {
   const [comments, setComments] = useState([]);
