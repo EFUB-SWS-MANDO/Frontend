@@ -67,6 +67,7 @@ const Card = styled.article`
 const TitleRow = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: ${({ theme }) => theme.spacing(1)};
   margin-bottom: ${({ theme }) => theme.spacing(2)};
 
@@ -76,6 +77,10 @@ const TitleRow = styled.div`
 `;
 
 const Title = styled.h3`
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: ${({ theme }) => theme.fontSize.md};
   font-weight: ${({ theme }) => theme.fontWeight.semibold};
   color: ${({ theme }) => theme.colors.text};
@@ -91,6 +96,8 @@ const Content = styled.p`
 const TagArea = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  flex-shrink: 0;
   gap: ${({ theme }) => theme.spacing(1)};
   margin-left: ${({ theme }) => theme.spacing(3)};
 `;
