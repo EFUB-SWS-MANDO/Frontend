@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
 const TAG_COLORS = [
-  { bg: '#ECFCEF', text: '#008947' },
-  { bg: '#EAF3FF', text: '#2E6FD8' },
-  { bg: '#F3EEFF', text: '#7C5CD9' },
-  { bg: '#FFF4E5', text: '#C77414' },
-  { bg: '#FFEEF3', text: '#D9527C' },
-  { bg: '#FFF9DB', text: '#A8850E' },
+  { bg: 'green50', text: 'green500' },
+  { bg: 'blue50', text: 'blue100' },
+  { bg: 'yellow50', text: 'yellow100' },
+  { bg: 'pink50', text: 'pink100' },
+  { bg: 'red50', text: 'red100' },
+  { bg: 'bgSub', text: 'textSub' },
 ];
 
 const pickColor = (label) => {
@@ -29,12 +29,14 @@ function Tag({ label }) {
 const Chip = styled.span`
   display: inline-flex;
   align-items: center;
-  padding: ${({ theme }) => `${theme.spacing(1)} ${theme.spacing(3)}`};
-  border-radius: ${({ theme }) => theme.radius.full};
-  background: ${({ $bg }) => $bg};
-  color: ${({ $text }) => $text};
-  font-size: ${({ theme }) => theme.fontSize.xs};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  justify-content: center;
+  padding: ${({ theme }) => theme.spacing(1)} ${({ theme }) => theme.spacing(1.5)};
+  border-radius: ${({ theme }) => theme.radius.xs};
+  background: ${({ theme, $bg }) => theme.colors[$bg]};
+  color: ${({ theme, $text }) => theme.colors[$text]};
+  font-size: ${({ theme }) => theme.fontSize.xxs};
+  font-weight: ${({ theme }) => theme.fontWeight.semibold};
+  line-height: ${11 / 10};
   white-space: nowrap;
 `;
 
