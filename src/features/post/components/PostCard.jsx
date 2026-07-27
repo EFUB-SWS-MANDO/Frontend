@@ -3,6 +3,7 @@ import styled, { useTheme } from 'styled-components';
 import CommentIcon from '@/asset/icons/CommentIcon';
 import LeafIcon from '@/asset/icons/LeafIcon';
 import LockIcon from '@/asset/icons/LockIcon';
+import Tag from '@/components/Tag/Tag';
 
 function PostCard({ post }) {
   const theme = useTheme();
@@ -19,6 +20,13 @@ function PostCard({ post }) {
         {post.onlyMe && <LockIcon size={18} />}
       </TitleRow>
       <Content>{post.content}</Content>
+      {post.tags?.length > 0 && (
+        <TagRow>
+          {post.tags.slice(0, 3).map((tag) => (
+            <Tag key={tag} label={tag} />
+          ))}
+        </TagRow>
+      )}
       <Footer>
         <AuthorInfo>
           {post.author.profileImage ? (
@@ -78,6 +86,13 @@ const Content = styled.p`
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: ${({ theme }) => theme.spacing(5)};
   line-height: ${20 / 14};
+`;
+
+const TagRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: ${({ theme }) => theme.spacing(2)};
+  margin-bottom: ${({ theme }) => theme.spacing(4)};
 `;
 
 const Footer = styled.div`
