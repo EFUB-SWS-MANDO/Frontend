@@ -38,7 +38,7 @@ export const MOCK_POSTS = [
     tags: ['대외활동'],
     recruitStatus: 'closed',
     isLiked: false,
-    onlyMe: true,
+    isPrivate: true,
   },
   {
     id: 4,
