@@ -51,10 +51,13 @@ export function useComments(postId) {
         setComments(MOCK_COMMENTS);
         return;
       }
+      const MAX_PAGES = 50;
       const flat = [];
       let idAfter;
       let hasNext = true;
-      while (hasNext) {
+      let page = 0;
+      while (hasNext && page < MAX_PAGES) {
+        page += 1;
         const data = await api.get(ENDPOINTS.posts.comments(postId), {
           params: idAfter !== undefined ? { idAfter } : undefined,
         });
@@ -62,8 +65,10 @@ export function useComments(postId) {
           const raw = item.commentId !== undefined ? item : Object.values(item)[0];
           if (raw?.commentId !== undefined) flat.push(mapComment(raw));
         });
-        hasNext = data.hasNext ?? false;
-        idAfter = data.nextIdAfter;
+        const nextIdAfter = data.nextIdAfter;
+        hasNext =
+          (data.hasNext ?? false) && nextIdAfter !== undefined && nextIdAfter !== idAfter;
+        idAfter = nextIdAfter;
       }
       setComments(buildCommentTree(flat));
     } catch (e) {
