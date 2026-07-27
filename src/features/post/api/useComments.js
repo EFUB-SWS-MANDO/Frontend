@@ -46,9 +46,26 @@ export function useComments(postId) {
     setIsLoading(true);
     setError(null);
     try {
-      // TODO: 백엔드 연동 후 실제 api.get(ENDPOINTS.posts.comments(postId)) 사용
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      setComments(MOCK_COMMENTS);
+      if (USE_MOCK) {
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        setComments(MOCK_COMMENTS);
+        return;
+      }
+      const flat = [];
+      let idAfter;
+      let hasNext = true;
+      while (hasNext) {
+        const data = await api.get(ENDPOINTS.posts.comments(postId), {
+          params: idAfter !== undefined ? { idAfter } : undefined,
+        });
+        (data.comments ?? []).forEach((item) => {
+          const raw = item.commentId !== undefined ? item : Object.values(item)[0];
+          if (raw?.commentId !== undefined) flat.push(mapComment(raw));
+        });
+        hasNext = data.hasNext ?? false;
+        idAfter = data.nextIdAfter;
+      }
+      setComments(buildCommentTree(flat));
     } catch (e) {
       setError(e);
     } finally {
