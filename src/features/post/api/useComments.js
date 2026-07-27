@@ -94,13 +94,29 @@ export function useComments(postId) {
     }
   };
 
-  const addReply = (parentId, newReply) => {
-    // TODO: 백엔드 연동 후 API 호출로 대체, 지금은 화면에서만 추가
+  const appendReply = (parentId, reply) => {
     setComments((prev) =>
       prev.map((c) =>
-        c.id === parentId ? { ...c, replies: [...(c.replies ?? []), newReply] } : c,
+        c.id === parentId ? { ...c, replies: [...(c.replies ?? []), reply] } : c,
       ),
     );
+  };
+
+  const addReply = async (parentId, newReply) => {
+    if (USE_MOCK) {
+      appendReply(parentId, newReply);
+      return;
+    }
+    try {
+      const data = await api.post(ENDPOINTS.posts.comments(postId), {
+        content: newReply.content,
+        parentId,
+        isPrivate: newReply.isPrivate ?? false,
+      });
+      appendReply(parentId, mapComment(data));
+    } catch (e) {
+      setError(e);
+    }
   };
 
   const updateComment = (commentId, updates) => {
