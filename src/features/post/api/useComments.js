@@ -21,8 +21,8 @@ const mapComment = (raw) => ({
   parentId: raw.parentId ?? null,
   content: raw.content,
   isPrivate: raw.isPrivate ?? false,
-  isDeleted: raw.deleted ?? false,
-  isEdited: raw.edited ?? false,
+  isDeleted: raw.deleted ?? raw.isDeleted ?? false,
+  isEdited: raw.edited ?? raw.isEdited ?? false,
   createdAt: formatDateTime(raw.createdAt),
 });
 
