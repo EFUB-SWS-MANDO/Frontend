@@ -77,9 +77,21 @@ export function useComments(postId) {
     fetchComments();
   }, [fetchComments]);
 
-  const addComment = (newComment) => {
-    // TODO: 백엔드 연동 후 API 호출로 대체, 지금은 화면에서만 추가
-    setComments((prev) => [...prev, { ...newComment, replies: [] }]);
+  const addComment = async (newComment) => {
+    if (USE_MOCK) {
+      setComments((prev) => [...prev, { ...newComment, replies: [] }]);
+      return;
+    }
+    try {
+      const data = await api.post(ENDPOINTS.posts.comments(postId), {
+        content: newComment.content,
+        parentId: null,
+        isPrivate: newComment.isPrivate ?? false,
+      });
+      setComments((prev) => [...prev, { ...mapComment(data), replies: [] }]);
+    } catch (e) {
+      setError(e);
+    }
   };
 
   const addReply = (parentId, newReply) => {
