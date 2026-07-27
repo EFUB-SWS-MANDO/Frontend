@@ -161,7 +161,18 @@ export function useComments(postId) {
     }
   };
 
-  const deleteComment = (commentId) => updateComment(commentId, { isDeleted: true });
+  const deleteComment = async (commentId) => {
+    if (USE_MOCK) {
+      applyCommentUpdate(commentId, { isDeleted: true });
+      return;
+    }
+    try {
+      await api.delete(ENDPOINTS.comments.remove(commentId));
+      applyCommentUpdate(commentId, { isDeleted: true });
+    } catch (e) {
+      setError(e);
+    }
+  };
 
   return {
     comments,
