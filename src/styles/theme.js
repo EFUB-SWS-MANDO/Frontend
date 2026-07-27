@@ -61,6 +61,7 @@ export const theme = {
     xxxl: '36px',
   },
   fontWeight: { regular: 400, medium: 500, semibold: 600, bold: 700 },
+  lineHeight: { xxs: 11 / 10 },
   radius: { xs: '4px', sm: '8px', md: '12px', lg: '20px', full: '9999px' },
   spacing: (n) => `${n * 4}px`, // spacing(4) -> 16px
   breakpoints: { mobile: '480px', tablet: '768px' },

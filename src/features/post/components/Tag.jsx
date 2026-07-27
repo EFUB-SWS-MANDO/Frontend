@@ -36,7 +36,7 @@ const Chip = styled.span`
   color: ${({ theme, $text }) => theme.colors[$text]};
   font-size: ${({ theme }) => theme.fontSize.xxs};
   font-weight: ${({ theme }) => theme.fontWeight.semibold};
-  line-height: ${11 / 10};
+  line-height: ${({ theme }) => theme.lineHeight.xxs};
   white-space: nowrap;
 `;
 
