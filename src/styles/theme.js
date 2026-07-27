@@ -25,6 +25,16 @@ export const theme = {
     gray950: '#2C303D',
     black: '#0F0F0F',
 
+    // ===== Sub (Figma sub 팔레트, 태그 색상) =====
+    blue50: '#EAF3FF',
+    blue100: '#1C72EB',
+    yellow50: '#FFF6EB',
+    yellow100: '#F59E0B',
+    pink50: '#FFF0F8',
+    pink100: '#F772BD',
+    red50: '#FFF0F0',
+    red100: '#FF4747',
+
     // ===== 기존 시맨틱 키 (다른 페이지 호환용, 값만 정확한 컬러로 교체) =====
     primary: '#00BF63',      // green500
     primaryDark: '#008947',  // green700
@@ -41,6 +51,7 @@ export const theme = {
     kakaoText: '#191919',
   },
   fontSize: {
+    xxs: '10px',
     xs: '12px',
     sm: '14px',
     md: '16px',
@@ -50,7 +61,7 @@ export const theme = {
     xxxl: '36px',
   },
   fontWeight: { regular: 400, medium: 500, semibold: 600, bold: 700 },
-  radius: { sm: '8px', md: '12px', lg: '20px', full: '9999px' },
+  radius: { xs: '4px', sm: '8px', md: '12px', lg: '20px', full: '9999px' },
   spacing: (n) => `${n * 4}px`, // spacing(4) -> 16px
   breakpoints: { mobile: '480px', tablet: '768px' },
 };
