@@ -3,7 +3,7 @@ import styled, { useTheme } from 'styled-components';
 import CommentIcon from '@/asset/icons/CommentIcon';
 import LeafIcon from '@/asset/icons/LeafIcon';
 import LockIcon from '@/asset/icons/LockIcon';
-import Tag from '@/components/Tag/Tag';
+import Tag from '@/features/post/components/Tag';
 
 function PostCard({ post }) {
   const theme = useTheme();
