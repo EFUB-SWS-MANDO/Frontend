@@ -5,6 +5,7 @@ import PostTypeDropdown from '@/features/post/components/PostTypeDropdown';
 import FreeWriteForm from '@/features/post/components/FreeWriteForm';
 import TemplateWriteForm from '@/features/post/components/TemplateWriteForm';
 import AttachmentButtons from '@/features/post/components/AttachmentButtons';
+import AttachmentPreviewList from '@/features/post/components/AttachmentPreviewList';
 import CategorySelector from '@/features/post/components/CategorySelector';
 import VisibilityToggle from '@/features/post/components/VisibilityToggle';
 import CompletionToast from '@/features/post/components/CompletionToast';
@@ -91,8 +92,13 @@ function PostWritePage() {
             )}
           </FormArea>
 
+          <AttachmentPreviewList photos={photos} files={files} />
+
           <BottomRow>
-            <AttachmentButtons onPhotoSelect={setPhotos} onFileSelect={setFiles} />
+            <AttachmentButtons
+              onPhotoSelect={(newPhotos) => setPhotos((prev) => [...prev, ...newPhotos])}
+              onFileSelect={(newFiles) => setFiles((prev) => [...prev, ...newFiles])}
+            />
             <NextButton onClick={handleNext} disabled={isTemplateUnavailable}>
               다음
               <ArrowRightIcon color="#494D5A" size={16} />

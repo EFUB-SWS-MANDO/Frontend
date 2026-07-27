@@ -4,6 +4,7 @@ export const MOCK_POST_DETAIL = {
     id: 1,
     name: '람지우2세',
     profileImage: '',
+    isFollowing: false,
   },
   createdAt: '2026.01.12 23:23',
   content:

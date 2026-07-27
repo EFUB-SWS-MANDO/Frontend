@@ -13,19 +13,24 @@ function ProfilePage() {
   const { userId: rawUserId } = useParams();
   const myUser = useAuthStore((state) => state.user);
   const userId = rawUserId === 'me' ? myUser?.id : rawUserId;
-  const isOwner = String(userId) === String(myUser?.id);
 
   const { profile, isLoading: profileLoading, error: profileError } = useProfile(userId);
   const { posts, isLoading: postsLoading, error: postsError } = usePosts({ userId });
 
   if (profileLoading || postsLoading) return <Spinner />;
-  if (profileError || postsError) return <EmptyState message="불러오지 못했어요. 다시 시도해 주세요." />;
+  if (profileError || postsError) {
+    return (
+      <EmptyState
+        message={profileError?.message || postsError?.message || '불러오지 못했어요. 다시 시도해 주세요.'}
+      />
+    );
+  }
 
   return (
     <div>
-      <ProfileHeader user={profile} isOwner={isOwner} />
+      <ProfileHeader user={profile} isOwner={profile?.isMe} />
       <PostSection>
-        <SectionTitle>{isOwner ? '내가 쓴 글' : `${profile?.name}님의 글`}</SectionTitle>
+        <SectionTitle>{profile?.isMe ? '내가 쓴 글' : `${profile?.nickname}님의 글`}</SectionTitle>
         {posts.length === 0 ? (
           <EmptyState />
         ) : (

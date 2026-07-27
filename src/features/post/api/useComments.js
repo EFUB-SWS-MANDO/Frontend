@@ -26,8 +26,44 @@ export function useComments(postId) {
 
   const addComment = (newComment) => {
     // TODO: 백엔드 연동 후 API 호출로 대체, 지금은 화면에서만 추가
-    setComments((prev) => [...prev, newComment]);
+    setComments((prev) => [...prev, { ...newComment, replies: [] }]);
   };
 
-  return { comments, isLoading, error, refetch: fetchComments, addComment };
+  const addReply = (parentId, newReply) => {
+    // TODO: 백엔드 연동 후 API 호출로 대체, 지금은 화면에서만 추가
+    setComments((prev) =>
+      prev.map((c) =>
+        c.id === parentId ? { ...c, replies: [...(c.replies ?? []), newReply] } : c,
+      ),
+    );
+  };
+
+  const updateComment = (commentId, updates) => {
+    // TODO: 백엔드 연동 후 API 호출로 대체
+    setComments((prev) =>
+      prev.map((c) => {
+        if (c.id === commentId) return { ...c, ...updates };
+        if (c.replies?.some((r) => r.id === commentId)) {
+          return {
+            ...c,
+            replies: c.replies.map((r) => (r.id === commentId ? { ...r, ...updates } : r)),
+          };
+        }
+        return c;
+      }),
+    );
+  };
+
+  const deleteComment = (commentId) => updateComment(commentId, { isDeleted: true });
+
+  return {
+    comments,
+    isLoading,
+    error,
+    refetch: fetchComments,
+    addComment,
+    addReply,
+    updateComment,
+    deleteComment,
+  };
 }
