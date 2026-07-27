@@ -154,7 +154,10 @@ export function useComments(postId) {
       return;
     }
     const current = findComment(commentId);
-    if (!current) return;
+    if (!current) {
+      setError(new Error(`댓글(${commentId})을 찾을 수 없습니다.`));
+      return;
+    }
     try {
       const data = await api.patch(ENDPOINTS.comments.update(commentId), {
         content: updates.content ?? current.content,
