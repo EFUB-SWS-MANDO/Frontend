@@ -75,6 +75,11 @@ const UploadArea = styled.label`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing(2)};
+
+  &:focus-within {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: -1px;
+  }
 `;
 
 const FileList = styled.span`
@@ -84,7 +89,15 @@ const FileList = styled.span`
 `;
 
 const HiddenInput = styled.input`
-  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 `;
 
 export default TemplateWriteForm;
