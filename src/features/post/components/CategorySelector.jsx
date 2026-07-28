@@ -17,9 +17,9 @@ function CategorySelector({ selected, onToggle }) {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <SearchButton type="button" aria-label="검색">
+        <SearchIcon aria-hidden="true">
           <SendCircleIcon size={36} />
-        </SearchButton>
+        </SearchIcon>
       </SearchRow>
       <ChipList>
         {filtered.map((category) => {
@@ -69,16 +69,18 @@ const SearchInput = styled.input`
   &::placeholder {
     color: ${({ theme }) => theme.colors.textSub};
   }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 2px;
+  }
 `;
 
-const SearchButton = styled.button`
+const SearchIcon = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background: none;
-  border: none;
-  padding: 0;
 `;
 
 const ChipList = styled.div`

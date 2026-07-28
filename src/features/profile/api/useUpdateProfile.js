@@ -16,12 +16,16 @@ export function useUpdateProfile() {
     setError(null);
 
     try {
-      let profileImage = useAuthStore.getState().user?.profileImage ?? MOCK_PROFILE.profileImage;
+      const previousImage = useAuthStore.getState().user?.profileImage ?? null;
+      let profileImage = previousImage;
 
       // VITE_MOCK_AUTH=true면 API 호출 없이 목 데이터만 갱신 (시연/개발용)
       if (import.meta.env.VITE_MOCK_AUTH === 'true') {
         await new Promise((resolve) => setTimeout(resolve, 500));
-        if (profileImageFile) profileImage = URL.createObjectURL(profileImageFile);
+        if (profileImageFile) {
+          profileImage = URL.createObjectURL(profileImageFile);
+          if (previousImage?.startsWith('blob:')) URL.revokeObjectURL(previousImage);
+        }
       } else {
         const payload = { nickname, bio };
         if (profileImageFile) {

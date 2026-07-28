@@ -11,6 +11,7 @@ function LikeButton({ postId, initialCount, initialLiked }) {
       <Button
         $active={isLiked}
         onClick={toggleLike}
+        aria-pressed={isLiked}
         aria-label={isLiked ? '추천 취소' : '추천하기'}
       >
         <LeafIcon color={isLiked ? '#4CAF50' : '#6B7280'} size={16} />
