@@ -12,6 +12,5 @@ export async function uploadProfileImage(file) {
     headers: { 'Content-Type': file.type },
     timeout: 10000,
   });
-  // TODO: 프로필 생성/수정 요청 필드명이 profileImage인지 fileKey인지 백엔드 확인 필요
   return fileKey;
 }
