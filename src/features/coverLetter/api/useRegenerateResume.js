@@ -5,7 +5,6 @@ import { USE_MOCK } from '@/apis/config';
 import { buildMockDraftAnswers } from '../mocks/drafts';
 
 // 자소서 재생성. 전체 문항 답변을 덮어쓰며 되돌리기 불가.
-// (백엔드 개발 중 — 완료 전까지는 mock으로 동작)
 export function useRegenerateResume() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
