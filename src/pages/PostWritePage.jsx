@@ -16,14 +16,14 @@ import { useAuthStore } from '@/stores/authStore';
 function buildTitle(content) {
   const firstLine = content.trim().split('\n')[0];
   if (!firstLine) return '제목 없음';
-  return firstLine.length > 30 ? `${firstLine.slice(0, 30)}...` : firstLine;
+  return firstLine.length > 30 ? `${firstLine.slice(0, 27)}...` : firstLine;
 }
 
 function PostWritePage() {
   const navigate = useNavigate();
   const location = useLocation();
   const myUser = useAuthStore((state) => state.user);
-  const { createPost } = useCreatePost();
+  const { createPost, isSubmitting, error } = useCreatePost();
 
   const [step, setStep] = useState(1);
   const [postType, setPostType] = useState(location.state?.postType ?? 'free');
@@ -54,6 +54,11 @@ function PostWritePage() {
   };
 
   const handleUpload = async () => {
+    if (!myUser?.id) {
+      navigate('/login');
+      return;
+    }
+
     const content = postType === 'free' ? freeContent : templateContent.activity;
     const tags = MOCK_CATEGORIES.filter((c) => selectedCategories.includes(c.id)).map((c) => c.name);
 
@@ -124,7 +129,10 @@ function PostWritePage() {
           </BottomSectionRow>
 
           <UploadButtonRow>
-            <UploadButton onClick={handleUpload}>업로드하기 ↑</UploadButton>
+            {error && <ErrorText role="alert">게시글을 등록하지 못했습니다. 다시 시도해주세요.</ErrorText>}
+            <UploadButton onClick={handleUpload} disabled={isSubmitting}>
+              {isSubmitting ? '업로드 중...' : '업로드하기 ↑'}
+            </UploadButton>
           </UploadButtonRow>
         </>
       )}
@@ -205,7 +213,14 @@ const BottomSectionRow = styled.div`
 
 const UploadButtonRow = styled.div`
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: ${({ theme }) => theme.spacing(3)};
+`;
+
+const ErrorText = styled.p`
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.error};
 `;
 
 const UploadButton = styled.button`
@@ -218,6 +233,11 @@ const UploadButton = styled.button`
   color: ${({ theme }) => theme.colors.bg};
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;
 
 export default PostWritePage;
