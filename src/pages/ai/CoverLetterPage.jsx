@@ -8,8 +8,8 @@ import CoverLetterStep3 from '../../features/coverLetter/components/CoverLetterS
 import CoverLetterStep4 from '../../features/coverLetter/components/CoverLetterStep4';
 import CoverLetterStep5 from '../../features/coverLetter/components/CoverLetterStep5';
 import CoverLetterStep6 from '../../features/coverLetter/components/CoverLetterStep6';
-import { buildMockDraftAnswers } from '../../features/coverLetter/mocks/drafts';
 import { useCreateResume } from '../../features/coverLetter/api/useCreateResume';
+import { useRegenerateResume } from '../../features/coverLetter/api/useRegenerateResume';
 
 const TOTAL_STEPS = 5;
 
@@ -25,34 +25,48 @@ const CoverLetterPage = () => {
   const [draftAnswers, setDraftAnswers] = useState({});
   const [draftVariant, setDraftVariant] = useState(0);
   const [activeQuestionId, setActiveQuestionId] = useState(null);
+  const [resumeId, setResumeId] = useState(null);
   const { createResume, isSubmitting, error } = useCreateResume();
+  const {
+    regenerateResume,
+    isSubmitting: isRegenerating,
+    error: regenerateError,
+  } = useRegenerateResume();
 
   const goNext = () => setStep((prev) => Math.min(prev + 1, TOTAL_STEPS));
 
-  const handleGenerateDrafts = async () => {
-    const resume = await createResume({ title, postIds: selectedActivities, questions });
-    if (!resume) return;
-
+  const applyResumeQuestions = (resumeQuestions) => {
     setQuestions(
-      resume.questions.map((q) => ({
+      resumeQuestions.map((q) => ({
         id: q.questionId,
         content: q.content,
         maxLength: q.maxLength,
       })),
     );
     setDraftAnswers(
-      resume.questions.reduce((acc, q) => {
+      resumeQuestions.reduce((acc, q) => {
         acc[q.questionId] = { content: q.answer, explanation: q.description };
         return acc;
       }, {}),
     );
+  };
+
+  const handleGenerateDrafts = async () => {
+    const resume = await createResume({ title, postIds: selectedActivities, questions });
+    if (!resume) return;
+
+    setResumeId(resume.resumeId);
+    applyResumeQuestions(resume.questions);
     goNext();
   };
 
-  const handleRegenerateDrafts = () => {
+  const handleRegenerateDrafts = async () => {
     const nextVariant = draftVariant + 1;
+    const resumeQuestions = await regenerateResume(resumeId, questions, nextVariant);
+    if (!resumeQuestions) return;
+
     setDraftVariant(nextVariant);
-    setDraftAnswers(buildMockDraftAnswers(questions, nextVariant));
+    applyResumeQuestions(resumeQuestions);
   };
 
   const handleFinish = () => {
@@ -111,6 +125,8 @@ const CoverLetterPage = () => {
             onSelectQuestion={setActiveQuestionId}
             onRestart={handleRegenerateDrafts}
             onFinish={handleFinish}
+            isRegenerating={isRegenerating}
+            regenerateError={regenerateError}
           />
         );
       }

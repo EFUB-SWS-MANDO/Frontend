@@ -36,6 +36,7 @@ export const ENDPOINTS = {
     create: '/api/resumes',
     detail: (resumeId) => `/api/resumes/${resumeId}`,
     remove: (resumeId) => `/api/resumes/${resumeId}`,
+    regenerate: (resumeId) => `/api/resumes/${resumeId}/regenerate`,
   },
   interviews: {
     list: '/api/interviews',
