@@ -1,16 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
+import { api } from '@/apis/axiosInstance';
+import { ENDPOINTS } from '@/apis/endpoints';
+import { USE_MOCK } from '@/apis/config';
 import { MOCK_POSTS } from '@/mocks/mockPosts';
-// import { api } from '@/apis/axiosInstance'; // TODO: 백엔드 연동 후 주석 해제
-// import { ENDPOINTS } from '@/apis/endpoints'; // TODO: 백엔드 연동 후 주석 해제
+import { categoryLabelToCode } from '@/constants/postCategories';
+import { mapPostSummary } from './postMappers';
 
-// 백엔드 연동 전, 목 데이터를 파라미터로 필터링해서 반환한다.
-// params: { tab: 'all'|'following', tags: string[], recruitStatus: 'all'|'recruiting'|'closed', keyword: string }
-function filterPosts(posts, { tab, tags, recruitStatus, keyword }) {
+// mock 데이터를 파라미터로 필터링 (백엔드 연동 전 개발용)
+function filterMockPosts(posts, { followingOnly, categories, author, keyword }) {
   return posts.filter((post) => {
-    if (tab === 'following' && !post.author.isFollowing) return false;
-    if (tags?.length && !tags.some((t) => post.tags.includes(t))) return false;
-    if (recruitStatus && recruitStatus !== 'all' && post.recruitStatus !== recruitStatus)
-      return false;
+    if (followingOnly && !post.author.isFollowing) return false;
+    if (author != null && String(post.author.id) !== String(author)) return false;
+    if (categories?.length && !categories.some((t) => post.tags.includes(t))) return false;
     if (keyword) {
       const q = keyword.trim().toLowerCase();
       const target = `${post.title} ${post.content}`.toLowerCase();
@@ -31,9 +32,39 @@ export function usePosts(params = {}) {
     setIsLoading(true);
     setError(null);
     try {
-      // TODO: 백엔드 연동 후 아래 mock 대신 실제 api.get() 사용
-      await new Promise((resolve) => setTimeout(resolve, 300)); // 로딩 흉내
-      setPosts(filterPosts(MOCK_POSTS, JSON.parse(paramsKey)));
+      const { followingOnly, categories, author, keyword, sortBy, sortDirection } =
+        JSON.parse(paramsKey);
+
+      if (USE_MOCK) {
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        setPosts(filterMockPosts(MOCK_POSTS, { followingOnly, categories, author, keyword }));
+        return;
+      }
+
+      const MAX_PAGES = 50;
+      const flat = [];
+      let nextCursor;
+      let hasNext = true;
+      let page = 0;
+      while (hasNext && page < MAX_PAGES) {
+        page += 1;
+        const data = await api.get(ENDPOINTS.posts.list, {
+          params: {
+            sortBy,
+            sortDirection,
+            category: categories?.length ? categories.map(categoryLabelToCode) : undefined,
+            author,
+            followingOnly,
+            keyword,
+            nextCursor,
+          },
+        });
+        (data.posts ?? []).forEach((raw) => flat.push(mapPostSummary(raw)));
+        const next = data.nextCursor;
+        hasNext = (data.hasNext ?? false) && next !== undefined && next !== nextCursor;
+        nextCursor = next;
+      }
+      setPosts(flat);
     } catch (e) {
       setError(e);
     } finally {

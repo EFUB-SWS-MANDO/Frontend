@@ -1,4 +1,4 @@
-// 백엔드 연동 전 목 데이터. tags/recruitStatus/isFollowing은 필터·탭 개발용.
+// 백엔드 연동 전 목 데이터. tags/isFollowing은 필터·탭 개발용.
 export const MOCK_POSTS = [
   {
     id: 1,
@@ -9,8 +9,7 @@ export const MOCK_POSTS = [
     createdAt: '2026.06.15 18:20',
     commentCount: 52,
     likeCount: 789012,
-    tags: ['스터디'],
-    recruitStatus: 'recruiting',
+    tags: ['성장'],
     isLiked: false,
   },
   {
@@ -22,8 +21,7 @@ export const MOCK_POSTS = [
     createdAt: '2026.06.16 09:45',
     commentCount: 34,
     likeCount: 987654,
-    tags: ['프로젝트'],
-    recruitStatus: 'recruiting',
+    tags: ['도전'],
     isLiked: false,
   },
   {
@@ -35,8 +33,7 @@ export const MOCK_POSTS = [
     createdAt: '2026.06.18 14:02',
     commentCount: 45,
     likeCount: 456789,
-    tags: ['대외활동'],
-    recruitStatus: 'closed',
+    tags: ['협업'],
     isLiked: false,
   },
   {
@@ -48,8 +45,7 @@ export const MOCK_POSTS = [
     createdAt: '2026.06.19 11:30',
     commentCount: 52,
     likeCount: 768013,
-    tags: ['스터디'],
-    recruitStatus: 'closed',
+    tags: ['성장'],
     isLiked: false,
   },
   {
@@ -61,8 +57,7 @@ export const MOCK_POSTS = [
     createdAt: '2026.06.20 09:45',
     commentCount: 34,
     likeCount: 768013,
-    tags: ['공모전'],
-    recruitStatus: 'recruiting',
+    tags: ['도전'],
     isLiked: false,
   },
   {
@@ -74,8 +69,7 @@ export const MOCK_POSTS = [
     createdAt: '2026.06.21 20:10',
     commentCount: 24,
     likeCount: 768013,
-    tags: ['인턴'],
-    recruitStatus: 'closed',
+    tags: ['직무역량'],
     isLiked: false,
   },
 ];

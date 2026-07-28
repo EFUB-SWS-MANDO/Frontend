@@ -1,19 +1,10 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import Button from '@/components/Button/Button';
-import { CATEGORIES } from '@/constants/categories';
+import { POST_CATEGORIES } from '@/constants/postCategories';
 
-const RECRUIT_OPTIONS = [
-  { value: 'all', label: '전체' },
-  { value: 'recruiting', label: '모집 중' },
-  { value: 'closed', label: '모집 완료' },
-];
-
-// 필터 모달: 모집 상태(단일 선택) + 태그(다중 선택). 확인 시 한번에 적용.
+// 필터 모달: 카테고리(다중 선택). 확인 시 한번에 적용.
 function FilterModal({ initialFilters, onApply, onClose }) {
-  const [recruitStatus, setRecruitStatus] = useState(
-    initialFilters.recruitStatus,
-  );
   const [tags, setTags] = useState(initialFilters.tags);
 
   const toggleTag = (tag) => {
@@ -29,30 +20,16 @@ function FilterModal({ initialFilters, onApply, onClose }) {
         aria-label="글 필터"
         onClick={(e) => e.stopPropagation()}
       >
-        <SectionTitle>모집 필터</SectionTitle>
+        <SectionTitle>카테고리별 필터</SectionTitle>
         <OptionRow>
-          {RECRUIT_OPTIONS.map((opt) => (
+          {POST_CATEGORIES.map(({ label }) => (
             <OptionChip
-              key={opt.value}
+              key={label}
               type="button"
-              $selected={recruitStatus === opt.value}
-              onClick={() => setRecruitStatus(opt.value)}
+              $selected={tags.includes(label)}
+              onClick={() => toggleTag(label)}
             >
-              {opt.label}
-            </OptionChip>
-          ))}
-        </OptionRow>
-
-        <SectionTitle>태그별 필터</SectionTitle>
-        <OptionRow>
-          {CATEGORIES.map((tag) => (
-            <OptionChip
-              key={tag}
-              type="button"
-              $selected={tags.includes(tag)}
-              onClick={() => toggleTag(tag)}
-            >
-              {tag}
+              {label}
             </OptionChip>
           ))}
         </OptionRow>
@@ -61,10 +38,7 @@ function FilterModal({ initialFilters, onApply, onClose }) {
           <Button variant="outline" type="button" onClick={onClose}>
             취소
           </Button>
-          <Button
-            type="button"
-            onClick={() => onApply({ recruitStatus, tags })}
-          >
+          <Button type="button" onClick={() => onApply({ tags })}>
             확인
           </Button>
         </ButtonRow>

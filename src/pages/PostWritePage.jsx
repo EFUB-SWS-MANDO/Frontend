@@ -10,10 +10,26 @@ import CategorySelector from '@/features/post/components/CategorySelector';
 import VisibilityToggle from '@/features/post/components/VisibilityToggle';
 import CompletionToast from '@/features/post/components/CompletionToast';
 import ArrowRightIcon from '@/asset/icons/ArrowRightIcon';
+import { useCreatePost } from '@/features/post/api/useCreatePost';
+import { useAuthStore } from '@/stores/authStore';
+import { MOCK_CATEGORIES } from '@/mocks/mockCategories';
+import { categoryLabelToCode } from '@/constants/postCategories';
+
+const TITLE_MAX_LENGTH = 20;
+
+function buildTitle(content) {
+  const firstLine = content.trim().split('\n')[0];
+  if (!firstLine) return '제목 없음';
+  return firstLine.length > TITLE_MAX_LENGTH
+    ? `${firstLine.slice(0, TITLE_MAX_LENGTH - 3)}...`
+    : firstLine;
+}
 
 function PostWritePage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const myUser = useAuthStore((state) => state.user);
+  const { createPost, isSubmitting, error } = useCreatePost();
 
   const [step, setStep] = useState(1);
   const [postType, setPostType] = useState(location.state?.postType ?? 'free');
@@ -43,9 +59,26 @@ function PostWritePage() {
     );
   };
 
-  const handleUpload = () => {
-    // TODO: 백엔드 연동 후 실제 게시글 생성 API 호출
-    setShowToast(true);
+  const handleUpload = async () => {
+    if (!myUser?.id) {
+      navigate('/login');
+      return;
+    }
+
+    const content = postType === 'free' ? freeContent : templateContent.activity;
+    const categories = selectedCategories
+      .map((id) => MOCK_CATEGORIES.find((c) => c.id === id)?.name)
+      .filter(Boolean)
+      .map(categoryLabelToCode);
+
+    const post = await createPost({
+      title: buildTitle(content),
+      content,
+      categories,
+      isPrivate: visibility === 'private',
+    });
+
+    if (post) setShowToast(true);
   };
 
   const handleToastDone = () => {
@@ -99,7 +132,10 @@ function PostWritePage() {
           </BottomSectionRow>
 
           <UploadButtonRow>
-            <UploadButton onClick={handleUpload}>업로드하기 ↑</UploadButton>
+            {error && <ErrorText role="alert">게시글을 등록하지 못했어요. 다시 시도해주세요.</ErrorText>}
+            <UploadButton onClick={handleUpload} disabled={isSubmitting}>
+              {isSubmitting ? '업로드 중...' : '업로드하기 ↑'}
+            </UploadButton>
           </UploadButtonRow>
         </>
       )}
@@ -180,7 +216,14 @@ const BottomSectionRow = styled.div`
 
 const UploadButtonRow = styled.div`
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: ${({ theme }) => theme.spacing(3)};
+`;
+
+const ErrorText = styled.p`
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.error};
 `;
 
 const UploadButton = styled.button`
@@ -193,6 +236,11 @@ const UploadButton = styled.button`
   color: ${({ theme }) => theme.colors.bg};
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;
 
 export default PostWritePage;
