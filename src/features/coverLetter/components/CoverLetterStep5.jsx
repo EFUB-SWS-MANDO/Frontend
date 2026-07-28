@@ -26,10 +26,6 @@ const CoverLetterStep5 = ({
     navigator.clipboard.writeText(draft.content);
   };
 
-  const handleSave = () => {
-    // TODO: 백엔드 연동 시 자소서 저장 API 요청
-  };
-
   return (
     <StepWrapper>
       <GuideArea>
@@ -52,7 +48,6 @@ const CoverLetterStep5 = ({
             selected={selectedIds.includes(question.id)}
             onSelect={onSelectQuestion}
             onCopy={handleCopy}
-            onSave={handleSave}
           />
         ))}
       </DraftList>
