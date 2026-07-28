@@ -9,6 +9,7 @@ import CoverLetterStep4 from '../../features/coverLetter/components/CoverLetterS
 import CoverLetterStep5 from '../../features/coverLetter/components/CoverLetterStep5';
 import CoverLetterStep6 from '../../features/coverLetter/components/CoverLetterStep6';
 import { buildMockDraftAnswers } from '../../features/coverLetter/mocks/drafts';
+import { useCreateResume } from '../../features/coverLetter/api/useCreateResume';
 
 const TOTAL_STEPS = 5;
 
@@ -24,11 +25,27 @@ const CoverLetterPage = () => {
   const [draftAnswers, setDraftAnswers] = useState({});
   const [draftVariant, setDraftVariant] = useState(0);
   const [activeQuestionId, setActiveQuestionId] = useState(null);
+  const { createResume, isSubmitting, error } = useCreateResume();
 
   const goNext = () => setStep((prev) => Math.min(prev + 1, TOTAL_STEPS));
 
-  const handleGenerateDrafts = () => {
-    setDraftAnswers(buildMockDraftAnswers(questions, draftVariant));
+  const handleGenerateDrafts = async () => {
+    const resume = await createResume({ title, postIds: selectedActivities, questions });
+    if (!resume) return;
+
+    setQuestions(
+      resume.questions.map((q) => ({
+        id: q.questionId,
+        content: q.content,
+        maxLength: q.maxLength,
+      })),
+    );
+    setDraftAnswers(
+      resume.questions.reduce((acc, q) => {
+        acc[q.questionId] = { content: q.answer, explanation: q.description };
+        return acc;
+      }, {}),
+    );
     goNext();
   };
 
@@ -72,6 +89,8 @@ const CoverLetterPage = () => {
             questions={questions}
             setQuestions={setQuestions}
             onNext={handleGenerateDrafts}
+            isSubmitting={isSubmitting}
+            error={error}
           />
         );
       case 5: {
