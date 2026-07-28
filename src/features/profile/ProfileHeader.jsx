@@ -1,15 +1,12 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useFollow } from './api/useFollow';
-import DropdownMenu from '@/components/DropdownMenu/DropdownMenu';
 import FollowButton from './FollowButton';
 import ProfileEditModal from './ProfileEditModal';
 
 function ProfileHeader({ user, isOwner, onProfileUpdated }) {
   const { isFollowing, isToggling, error: followError, toggleFollow } = useFollow(user?.memberId, false);
   const [isEditOpen, setIsEditOpen] = useState(false);
-
-  const menuOptions = [{ label: '차단하기', onClick: () => {/* TODO: 차단 API 연동 */}, danger: true }];
 
   return (
     <Wrapper>
@@ -39,10 +36,7 @@ function ProfileHeader({ user, isOwner, onProfileUpdated }) {
             </EditButton>
           ) : (
             <>
-              <FollowRow>
-                <FollowButton isFollowing={isFollowing} onClick={toggleFollow} disabled={isToggling} />
-                <DropdownMenu options={menuOptions} />
-              </FollowRow>
+              <FollowButton isFollowing={isFollowing} onClick={toggleFollow} disabled={isToggling} />
               {followError && <FollowErrorText>{followError.message}</FollowErrorText>}
             </>
           )}
@@ -139,12 +133,6 @@ const ActionArea = styled.div`
 const FollowErrorText = styled.p`
   font-size: ${({ theme }) => theme.fontSize.xs};
   color: ${({ theme }) => theme.colors.error};
-`;
-
-const FollowRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing(2)};
 `;
 
 const EditButton = styled.button`
