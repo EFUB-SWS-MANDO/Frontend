@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import CopyIcon from '../../../asset/icons/CopyIcon';
 import SaveIcon from '../../../asset/icons/SaveIcon';
@@ -14,13 +14,17 @@ const DraftQuestionCard = ({
   onCopy,
 }) => {
   const [showSaved, setShowSaved] = useState(false);
+  const savedTimerRef = useRef(null);
+
+  useEffect(() => () => clearTimeout(savedTimerRef.current), []);
 
   const handleSelect = () => onSelect(question.id);
   const handleCopy = () => onCopy(question.id);
   const handleSave = () => {
     // 생성 시점에 이미 저장되므로 별도 API 호출 없이 저장 완료 표시만 보여줌
+    clearTimeout(savedTimerRef.current);
     setShowSaved(true);
-    setTimeout(() => setShowSaved(false), SAVED_FLASH_MS);
+    savedTimerRef.current = setTimeout(() => setShowSaved(false), SAVED_FLASH_MS);
   };
 
   return (
@@ -34,7 +38,11 @@ const DraftQuestionCard = ({
           <IconButton type="button" onClick={handleCopy} aria-label="복사하기">
             <CopyIcon color="#494D5A" size={18} />
           </IconButton>
-          <IconButton type="button" onClick={handleSave} aria-label="저장하기">
+          <IconButton
+            type="button"
+            onClick={handleSave}
+            aria-label={showSaved ? '저장됨' : '저장하기'}
+          >
             {showSaved && <SavedLabel>저장됨</SavedLabel>}
             <SaveIcon color={showSaved ? '#00BF63' : '#494D5A'} size={18} />
           </IconButton>

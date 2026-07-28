@@ -24,7 +24,10 @@ export function useResumeDetail(resumeId) {
   const [error, setError] = useState(null);
 
   const fetchDetail = useCallback(async () => {
-    if (resumeId == null) return;
+    if (resumeId == null) {
+      setIsLoading(false);
+      return;
+    }
     setIsLoading(true);
     setError(null);
     try {
