@@ -148,11 +148,9 @@ export function useInterview({ mode, selection } = {}) {
 
   const moveToNextMockQuestion = () => {
     setFeedback(null);
-    setQuestionIndex((prev) => {
-      const next = (prev + 1) % MOCK_INTERVIEW_QUESTIONS.length;
-      setQuestion(MOCK_INTERVIEW_QUESTIONS[next].question);
-      return next;
-    });
+    const next = (questionIndex + 1) % MOCK_INTERVIEW_QUESTIONS.length;
+    setQuestionIndex(next);
+    setQuestion(MOCK_INTERVIEW_QUESTIONS[next].question);
   };
 
   const requestNextQuestion = async (type, answer) => {
