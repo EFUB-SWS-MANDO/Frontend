@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
 import { USE_MOCK } from '@/apis/config';
@@ -60,22 +60,26 @@ export function useRecords(type) {
   const [records, setRecords] = useState({ coverLetter: [], interview: [] });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const requestIdRef = useRef(0);
 
   const fetchRecords = useCallback(async () => {
+    requestIdRef.current += 1;
+    const requestId = requestIdRef.current;
+    const isStale = () => requestId !== requestIdRef.current;
     setIsLoading(true);
     setError(null);
     try {
       if (USE_MOCK || type === 'saved') {
         await new Promise((resolve) => setTimeout(resolve, 300));
-        setRecords(type === 'saved' ? MOCK_SAVED : MOCK_HISTORY);
+        if (!isStale()) setRecords(type === 'saved' ? MOCK_SAVED : MOCK_HISTORY);
         return;
       }
       const interview = await fetchInterviewGroups();
-      setRecords({ coverLetter: MOCK_HISTORY.coverLetter, interview });
+      if (!isStale()) setRecords({ coverLetter: MOCK_HISTORY.coverLetter, interview });
     } catch (e) {
-      setError(e);
+      if (!isStale()) setError(e);
     } finally {
-      setIsLoading(false);
+      if (!isStale()) setIsLoading(false);
     }
   }, [type]);
 
