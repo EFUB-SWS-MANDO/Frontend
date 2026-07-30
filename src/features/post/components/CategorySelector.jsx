@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import SendCircleIcon from '@/asset/icons/SendCircleIcon';
 import { MOCK_CATEGORIES } from '@/mocks/mockCategories';
 
 function CategorySelector({ selected, onToggle }) {
@@ -16,7 +17,9 @@ function CategorySelector({ selected, onToggle }) {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <SearchButton aria-label="검색">➤</SearchButton>
+        <SearchIcon aria-hidden="true">
+          <SendCircleIcon size={36} />
+        </SearchIcon>
       </SearchRow>
       <ChipList>
         {filtered.map((category) => {
@@ -50,23 +53,34 @@ const SearchRow = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing(2)};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  padding-bottom: ${({ theme }) => theme.spacing(2)};
+  padding: ${({ theme }) => theme.spacing(2)} ${({ theme }) => theme.spacing(2)} ${({ theme }) => theme.spacing(2)} ${({ theme }) => theme.spacing(5)};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.full};
+  background: ${({ theme }) => theme.colors.bg};
 `;
 
 const SearchInput = styled.input`
   flex: 1;
   border: none;
+  outline: none;
   font-size: ${({ theme }) => theme.fontSize.sm};
   color: ${({ theme }) => theme.colors.text};
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.textSub};
   }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 2px;
+  }
 `;
 
-const SearchButton = styled.button`
-  color: ${({ theme }) => theme.colors.textSub};
+const SearchIcon = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 `;
 
 const ChipList = styled.div`

@@ -1,15 +1,26 @@
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import CopyIcon from '../../../asset/icons/CopyIcon';
 import SaveIcon from '../../../asset/icons/SaveIcon';
 
+const SAVED_FLASH_MS = 1500;
+
 const CoverLetterStep6 = ({ index, question, draft }) => {
+  const [showSaved, setShowSaved] = useState(false);
+  const savedTimerRef = useRef(null);
+
+  useEffect(() => () => clearTimeout(savedTimerRef.current), []);
+
   const handleCopy = () => {
     if (!draft) return;
     navigator.clipboard.writeText(draft.content);
   };
 
   const handleSave = () => {
-    // TODO: 백엔드 연동 시 자소서 저장 API 요청
+    // 생성 시점에 이미 저장되므로 별도 API 호출 없이 저장 완료 표시만 보여줌
+    clearTimeout(savedTimerRef.current);
+    setShowSaved(true);
+    savedTimerRef.current = setTimeout(() => setShowSaved(false), SAVED_FLASH_MS);
   };
 
   return (
@@ -29,7 +40,7 @@ const CoverLetterStep6 = ({ index, question, draft }) => {
         </ActionButton>
         <ActionButton onClick={handleSave}>
           <SaveIcon color="#9197AC" size={20} />
-          저장하기
+          {showSaved ? '저장됨' : '저장하기'}
         </ActionButton>
       </ActionRow>
     </StepWrapper>

@@ -2,7 +2,15 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import DraftQuestionCard from './DraftQuestionCard';
 
-const CoverLetterStep5 = ({ questions, draftAnswers, onSelectQuestion, onRestart, onFinish }) => {
+const CoverLetterStep5 = ({
+  questions,
+  draftAnswers,
+  onSelectQuestion,
+  onRestart,
+  onFinish,
+  isRegenerating,
+  regenerateError,
+}) => {
   const [selectedIds, setSelectedIds] = useState([]);
 
   const isAllSelected =
@@ -16,10 +24,6 @@ const CoverLetterStep5 = ({ questions, draftAnswers, onSelectQuestion, onRestart
     const draft = draftAnswers[id];
     if (!draft) return;
     navigator.clipboard.writeText(draft.content);
-  };
-
-  const handleSave = () => {
-    // TODO: 백엔드 연동 시 자소서 저장 API 요청
   };
 
   return (
@@ -44,13 +48,18 @@ const CoverLetterStep5 = ({ questions, draftAnswers, onSelectQuestion, onRestart
             selected={selectedIds.includes(question.id)}
             onSelect={onSelectQuestion}
             onCopy={handleCopy}
-            onSave={handleSave}
           />
         ))}
       </DraftList>
 
+      {regenerateError && (
+        <ErrorText role="alert">다시 작성하지 못했어요. 다시 시도해주세요.</ErrorText>
+      )}
+
       <BottomArea>
-        <SecondaryButton onClick={onRestart}>다시 작성하기</SecondaryButton>
+        <SecondaryButton onClick={onRestart} disabled={isRegenerating}>
+          {isRegenerating ? '다시 작성 중...' : '다시 작성하기'}
+        </SecondaryButton>
         <PrimaryButton onClick={onFinish}>끝내기</PrimaryButton>
       </BottomArea>
     </StepWrapper>
@@ -107,6 +116,12 @@ const DraftList = styled.div`
   overflow-y: auto;
 `;
 
+const ErrorText = styled.p`
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.error};
+  text-align: center;
+`;
+
 const BottomArea = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing(3)};
@@ -127,6 +142,11 @@ const SecondaryButton = styled.button`
   &:hover {
     border-color: ${({ theme }) => theme.colors.primary};
     color: ${({ theme }) => theme.colors.primary};
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 `;
 

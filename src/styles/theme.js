@@ -49,6 +49,17 @@ export const theme = {
     error: '#FF4747',        // Figma red-100
     kakao: '#FFE607',
     kakaoText: '#191919',
+    overlay: 'rgba(0, 0, 0, 0.3)',
+
+    // ===== Tag 색상 팔레트 (랜덤 배정용) =====
+    tag: {
+      green: { bg: '#ECFCEF', text: '#008947' },
+      blue: { bg: '#E7F0FF', text: '#2E6FF2' },
+      pink: { bg: '#FDEAF3', text: '#D6409F' },
+      red: { bg: '#FFE9E9', text: '#E4483C' },
+      orange: { bg: '#FFF3E0', text: '#C9760C' },
+      gray: { bg: '#F2F3F5', text: '#494D5A' },
+    },
   },
   fontSize: {
     xxs: '10px',

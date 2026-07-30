@@ -12,6 +12,7 @@ export const MOCK_POSTS = [
     tags: ['스터디', '협업', '성장'],
     recruitStatus: 'recruiting',
     isLiked: false,
+    isPrivate: true,
   },
   {
     id: 2,
@@ -35,7 +36,7 @@ export const MOCK_POSTS = [
     createdAt: '2026.06.18 14:02',
     commentCount: 45,
     likeCount: 456789,
-    tags: ['대외활동'],
+    tags: ['대외활동', '기획력'],
     recruitStatus: 'closed',
     isLiked: false,
     isPrivate: true,

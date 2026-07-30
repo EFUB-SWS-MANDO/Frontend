@@ -4,7 +4,7 @@ import QuestionInputCard from './QuestionInputCard';
 
 const MAX_QUESTIONS = 5;
 
-const CoverLetterStep4 = ({ questions, setQuestions, onNext }) => {
+const CoverLetterStep4 = ({ questions, setQuestions, onNext, isSubmitting, error }) => {
   const handleAddQuestion = () => {
     if (questions.length >= MAX_QUESTIONS) return;
     setQuestions((prev) => [
@@ -32,7 +32,6 @@ const CoverLetterStep4 = ({ questions, setQuestions, onNext }) => {
   const hasContent = questions.some((q) => q.content.trim() !== '');
 
   const handleGenerateDraft = () => {
-    // TODO: 백엔드 연동 시 AI 초안 생성 API 요청
     onNext();
   };
 
@@ -64,8 +63,9 @@ const CoverLetterStep4 = ({ questions, setQuestions, onNext }) => {
       )}
 
       <BottomArea>
-        <PrimaryButton onClick={handleGenerateDraft} disabled={!hasContent}>
-          자소서 초안 생성하기
+        {error && <ErrorText role="alert">초안 생성에 실패했어요. 다시 시도해주세요.</ErrorText>}
+        <PrimaryButton onClick={handleGenerateDraft} disabled={!hasContent || isSubmitting}>
+          {isSubmitting ? '생성 중...' : '자소서 초안 생성하기'}
           <MagicpenIcon color="#FFFFFF" size={18} />
         </PrimaryButton>
       </BottomArea>
@@ -123,6 +123,13 @@ const AddButton = styled.button`
 
 const BottomArea = styled.div`
   width: 100%;
+`;
+
+const ErrorText = styled.p`
+  margin-bottom: ${({ theme }) => theme.spacing(2)};
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.error};
+  text-align: center;
 `;
 
 const PrimaryButton = styled.button`

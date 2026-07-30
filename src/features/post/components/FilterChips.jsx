@@ -54,10 +54,12 @@ const IconButton = styled.button`
   justify-content: center;
   padding: ${({ theme }) => theme.spacing(2)};
   border-radius: ${({ theme }) => theme.radius.full};
+  background-color: ${({ theme }) => theme.colors.bg} !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   flex-shrink: 0;
 
   &:hover {
-    background: ${({ theme }) => theme.colors.bgSub};
+    background-color: ${({ theme }) => theme.colors.bgSub} !important;
   }
 `;
 

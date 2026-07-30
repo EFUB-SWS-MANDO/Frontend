@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import ArrowRightIcon from '../../../asset/icons/ArrowRightIcon';
 
-const TITLE_MAX_LENGTH = 50;
+const TITLE_MAX_LENGTH = 20;
 
 const CoverLetterStep3 = ({ title, setTitle, onNext }) => {
   const handleChange = (e) => {

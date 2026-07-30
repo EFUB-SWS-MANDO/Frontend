@@ -1,37 +1,62 @@
 import { useNavigate } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
 import LeafIcon from '@/asset/icons/LeafIcon';
+import coverLetterImage from '@/asset/images/ai-cover-letter.webp';
+import interviewImage from '@/asset/images/ai-interview.webp';
 
 function AiHomePage() {
   const theme = useTheme();
   const navigate = useNavigate();
 
   return (
-    <Container>
-      <GreetingArea>
-        <LeafIcon size={59} color={theme.colors.primary} />
-        <Greeting>오늘은 어떤 걸 해볼까?</Greeting>
-      </GreetingArea>
+    <PageWrapper>
+      <Container>
+        <GreetingArea>
+          <LeafIcon size={59} color={theme.colors.primary} />
+          <Greeting>오늘은 어떤 걸 해볼까?</Greeting>
+        </GreetingArea>
 
-      <CardGrid>
-        <MenuCard type="button" onClick={() => navigate('/ai/cover-letter')}>
-          <CardLabel>자소서</CardLabel>
-        </MenuCard>
-        <MenuCard type="button" onClick={() => navigate('/ai/interview')}>
-          <CardLabel>모의 면접</CardLabel>
-        </MenuCard>
-        <WideCard type="button" onClick={() => navigate('/ai/saved')}>
-          <CardLabel>저장 목록</CardLabel>
-        </WideCard>
-      </CardGrid>
-    </Container>
+        <CardGrid>
+          <MenuCard type="button" onClick={() => navigate('/ai/cover-letter')}>
+            <CardContent>
+              <CardImage src={coverLetterImage} alt="" />
+              <CardLabel>자소서</CardLabel>
+            </CardContent>
+          </MenuCard>
+          <MenuCard type="button" onClick={() => navigate('/ai/interview')}>
+            <CardContent>
+              <CardImage src={interviewImage} alt="" />
+              <CardLabel>모의 면접</CardLabel>
+            </CardContent>
+          </MenuCard>
+          <WideCard type="button" onClick={() => navigate('/ai/saved')}>
+            <CardLabel>저장 목록</CardLabel>
+          </WideCard>
+        </CardGrid>
+      </Container>
+    </PageWrapper>
   );
 }
+
+const PageWrapper = styled.div`
+  position: relative;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  min-height: 70vh;
+  background: radial-gradient(
+    ellipse 65% 60% at 50% 100%,
+    ${({ theme }) => theme.colors.green100} 0%,
+    ${({ theme }) => theme.colors.green50} 45%,
+    transparent 75%
+  );
+`;
 
 const Container = styled.section`
   max-width: 756px;
   margin: 0 auto;
   padding-top: ${({ theme }) => theme.spacing(35)};
+  padding-bottom: ${({ theme }) => theme.spacing(35)};
 `;
 
 const GreetingArea = styled.div`
@@ -77,6 +102,19 @@ const WideCard = styled(MenuCard)`
   height: 52px;
   align-items: center;
   border-radius: ${({ theme }) => theme.radius.full};
+`;
+
+const CardContent = styled.span`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing(3)};
+`;
+
+const CardImage = styled.img`
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
 `;
 
 const CardLabel = styled.span`
