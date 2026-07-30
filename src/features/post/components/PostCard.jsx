@@ -1,18 +1,13 @@
-import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
 import CommentIcon from '@/asset/icons/CommentIcon';
 import LeafIcon from '@/asset/icons/LeafIcon';
 import LockIcon from '@/asset/icons/LockIcon';
-import Tag, { randomTagColor } from '@/components/Tag/Tag';
+import Tag from '@/features/post/components/Tag';
 
 function PostCard({ post }) {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { tags, tagColors } = useMemo(() => {
-    const sliced = post.tags?.slice(0, 3) ?? [];
-    return { tags: sliced, tagColors: sliced.map(() => randomTagColor()) };
-  }, [post.tags]);
 
   const handleCardClick = () => {
     navigate(`/posts/${post.id}`);
@@ -22,12 +17,14 @@ function PostCard({ post }) {
     <Card onClick={handleCardClick}>
       <TitleRow>
         <Title>{post.title}</Title>
-        {post.isPrivate && (
-          <LockIcon color={theme.colors.textSub} size={18} role="img" aria-label="비밀글" />
+        {post.isPrivate && <LockIcon size={18} label="비공개 게시물" />}
+        {post.tags?.length > 0 && (
+          <TagArea>
+            {post.tags.slice(0, 3).map((tag) => (
+              <Tag key={tag} label={tag} />
+            ))}
+          </TagArea>
         )}
-        {tags.map((tag, index) => (
-          <Tag key={tag} label={tag} color={tagColors[index]} />
-        ))}
       </TitleRow>
       <Content>{post.content}</Content>
       <Footer>
@@ -74,13 +71,21 @@ const Card = styled.article`
 
 const TitleRow = styled.div`
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing(1.5)};
-  margin-bottom: ${({ theme }) => theme.spacing(3)};
+  flex-wrap: wrap;
+  gap: ${({ theme }) => theme.spacing(1)};
+  margin-bottom: ${({ theme }) => theme.spacing(2)};
+
+  svg {
+    flex-shrink: 0;
+  }
 `;
 
 const Title = styled.h3`
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: ${({ theme }) => theme.fontSize.md};
   font-weight: ${({ theme }) => theme.fontWeight.semibold};
   color: ${({ theme }) => theme.colors.text};
@@ -91,6 +96,15 @@ const Content = styled.p`
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: ${({ theme }) => theme.spacing(5)};
   line-height: ${20 / 14};
+`;
+
+const TagArea = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  gap: ${({ theme }) => theme.spacing(1)};
+  margin-left: ${({ theme }) => theme.spacing(3)};
 `;
 
 const Footer = styled.div`

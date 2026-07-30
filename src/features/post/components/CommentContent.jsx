@@ -37,7 +37,10 @@ function CommentContent({
             <Avatar $size={avatarSize} src={item.author.profileImage} alt={`${item.author.name} 프로필`} />
           )}
           <AuthorName>{item.isDeleted ? '(알 수 없음)' : item.author.name}</AuthorName>
-          <CreatedAt>{item.createdAt}</CreatedAt>
+          <CreatedAt>
+            {item.createdAt}
+            {item.isEdited && ' (수정됨)'}
+          </CreatedAt>
         </AuthorInfo>
         {!item.isDeleted && isOwner && <DropdownMenu options={menuOptions} />}
       </TopRow>
