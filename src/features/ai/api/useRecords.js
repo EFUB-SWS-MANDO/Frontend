@@ -50,6 +50,9 @@ const fetchInterviewGroups = async () => {
       (data.hasNext ?? false) && nextIdAfter !== undefined && nextIdAfter !== idAfter;
     idAfter = nextIdAfter;
   }
+  if (hasNext) {
+    throw new Error('기록이 너무 많아 전체를 불러오지 못했습니다.');
+  }
   return groupByDate(flat);
 };
 
