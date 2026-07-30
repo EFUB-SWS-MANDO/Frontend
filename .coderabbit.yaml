@@ -24,6 +24,11 @@ reviews:
       - "develop"
       - "main"
 
+  # 이 프로젝트는 JSDoc/docstring 컨벤션을 사용하지 않아 기본 임계값(80%)이 맞지 않음
+  pre_merge_checks:
+    docstrings:
+      mode: "off"
+
   # 리뷰 대상에서 제외할 경로
   path_filters:
     - "!**/node_modules/**"

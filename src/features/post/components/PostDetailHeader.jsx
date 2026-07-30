@@ -17,7 +17,7 @@ function PostDetailHeader({ post, isOwner }) {
         { label: '본문 수정', onClick: () => {/* TODO: 수정 화면 이동 */} },
         { label: '본문 삭제', onClick: () => {/* TODO: 삭제 API 연동 */}, danger: true },
       ]
-    : [{ label: '차단하기', onClick: () => {/* TODO: 차단 API 연동 */}, danger: true }];
+    : [];
 
   return (
     <Wrapper>
@@ -44,7 +44,7 @@ function PostDetailHeader({ post, isOwner }) {
           ) : (
             <FollowButton isFollowing={isFollowing} onClick={toggleFollow} disabled={isToggling} />
           )}
-          <DropdownMenu options={menuOptions} />
+          {isOwner && <DropdownMenu options={menuOptions} />}
         </ActionArea>
       </AuthorRow>
 

@@ -14,20 +14,18 @@ function CommentContent({
   onTogglePrivate,
   onDelete,
 }) {
-  const menuOptions = item.isDeleted
-    ? []
-    : isOwner
-      ? [
-          {
-            type: 'toggle',
-            label: '공개',
-            checked: !item.isPrivate,
-            onChange: onTogglePrivate,
-          },
-          { label: '수정하기', onClick: onStartEdit },
-          { label: '삭제하기', onClick: onDelete, danger: true },
-        ]
-      : [{ label: '차단하기', onClick: () => {/* TODO: 차단 API 연동 */}, danger: true, disabled: true }];
+  const menuOptions = isOwner
+    ? [
+        {
+          type: 'toggle',
+          label: '공개',
+          checked: !item.isPrivate,
+          onChange: onTogglePrivate,
+        },
+        { label: '수정하기', onClick: onStartEdit },
+        { label: '삭제하기', onClick: onDelete, danger: true },
+      ]
+    : [];
 
   return (
     <>
@@ -44,7 +42,7 @@ function CommentContent({
             {item.isEdited && ' (수정됨)'}
           </CreatedAt>
         </AuthorInfo>
-        {!item.isDeleted && <DropdownMenu options={menuOptions} />}
+        {!item.isDeleted && isOwner && <DropdownMenu options={menuOptions} />}
       </TopRow>
 
       {item.isDeleted ? (

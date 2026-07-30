@@ -1,22 +1,8 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
+import { uploadProfileImage } from '@/apis/uploadProfileImage';
 import { useAuthStore } from '@/stores/authStore';
-
-async function uploadProfileImage(file) {
-  const { uploadUrl, fileKey } = await api.post(ENDPOINTS.files.presignedUrl, {
-    fileName: file.name,
-    contentType: file.type,
-    uploadType: 'PROFILE',
-  });
-  await axios.put(uploadUrl, file, {
-    headers: { 'Content-Type': file.type },
-    timeout: 10000,
-  });
-  // TODO: 프로필 생성/수정 요청 필드명이 profileImage인지 fileKey인지 백엔드 확인 필요
-  return fileKey;
-}
 
 // 정보설정(닉네임/프로필 이미지) 제출. 성공 시 로그인 상태로 전환.
 export function useSignup() {

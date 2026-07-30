@@ -27,6 +27,7 @@ function FeedTabs({ activeTab, onChange }) {
 const TabList = styled.div`
   position: relative;
   display: flex;
+  width: 100%;
   height: 42px;
 
   &::after {
@@ -43,7 +44,7 @@ const TabList = styled.div`
 const Tab = styled.button`
   position: relative;
   height: 100%;
-  padding: ${({ theme }) => `0 ${theme.spacing(5)}`};
+  padding: ${({ theme }) => `0 ${theme.spacing(8)}`};
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme, $active }) =>
     $active ? theme.fontWeight.semibold : theme.fontWeight.regular};

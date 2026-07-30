@@ -14,7 +14,7 @@ function ProfilePage() {
   const myUser = useAuthStore((state) => state.user);
   const userId = rawUserId === 'me' ? myUser?.id : rawUserId;
 
-  const { profile, isLoading: profileLoading, error: profileError } = useProfile(userId);
+  const { profile, isLoading: profileLoading, error: profileError, refetch } = useProfile(userId);
   const { posts, isLoading: postsLoading, error: postsError } = usePosts({ userId });
 
   if (profileLoading || postsLoading) return <Spinner />;
@@ -28,7 +28,7 @@ function ProfilePage() {
 
   return (
     <div>
-      <ProfileHeader user={profile} isOwner={profile?.isMe} />
+      <ProfileHeader user={profile} isOwner={profile?.isMe} onProfileUpdated={refetch} />
       <PostSection>
         <SectionTitle>{profile?.isMe ? '내가 쓴 글' : `${profile?.nickname}님의 글`}</SectionTitle>
         {posts.length === 0 ? (
