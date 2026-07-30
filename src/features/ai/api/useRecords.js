@@ -80,5 +80,25 @@ export function useRecords(type) {
     fetchRecords();
   }, [fetchRecords]);
 
-  return { records, isLoading, error, refetch: fetchRecords };
+  const removeInterview = async (interviewSessionId) => {
+    if (!USE_MOCK) {
+      try {
+        await api.delete(ENDPOINTS.interviews.remove(interviewSessionId));
+      } catch (e) {
+        setError(e);
+        return;
+      }
+    }
+    setRecords((prev) => ({
+      ...prev,
+      interview: prev.interview
+        .map((group) => ({
+          ...group,
+          items: group.items.filter((item) => item.id !== interviewSessionId),
+        }))
+        .filter((group) => group.items.length > 0),
+    }));
+  };
+
+  return { records, isLoading, error, refetch: fetchRecords, removeInterview };
 }
