@@ -1,5 +1,41 @@
 import { useState, useEffect, useCallback } from 'react';
+import { api } from '@/apis/axiosInstance';
+import { ENDPOINTS } from '@/apis/endpoints';
+import { USE_MOCK } from '@/apis/config';
 import { MOCK_COMMENTS } from '@/mocks/mockComments';
+
+const formatDateTime = (isoString) => {
+  const date = new Date(isoString);
+  if (Number.isNaN(date.getTime())) return isoString;
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${date.getFullYear()}.${pad(date.getMonth() + 1)}.${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
+
+const mapComment = (raw) => ({
+  id: raw.commentId,
+  author: {
+    id: raw.author?.memberId,
+    name: raw.author?.nickname ?? '알 수 없음',
+    profileImage: raw.author?.profileImage ?? '',
+  },
+  parentId: raw.parentId ?? null,
+  content: raw.content,
+  isPrivate: raw.isPrivate ?? false,
+  isDeleted: raw.deleted ?? raw.isDeleted ?? false,
+  isEdited: raw.edited ?? raw.isEdited ?? false,
+  createdAt: formatDateTime(raw.createdAt),
+});
+
+const buildCommentTree = (flatComments) => {
+  const parents = flatComments.filter((c) => c.parentId === null).map((c) => ({ ...c, replies: [] }));
+  const parentById = new Map(parents.map((p) => [p.id, p]));
+  flatComments
+    .filter((c) => c.parentId !== null)
+    .forEach((reply) => {
+      parentById.get(reply.parentId)?.replies.push(reply);
+    });
+  return parents;
+};
 
 export function useComments(postId) {
   const [comments, setComments] = useState([]);
@@ -10,9 +46,31 @@ export function useComments(postId) {
     setIsLoading(true);
     setError(null);
     try {
-      // TODO: 백엔드 연동 후 실제 api.get(ENDPOINTS.posts.comments(postId)) 사용
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      setComments(MOCK_COMMENTS);
+      if (USE_MOCK) {
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        setComments(MOCK_COMMENTS);
+        return;
+      }
+      const MAX_PAGES = 50;
+      const flat = [];
+      let idAfter;
+      let hasNext = true;
+      let page = 0;
+      while (hasNext && page < MAX_PAGES) {
+        page += 1;
+        const data = await api.get(ENDPOINTS.posts.comments(postId), {
+          params: idAfter !== undefined ? { idAfter } : undefined,
+        });
+        (data.comments ?? []).forEach((item) => {
+          const raw = item.commentId !== undefined ? item : Object.values(item)[0];
+          if (raw?.commentId !== undefined) flat.push(mapComment(raw));
+        });
+        const nextIdAfter = data.nextIdAfter;
+        hasNext =
+          (data.hasNext ?? false) && nextIdAfter !== undefined && nextIdAfter !== idAfter;
+        idAfter = nextIdAfter;
+      }
+      setComments(buildCommentTree(flat));
     } catch (e) {
       setError(e);
     } finally {
@@ -24,22 +82,49 @@ export function useComments(postId) {
     fetchComments();
   }, [fetchComments]);
 
-  const addComment = (newComment) => {
-    // TODO: 백엔드 연동 후 API 호출로 대체, 지금은 화면에서만 추가
-    setComments((prev) => [...prev, { ...newComment, replies: [] }]);
+  const addComment = async (newComment) => {
+    if (USE_MOCK) {
+      setComments((prev) => [...prev, { ...newComment, replies: [] }]);
+      return;
+    }
+    try {
+      const data = await api.post(ENDPOINTS.posts.comments(postId), {
+        content: newComment.content,
+        parentId: null,
+        isPrivate: newComment.isPrivate ?? false,
+      });
+      setComments((prev) => [...prev, { ...mapComment(data), replies: [] }]);
+    } catch (e) {
+      setError(e);
+    }
   };
 
-  const addReply = (parentId, newReply) => {
-    // TODO: 백엔드 연동 후 API 호출로 대체, 지금은 화면에서만 추가
+  const appendReply = (parentId, reply) => {
     setComments((prev) =>
       prev.map((c) =>
-        c.id === parentId ? { ...c, replies: [...(c.replies ?? []), newReply] } : c,
+        c.id === parentId ? { ...c, replies: [...(c.replies ?? []), reply] } : c,
       ),
     );
   };
 
-  const updateComment = (commentId, updates) => {
-    // TODO: 백엔드 연동 후 API 호출로 대체
+  const addReply = async (parentId, newReply) => {
+    if (USE_MOCK) {
+      appendReply(parentId, newReply);
+      return;
+    }
+    try {
+      const data = await api.post(ENDPOINTS.posts.comments(postId), {
+        content: newReply.content,
+        parentId,
+        isPrivate: newReply.isPrivate ?? false,
+      });
+      appendReply(parentId, mapComment(data));
+    } catch (e) {
+      setError(e);
+    }
+  };
+
+  const applyCommentUpdate = (commentId, updates) => {
     setComments((prev) =>
       prev.map((c) => {
         if (c.id === commentId) return { ...c, ...updates };
@@ -54,7 +139,48 @@ export function useComments(postId) {
     );
   };
 
-  const deleteComment = (commentId) => updateComment(commentId, { isDeleted: true });
+  const findComment = (commentId) => {
+    for (const c of comments) {
+      if (c.id === commentId) return c;
+      const reply = c.replies?.find((r) => r.id === commentId);
+      if (reply) return reply;
+    }
+    return null;
+  };
+
+  const updateComment = async (commentId, updates) => {
+    if (USE_MOCK) {
+      applyCommentUpdate(commentId, updates);
+      return;
+    }
+    const current = findComment(commentId);
+    if (!current) {
+      setError(new Error(`댓글(${commentId})을 찾을 수 없습니다.`));
+      return;
+    }
+    try {
+      const data = await api.patch(ENDPOINTS.comments.update(commentId), {
+        content: updates.content ?? current.content,
+        isPrivate: updates.isPrivate ?? current.isPrivate,
+      });
+      applyCommentUpdate(commentId, mapComment(data));
+    } catch (e) {
+      setError(e);
+    }
+  };
+
+  const deleteComment = async (commentId) => {
+    if (USE_MOCK) {
+      applyCommentUpdate(commentId, { isDeleted: true });
+      return;
+    }
+    try {
+      await api.delete(ENDPOINTS.comments.remove(commentId));
+      applyCommentUpdate(commentId, { isDeleted: true });
+    } catch (e) {
+      setError(e);
+    }
+  };
 
   return {
     comments,

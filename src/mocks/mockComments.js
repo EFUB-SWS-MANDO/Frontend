@@ -14,6 +14,7 @@ export const MOCK_COMMENTS = [
         content: '대댓글입니다 대댓글이에요~',
         isPrivate: false,
         isDeleted: false,
+        isEdited: true,
       },
     ],
   },
