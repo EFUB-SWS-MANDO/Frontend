@@ -1,9 +1,19 @@
+import { useState } from 'react';
 import styled from 'styled-components';
-import CopyIcon from '../../../asset/icons/CopyIcon';
-import SaveIcon from '../../../asset/icons/SaveIcon';
+import DraftQuestionCard from './DraftQuestionCard';
 
-const CoverLetterStep5 = ({ index, question, draft }) => {
-  const handleCopy = () => {
+const CoverLetterStep5 = ({ questions, draftAnswers, onSelectQuestion, onRestart, onFinish }) => {
+  const [selectedIds, setSelectedIds] = useState([]);
+
+  const isAllSelected =
+    questions.length > 0 && selectedIds.length === questions.length;
+
+  const handleToggleSelectAll = () => {
+    setSelectedIds(isAllSelected ? [] : questions.map((question) => question.id));
+  };
+
+  const handleCopy = (id) => {
+    const draft = draftAnswers[id];
     if (!draft) return;
     navigator.clipboard.writeText(draft.content);
   };
@@ -14,24 +24,35 @@ const CoverLetterStep5 = ({ index, question, draft }) => {
 
   return (
     <StepWrapper>
-      <QuestionTitle>
-        {index + 1}. {question.content} ({question.maxLength}자)
-      </QuestionTitle>
+      <GuideArea>
+        <GuideText>초안 작성이 완료되었어요!</GuideText>
+        <SubRow>
+          <SubText>클릭하면 답변의 상세 설명을 확인할 수 있어요.</SubText>
+          <SelectAllButton onClick={handleToggleSelectAll}>
+            {isAllSelected ? '모두 해제' : '모두 선택'}
+          </SelectAllButton>
+        </SubRow>
+      </GuideArea>
 
-      <DraftBox>{draft?.content}</DraftBox>
+      <DraftList>
+        {questions.map((question, index) => (
+          <DraftQuestionCard
+            key={question.id}
+            index={index}
+            question={question}
+            draft={draftAnswers[question.id]}
+            selected={selectedIds.includes(question.id)}
+            onSelect={onSelectQuestion}
+            onCopy={handleCopy}
+            onSave={handleSave}
+          />
+        ))}
+      </DraftList>
 
-      <ExplanationBox>{draft?.explanation}</ExplanationBox>
-
-      <ActionRow>
-        <ActionButton onClick={handleCopy}>
-          <CopyIcon color="#9197AC" size={20} />
-          복사하기
-        </ActionButton>
-        <ActionButton onClick={handleSave}>
-          <SaveIcon color="#9197AC" size={20} />
-          저장하기
-        </ActionButton>
-      </ActionRow>
+      <BottomArea>
+        <SecondaryButton onClick={onRestart}>다시 작성하기</SecondaryButton>
+        <PrimaryButton onClick={onFinish}>끝내기</PrimaryButton>
+      </BottomArea>
     </StepWrapper>
   );
 };
@@ -42,53 +63,85 @@ const StepWrapper = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing(3)};
+  gap: ${({ theme }) => theme.spacing(5)};
 `;
 
-const QuestionTitle = styled.p`
-  font-size: ${({ theme }) => theme.fontSize.sm};
+const GuideArea = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing(1)};
+`;
+
+const GuideText = styled.p`
+  font-size: ${({ theme }) => theme.fontSize.md};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   color: ${({ theme }) => theme.colors.text};
 `;
 
-const DraftBox = styled.div`
-  padding: ${({ theme }) => theme.spacing(4)};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.md};
-  background: ${({ theme }) => theme.colors.bg};
-  min-height: 90px;
-  font-size: ${({ theme }) => theme.fontSize.xs};
-  color: ${({ theme }) => theme.colors.text};
-  line-height: 1.5;
+const SubRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
-const ExplanationBox = styled.div`
-  padding: ${({ theme }) => theme.spacing(4)};
-  border: 1px solid ${({ theme }) => theme.colors.primary};
-  border-radius: ${({ theme }) => theme.radius.md};
-  background: ${({ theme }) => theme.colors.bg};
-  min-height: 90px;
+const SubText = styled.span`
   font-size: ${({ theme }) => theme.fontSize.xs};
   color: ${({ theme }) => theme.colors.textSub};
-  line-height: 1.5;
 `;
 
-const ActionRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: ${({ theme }) => theme.spacing(6)};
-  margin-top: ${({ theme }) => theme.spacing(2)};
-`;
-
-const ActionButton = styled.button`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing(1)};
+const SelectAllButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
   font-size: ${({ theme }) => theme.fontSize.xs};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme }) => theme.colors.textSub};
+  padding: 0;
+`;
+
+const DraftList = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing(5)};
+  overflow-y: auto;
+`;
+
+const BottomArea = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing(3)};
+  width: 100%;
+`;
+
+const SecondaryButton = styled.button`
+  flex: 1;
+  padding: ${({ theme }) => theme.spacing(3.5)};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.full};
+  background: ${({ theme }) => theme.colors.bg};
+  cursor: pointer;
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  color: ${({ theme }) => theme.colors.textSub};
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.primary};
+  }
+`;
+
+const PrimaryButton = styled.button`
+  flex: 1;
+  padding: ${({ theme }) => theme.spacing(3.5)};
+  border: none;
+  border-radius: ${({ theme }) => theme.radius.full};
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.bg};
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.primaryDark};
+  }
 `;

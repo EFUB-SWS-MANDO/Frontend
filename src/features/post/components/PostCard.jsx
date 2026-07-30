@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
 import CommentIcon from '@/asset/icons/CommentIcon';
 import LeafIcon from '@/asset/icons/LeafIcon';
+import LockIcon from '@/asset/icons/LockIcon';
+import Tag from '@/features/post/components/Tag';
 
 function PostCard({ post }) {
   const theme = useTheme();
@@ -13,7 +15,17 @@ function PostCard({ post }) {
 
   return (
     <Card onClick={handleCardClick}>
-      <Title>{post.title}</Title>
+      <TitleRow>
+        <Title>{post.title}</Title>
+        {post.isPrivate && <LockIcon size={18} label="비공개 게시물" />}
+        {post.tags?.length > 0 && (
+          <TagArea>
+            {post.tags.slice(0, 3).map((tag) => (
+              <Tag key={tag} label={tag} />
+            ))}
+          </TagArea>
+        )}
+      </TitleRow>
       <Content>{post.content}</Content>
       <Footer>
         <AuthorInfo>
@@ -52,11 +64,26 @@ const Card = styled.article`
   }
 `;
 
+const TitleRow = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: ${({ theme }) => theme.spacing(1)};
+  margin-bottom: ${({ theme }) => theme.spacing(2)};
+
+  svg {
+    flex-shrink: 0;
+  }
+`;
+
 const Title = styled.h3`
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: ${({ theme }) => theme.fontSize.md};
   font-weight: ${({ theme }) => theme.fontWeight.semibold};
   color: ${({ theme }) => theme.colors.text};
-  margin-bottom: ${({ theme }) => theme.spacing(2)};
 `;
 
 const Content = styled.p`
@@ -64,6 +91,15 @@ const Content = styled.p`
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: ${({ theme }) => theme.spacing(5)};
   line-height: ${20 / 14};
+`;
+
+const TagArea = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  gap: ${({ theme }) => theme.spacing(1)};
+  margin-left: ${({ theme }) => theme.spacing(3)};
 `;
 
 const Footer = styled.div`
