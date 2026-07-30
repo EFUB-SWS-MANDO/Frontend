@@ -21,13 +21,15 @@ function InterviewSessionPage() {
     error,
     sessionId,
     isSessionReady,
+    isQuestionReady,
     submitAnswer,
     nextQuestion,
     followUpQuestion,
   } = useInterview({ mode: state?.mode, selection: state?.selection });
 
   const isFeedbackStep = feedback !== null;
-  const isActionBlocked = answer.trim() === '' || isQuestionLoading || !isSessionReady;
+  const isActionBlocked =
+    answer.trim() === '' || isQuestionLoading || !isSessionReady || !isQuestionReady;
 
   const resetAnswerState = () => {
     setAnswer('');
