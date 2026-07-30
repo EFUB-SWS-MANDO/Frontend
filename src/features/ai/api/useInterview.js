@@ -65,18 +65,30 @@ export function useInterview({ mode, selection } = {}) {
             streamRef.current = null;
           },
           onConnectionError: async () => {
-            if (ignore || reconnectedRef.current) return;
+            if (ignore) return;
+            if (reconnectedRef.current) {
+              setError(new Error('질문 스트림 연결이 끊어졌습니다.'));
+              setIsQuestionLoading(false);
+              return;
+            }
             reconnectedRef.current = true;
             streamRef.current?.close();
             try {
               const detail = await api.get(
                 ENDPOINTS.interviews.detail(interviewSessionId),
               );
-              if (!ignore && detail.sseTicket) {
+              if (ignore) return;
+              if (detail.sseTicket) {
                 connectStream(interviewSessionId, detail.sseTicket);
+              } else {
+                setError(new Error('질문 스트림 연결이 끊어졌습니다.'));
+                setIsQuestionLoading(false);
               }
             } catch (e) {
-              if (!ignore) setError(e);
+              if (!ignore) {
+                setError(e);
+                setIsQuestionLoading(false);
+              }
             }
           },
         },
