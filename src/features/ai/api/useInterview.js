@@ -2,10 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
 import { USE_MOCK } from '@/apis/config';
-import {
-  MOCK_INTERVIEW_QUESTIONS,
-  MOCK_INTERVIEW_SUMMARY,
-} from '@/mocks/mockInterview';
+import { MOCK_INTERVIEW_QUESTIONS } from '@/mocks/mockInterview';
 import { openInterviewStream } from './interviewStream';
 
 const TYPE_BY_MODE = {
@@ -180,6 +177,5 @@ export function useInterview({ mode, selection } = {}) {
     submitAnswer,
     nextQuestion,
     followUpQuestion,
-    summary: MOCK_INTERVIEW_SUMMARY,
   };
 }

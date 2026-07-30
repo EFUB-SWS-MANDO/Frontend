@@ -21,7 +21,7 @@ export const MOCK_INTERVIEW_QUESTIONS = [
 ];
 
 export const MOCK_INTERVIEW_SUMMARY = {
-  score: 81,
-  comment:
+  feedbackSummary: '경험을 구조적으로 풀어내는 힘이 돋보인 면접이었어요',
+  feedback:
     '전반적으로 경험을 구조적으로 설명하는 힘이 좋습니다. 답변마다 상황-행동-결과 흐름이 드러났고, 특히 협업 관련 질문에서 구체성이 돋보였습니다. 다만 성과를 수치로 표현하는 연습과, 답변 마무리에서 배운 점을 한 문장으로 정리하는 습관을 더하면 완성도가 크게 올라갈 것입니다.',
 };
