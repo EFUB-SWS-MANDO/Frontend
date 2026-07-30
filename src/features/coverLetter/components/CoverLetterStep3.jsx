@@ -1,70 +1,33 @@
 import styled from 'styled-components';
-import MagicpenIcon from '../../../asset/icons/MagicpenIcon';
-import QuestionInputCard from './QuestionInputCard';
+import ArrowRightIcon from '../../../asset/icons/ArrowRightIcon';
 
-const MAX_QUESTIONS = 5;
+const TITLE_MAX_LENGTH = 50;
 
-const CoverLetterStep3 = ({ questions, setQuestions, onNext }) => {
-  const handleAddQuestion = () => {
-    if (questions.length >= MAX_QUESTIONS) return;
-    setQuestions((prev) => [
-      ...prev,
-      { id: Date.now(), content: '', maxLength: '500' },
-    ]);
-  };
-
-  const handleRemoveQuestion = (id) => {
-    setQuestions((prev) => prev.filter((q) => q.id !== id));
-  };
-
-  const handleChangeContent = (id, value) => {
-    setQuestions((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, content: value } : q))
-    );
-  };
-
-  const handleChangeMaxLength = (id, value) => {
-    setQuestions((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, maxLength: value } : q))
-    );
-  };
-
-  const handleGenerateDraft = () => {
-    // TODO: 백엔드 연동 시 AI 초안 생성 API 요청
-    onNext();
+const CoverLetterStep3 = ({ title, setTitle, onNext }) => {
+  const handleChange = (e) => {
+    setTitle(e.target.value.slice(0, TITLE_MAX_LENGTH));
   };
 
   return (
     <StepWrapper>
       <GuideArea>
-        <GuideText>자소서 문항과 글자 수를 입력해주세요.</GuideText>
-        <SubText>구체적으로 입력할수록 정확도가 높아져요! (최대 5개)</SubText>
+        <GuideText>자소서 제목을 입력해주세요.</GuideText>
+        <SubText>입력한 제목으로 저장돼요.</SubText>
       </GuideArea>
 
-      <QuestionList>
-        {questions.map((question, index) => (
-          <QuestionInputCard
-            key={question.id}
-            index={index}
-            question={question}
-            onChangeContent={handleChangeContent}
-            onChangeMaxLength={handleChangeMaxLength}
-            onRemove={handleRemoveQuestion}
-            canRemove={questions.length > 1}
-          />
-        ))}
-      </QuestionList>
-
-      {questions.length < MAX_QUESTIONS && (
-        <AddButton type="button" onClick={handleAddQuestion}>
-          문항 추가하기
-        </AddButton>
-      )}
+      <TitleCard>
+        <TitleInput
+          placeholder="삼성전자 2026 하반기 공개채용"
+          value={title}
+          onChange={handleChange}
+          maxLength={TITLE_MAX_LENGTH}
+        />
+      </TitleCard>
 
       <BottomArea>
-        <PrimaryButton onClick={handleGenerateDraft}>
-          자소서 초안 생성하기
-          <MagicpenIcon color="#FFFFFF" size={18} />
+        <PrimaryButton onClick={onNext} disabled={title.trim() === ''}>
+          다음으로
+          <ArrowRightIcon color="#FFFFFF" size={16} />
         </PrimaryButton>
       </BottomArea>
     </StepWrapper>
@@ -97,25 +60,27 @@ const SubText = styled.p`
   color: ${({ theme }) => theme.colors.textSub};
 `;
 
-const QuestionList = styled.div`
+const TitleCard = styled.div`
   flex: 1;
-  overflow-y: auto;
-`;
-
-const AddButton = styled.button`
-  width: 100%;
-  padding: ${({ theme }) => theme.spacing(3.5)};
+  display: flex;
+  padding: ${({ theme }) => theme.spacing(4)};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.md};
   background: ${({ theme }) => theme.colors.bg};
-  cursor: pointer;
-  font-size: ${({ theme }) => theme.fontSize.sm};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
-  color: ${({ theme }) => theme.colors.textSub};
+`;
 
-  &:hover {
-    border-color: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.primary};
+const TitleInput = styled.textarea`
+  flex: 1;
+  width: 100%;
+  resize: none;
+  border: none;
+  outline: none;
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  color: ${({ theme }) => theme.colors.text};
+  font-family: inherit;
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.textSub};
   }
 `;
 
@@ -131,7 +96,7 @@ const PrimaryButton = styled.button`
   gap: ${({ theme }) => theme.spacing(1.5)};
   padding: ${({ theme }) => theme.spacing(3.5)};
   border: none;
-  border-radius: ${({ theme }) => theme.radius.md};
+  border-radius: ${({ theme }) => theme.radius.full};
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.bg};
   font-size: ${({ theme }) => theme.fontSize.sm};
@@ -140,5 +105,10 @@ const PrimaryButton = styled.button`
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.primaryDark};
+  }
+
+  &:disabled {
+    background-color: ${({ theme }) => theme.colors.gray400};
+    cursor: not-allowed;
   }
 `;

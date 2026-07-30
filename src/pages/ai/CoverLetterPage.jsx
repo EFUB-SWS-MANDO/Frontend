@@ -7,15 +7,17 @@ import CoverLetterStep2 from '../../features/coverLetter/components/CoverLetterS
 import CoverLetterStep3 from '../../features/coverLetter/components/CoverLetterStep3';
 import CoverLetterStep4 from '../../features/coverLetter/components/CoverLetterStep4';
 import CoverLetterStep5 from '../../features/coverLetter/components/CoverLetterStep5';
+import CoverLetterStep6 from '../../features/coverLetter/components/CoverLetterStep6';
 import { buildMockDraftAnswers } from '../../features/coverLetter/mocks/drafts';
 
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 5;
 
 const CoverLetterPage = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
 
   const [selectedActivities, setSelectedActivities] = useState([]);
+  const [title, setTitle] = useState('');
   const [questions, setQuestions] = useState([
     { id: 1, content: '', maxLength: '500' },
   ]);
@@ -63,18 +65,20 @@ const CoverLetterPage = () => {
           />
         );
       case 3:
+        return <CoverLetterStep3 title={title} setTitle={setTitle} onNext={goNext} />;
+      case 4:
         return (
-          <CoverLetterStep3
+          <CoverLetterStep4
             questions={questions}
             setQuestions={setQuestions}
             onNext={handleGenerateDrafts}
           />
         );
-      case 4: {
+      case 5: {
         if (activeQuestionId !== null) {
           const activeIndex = questions.findIndex((q) => q.id === activeQuestionId);
           return (
-            <CoverLetterStep5
+            <CoverLetterStep6
               index={activeIndex}
               question={questions[activeIndex]}
               draft={draftAnswers[activeQuestionId]}
@@ -82,7 +86,7 @@ const CoverLetterPage = () => {
           );
         }
         return (
-          <CoverLetterStep4
+          <CoverLetterStep5
             questions={questions}
             draftAnswers={draftAnswers}
             onSelectQuestion={setActiveQuestionId}
