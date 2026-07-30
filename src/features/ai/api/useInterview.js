@@ -184,6 +184,7 @@ export function useInterview({ mode, selection } = {}) {
     isSubmitting,
     error,
     sessionId,
+    isSessionReady: USE_MOCK || sessionId !== null,
     submitAnswer,
     nextQuestion,
     followUpQuestion,

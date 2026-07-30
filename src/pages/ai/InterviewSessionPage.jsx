@@ -20,13 +20,14 @@ function InterviewSessionPage() {
     isSubmitting,
     error,
     sessionId,
+    isSessionReady,
     submitAnswer,
     nextQuestion,
     followUpQuestion,
   } = useInterview({ mode: state?.mode, selection: state?.selection });
 
   const isFeedbackStep = feedback !== null;
-  const isAnswerEmpty = answer.trim() === '';
+  const isActionBlocked = answer.trim() === '' || isQuestionLoading || !isSessionReady;
 
   const resetAnswerState = () => {
     setAnswer('');
@@ -100,14 +101,14 @@ function InterviewSessionPage() {
           <ButtonRow>
             <SubButton
               type="button"
-              disabled={isAnswerEmpty || isQuestionLoading}
+              disabled={isActionBlocked}
               onClick={handleFollowUpQuestion}
             >
               꼬리질문 받기
             </SubButton>
             <SubButton
               type="button"
-              disabled={isAnswerEmpty || isQuestionLoading}
+              disabled={isActionBlocked}
               onClick={handleNextQuestion}
             >
               추가질문 받기
@@ -115,7 +116,7 @@ function InterviewSessionPage() {
           </ButtonRow>
           <PrimaryButton
             type="button"
-            disabled={isAnswerEmpty || isSubmitting || isQuestionLoading}
+            disabled={isActionBlocked || isSubmitting}
             onClick={() => submitAnswer(answer)}
           >
             {isSubmitting ? '피드백 생성 중...' : '제출하고 피드백 보기'}
