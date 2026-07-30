@@ -133,13 +133,29 @@ export function useInterview({ mode, selection } = {}) {
     });
   };
 
-  const nextQuestion = () => {
-    moveToNextMockQuestion();
+  const requestNextQuestion = async (type, answer) => {
+    if (USE_MOCK) {
+      moveToNextMockQuestion();
+      return;
+    }
+    setError(null);
+    setIsQuestionLoading(true);
+    setFeedback(null);
+    try {
+      await api.post(ENDPOINTS.interviews.question(sessionId), {
+        type,
+        questionId: questionIdRef.current,
+        answer,
+      });
+    } catch (e) {
+      setError(e);
+      setIsQuestionLoading(false);
+    }
   };
 
-  const followUpQuestion = () => {
-    moveToNextMockQuestion();
-  };
+  const nextQuestion = (answer) => requestNextQuestion('EXTRA', answer);
+
+  const followUpQuestion = (answer) => requestNextQuestion('FOLLOW_UP', answer);
 
   return {
     question,
