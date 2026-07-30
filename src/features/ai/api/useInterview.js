@@ -114,11 +114,24 @@ export function useInterview({ mode, selection } = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const submitAnswer = async () => {
+  const submitAnswer = async (answer) => {
     setIsSubmitting(true);
+    setError(null);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setFeedback(MOCK_INTERVIEW_QUESTIONS[questionIndex].feedback);
+      if (USE_MOCK) {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        setFeedback(MOCK_INTERVIEW_QUESTIONS[questionIndex].feedback);
+        return;
+      }
+      const data = await api.post(ENDPOINTS.interviews.feedback(sessionId), {
+        questionId: questionIdRef.current,
+        answer,
+      });
+      setFeedback(data.feedback);
+      streamRef.current?.close();
+      streamRef.current = null;
+    } catch (e) {
+      setError(e);
     } finally {
       setIsSubmitting(false);
     }
