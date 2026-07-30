@@ -1,27 +1,37 @@
 import styled from 'styled-components';
 
-const FIELDS = [
-  { key: 'basicInfo', placeholder: '기본 정보' },
-  { key: 'activity', placeholder: '활동 내용' },
-  { key: 'reflection', placeholder: '성찰 및 성장' },
-];
+const isUploadField = (field) => field.replace(/\s/g, '').includes('증빙');
 
-function TemplateWriteForm({ value, onChange }) {
+function TemplateWriteForm({ fields = [], value, onChange, uploadedFiles = [], onUpload }) {
   const handleFieldChange = (field, fieldValue) => {
     onChange({ ...value, [field]: fieldValue });
   };
 
+  const handleFileChange = (e) => {
+    onUpload?.(Array.from(e.target.files));
+    e.target.value = '';
+  };
+
   return (
     <Wrapper>
-      {FIELDS.map((field) => (
-        <FieldArea
-          key={field.key}
-          placeholder={field.placeholder}
-          value={value[field.key]}
-          onChange={(e) => handleFieldChange(field.key, e.target.value)}
-        />
-      ))}
-      <UploadArea type="button">증빙자료</UploadArea>
+      {fields.map((field) =>
+        isUploadField(field) ? (
+          <UploadArea key={field}>
+            {field}
+            {uploadedFiles.length > 0 && (
+              <FileList>{uploadedFiles.map((file) => file.name).join(', ')}</FileList>
+            )}
+            <HiddenInput type="file" multiple onChange={handleFileChange} />
+          </UploadArea>
+        ) : (
+          <FieldArea
+            key={field}
+            placeholder={field}
+            value={value[field] ?? ''}
+            onChange={(e) => handleFieldChange(field, e.target.value)}
+          />
+        )
+      )}
     </Wrapper>
   );
 }
@@ -53,7 +63,7 @@ const FieldArea = styled.textarea`
   }
 `;
 
-const UploadArea = styled.button`
+const UploadArea = styled.label`
   flex: 1;
   min-height: 96px;
   padding: ${({ theme }) => theme.spacing(4)};
@@ -61,6 +71,33 @@ const UploadArea = styled.button`
   text-align: left;
   font-size: ${({ theme }) => theme.fontSize.sm};
   color: ${({ theme }) => theme.colors.textSub};
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing(2)};
+
+  &:focus-within {
+    outline: 1px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: -1px;
+  }
+`;
+
+const FileList = styled.span`
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.text};
+  word-break: break-all;
+`;
+
+const HiddenInput = styled.input`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 `;
 
 export default TemplateWriteForm;

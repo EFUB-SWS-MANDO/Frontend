@@ -10,6 +10,9 @@ import CategorySelector from '@/features/post/components/CategorySelector';
 import VisibilityToggle from '@/features/post/components/VisibilityToggle';
 import CompletionToast from '@/features/post/components/CompletionToast';
 import ArrowRightIcon from '@/asset/icons/ArrowRightIcon';
+import Spinner from '@/components/Spinner/Spinner';
+import EmptyState from '@/components/EmptyState/EmptyState';
+import { useTemplates } from '@/features/post/api/useTemplates';
 import { useCreatePost } from '@/features/post/api/useCreatePost';
 import { MOCK_CATEGORIES } from '@/mocks/mockCategories';
 import { useAuthStore } from '@/stores/authStore';
@@ -29,16 +32,20 @@ function PostWritePage() {
   const [step, setStep] = useState(1);
   const [postType, setPostType] = useState(location.state?.postType ?? 'free');
   const [freeContent, setFreeContent] = useState('');
-  const [templateContent, setTemplateContent] = useState({
-    basicInfo: '',
-    activity: '',
-    reflection: '',
-  });
+  const [templateContent, setTemplateContent] = useState({});
+  const {
+    values: templateFields,
+    isLoading: isTemplateLoading,
+    error: templateError,
+  } = useTemplates();
   const [photos, setPhotos] = useState([]);
   const [files, setFiles] = useState([]);
   const [visibility, setVisibility] = useState('public');
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [showToast, setShowToast] = useState(false);
+
+  const isTemplateUnavailable =
+    postType !== 'free' && (isTemplateLoading || templateError || templateFields.length === 0);
 
   const handleClose = () => {
     navigate(-1);
@@ -46,6 +53,10 @@ function PostWritePage() {
 
   const handleNext = () => {
     setStep(2);
+  };
+
+  const handleEvidenceUpload = (newFiles) => {
+    setFiles((prev) => [...prev, ...newFiles]);
   };
 
   const handleToggleCategory = (categoryId) => {
@@ -60,7 +71,13 @@ function PostWritePage() {
       return;
     }
 
-    const content = postType === 'free' ? freeContent : templateContent.activity;
+    const content =
+      postType === 'free'
+        ? freeContent
+        : templateFields
+            .map((field) => templateContent[field])
+            .filter(Boolean)
+            .join('\n\n');
     const tags = MOCK_CATEGORIES.filter((c) => selectedCategories.includes(c.id)).map((c) => c.name);
 
     const ok = await createPost({
@@ -100,8 +117,20 @@ function PostWritePage() {
           <FormArea>
             {postType === 'free' ? (
               <FreeWriteForm value={freeContent} onChange={setFreeContent} />
+            ) : isTemplateLoading ? (
+              <Spinner />
+            ) : templateError ? (
+              <EmptyState message="템플릿을 불러오지 못했어요. 다시 시도해 주세요." />
+            ) : templateFields.length === 0 ? (
+              <EmptyState message="사용할 수 있는 템플릿이 없어요." />
             ) : (
-              <TemplateWriteForm value={templateContent} onChange={setTemplateContent} />
+              <TemplateWriteForm
+                fields={templateFields}
+                value={templateContent}
+                onChange={setTemplateContent}
+                uploadedFiles={files}
+                onUpload={handleEvidenceUpload}
+              />
             )}
           </FormArea>
 
@@ -112,7 +141,7 @@ function PostWritePage() {
               onPhotoSelect={(newPhotos) => setPhotos((prev) => [...prev, ...newPhotos])}
               onFileSelect={(newFiles) => setFiles((prev) => [...prev, ...newFiles])}
             />
-            <NextButton onClick={handleNext}>
+            <NextButton onClick={handleNext} disabled={isTemplateUnavailable}>
               다음
               <ArrowRightIcon color="#494D5A" size={16} />
             </NextButton>
@@ -127,7 +156,14 @@ function PostWritePage() {
           </TopRow>
 
           <SectionTitle>내가 쓴 글</SectionTitle>
-          <PreviewBox>{postType === 'free' ? freeContent : templateContent.activity}</PreviewBox>
+          <PreviewBox>
+            {postType === 'free'
+              ? freeContent
+              : templateFields
+                  .map((field) => templateContent[field])
+                  .filter(Boolean)
+                  .join('\n\n')}
+          </PreviewBox>
 
           <BottomSectionRow>
             <VisibilityToggle value={visibility} onChange={setVisibility} />
@@ -193,6 +229,11 @@ const NextButton = styled.button`
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;
 
 const SectionTitle = styled.h3`
