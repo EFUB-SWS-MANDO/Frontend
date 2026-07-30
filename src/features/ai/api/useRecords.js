@@ -88,6 +88,7 @@ export function useRecords(type) {
   }, [fetchRecords]);
 
   const removeInterview = async (interviewSessionId) => {
+    setError(null);
     if (!USE_MOCK) {
       try {
         await api.delete(ENDPOINTS.interviews.remove(interviewSessionId));
