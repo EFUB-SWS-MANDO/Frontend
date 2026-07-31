@@ -27,7 +27,7 @@ export function useInterview({ mode, selection } = {}) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [sessionId, setSessionId] = useState(null);
-  const [isQuestionReady, setIsQuestionReady] = useState(true);
+  const [isQuestionReady, setIsQuestionReady] = useState(USE_MOCK);
 
   const streamRef = useRef(null);
   const questionIdRef = useRef(null);
@@ -117,6 +117,7 @@ export function useInterview({ mode, selection } = {}) {
         if (!ignore) {
           setError(e);
           setIsQuestionLoading(false);
+          setIsQuestionReady(false);
         }
       }
     })();
@@ -166,6 +167,7 @@ export function useInterview({ mode, selection } = {}) {
     }
     setError(null);
     setIsQuestionLoading(true);
+    setIsQuestionReady(false);
     setFeedback(null);
     try {
       await api.post(ENDPOINTS.interviews.question(sessionId), {
