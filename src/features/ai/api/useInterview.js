@@ -27,7 +27,7 @@ export function useInterview({ mode, selection } = {}) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [sessionId, setSessionId] = useState(null);
-  const [isStreamBroken, setIsStreamBroken] = useState(false);
+  const [isQuestionReady, setIsQuestionReady] = useState(true);
 
   const streamRef = useRef(null);
   const questionIdRef = useRef(null);
@@ -56,10 +56,12 @@ export function useInterview({ mode, selection } = {}) {
             questionIdRef.current = data.questionId;
             setQuestion(data.question);
             setIsQuestionLoading(false);
+            setIsQuestionReady(true);
           },
           onQuestionError: (data) => {
             setError(new Error(data.message));
             setIsQuestionLoading(false);
+            setIsQuestionReady(false);
           },
           onClosed: () => {
             streamRef.current?.close();
@@ -70,7 +72,7 @@ export function useInterview({ mode, selection } = {}) {
             if (reconnectedRef.current) {
               setError(new Error('질문 스트림 연결이 끊어졌습니다.'));
               setIsQuestionLoading(false);
-              setIsStreamBroken(true);
+              setIsQuestionReady(false);
               return;
             }
             reconnectedRef.current = true;
@@ -85,13 +87,13 @@ export function useInterview({ mode, selection } = {}) {
               } else {
                 setError(new Error('질문 스트림 연결이 끊어졌습니다.'));
                 setIsQuestionLoading(false);
-                setIsStreamBroken(true);
+                setIsQuestionReady(false);
               }
             } catch (e) {
               if (!ignore) {
                 setError(e);
                 setIsQuestionLoading(false);
-                setIsStreamBroken(true);
+                setIsQuestionReady(false);
               }
             }
           },
@@ -174,6 +176,7 @@ export function useInterview({ mode, selection } = {}) {
     } catch (e) {
       setError(e);
       setIsQuestionLoading(false);
+      setIsQuestionReady(false);
     }
   };
 
@@ -189,7 +192,7 @@ export function useInterview({ mode, selection } = {}) {
     error,
     sessionId,
     isSessionReady: USE_MOCK || sessionId !== null,
-    isQuestionReady: USE_MOCK || !isStreamBroken,
+    isQuestionReady: USE_MOCK || isQuestionReady,
     submitAnswer,
     nextQuestion,
     followUpQuestion,
