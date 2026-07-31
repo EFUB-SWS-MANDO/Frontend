@@ -23,8 +23,9 @@ const TITLE_MAX_LENGTH = 20;
 function buildTitle(content) {
   const firstLine = content.trim().split('\n')[0];
   if (!firstLine) return '제목 없음';
-  return firstLine.length > TITLE_MAX_LENGTH
-    ? `${firstLine.slice(0, TITLE_MAX_LENGTH - 3)}...`
+  const characters = Array.from(firstLine);
+  return characters.length > TITLE_MAX_LENGTH
+    ? `${characters.slice(0, TITLE_MAX_LENGTH - 3).join('')}...`
     : firstLine;
 }
 
@@ -42,7 +43,7 @@ function PostWritePage() {
     values: templateFields,
     isLoading: isTemplateLoading,
     error: templateError,
-  } = useTemplates();
+  } = useTemplates('BASIC', postType !== 'free');
   const [photos, setPhotos] = useState([]);
   const [files, setFiles] = useState([]);
   const [visibility, setVisibility] = useState('public');

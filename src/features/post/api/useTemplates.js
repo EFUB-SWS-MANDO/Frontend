@@ -4,12 +4,16 @@ import { ENDPOINTS } from '@/apis/endpoints';
 import { USE_MOCK } from '@/apis/config';
 import { MOCK_TEMPLATE } from '@/mocks/mockTemplates';
 
-export function useTemplates(type = 'BASIC') {
+export function useTemplates(type = 'BASIC', enabled = true) {
   const [values, setValues] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(enabled);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!enabled) {
+      setIsLoading(false);
+      return;
+    }
     let isIgnored = false;
     (async () => {
       setIsLoading(true);
@@ -33,7 +37,7 @@ export function useTemplates(type = 'BASIC') {
     return () => {
       isIgnored = true;
     };
-  }, [type]);
+  }, [type, enabled]);
 
   return { values, isLoading, error };
 }
