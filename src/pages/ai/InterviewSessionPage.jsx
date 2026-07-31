@@ -29,7 +29,11 @@ function InterviewSessionPage() {
 
   const isFeedbackStep = feedback !== null;
   const isActionBlocked =
-    answer.trim() === '' || isQuestionLoading || !isSessionReady || !isQuestionReady;
+    answer.trim() === '' ||
+    isQuestionLoading ||
+    isSubmitting ||
+    !isSessionReady ||
+    !isQuestionReady;
 
   const resetAnswerState = () => {
     setAnswer('');
@@ -118,7 +122,7 @@ function InterviewSessionPage() {
           </ButtonRow>
           <PrimaryButton
             type="button"
-            disabled={isActionBlocked || isSubmitting}
+            disabled={isActionBlocked}
             onClick={() => submitAnswer(answer)}
           >
             {isSubmitting ? '피드백 생성 중...' : '제출하고 피드백 보기'}
