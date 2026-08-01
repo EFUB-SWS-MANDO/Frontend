@@ -49,6 +49,7 @@ function PostWritePage() {
   const [visibility, setVisibility] = useState('public');
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [showToast, setShowToast] = useState(false);
+  const [attachmentBlocked, setAttachmentBlocked] = useState(false);
 
   const isTemplateUnavailable =
     postType !== 'free' && (isTemplateLoading || templateError || templateFields.length === 0);
@@ -74,6 +75,10 @@ function PostWritePage() {
   const handleUpload = async () => {
     if (!myUser?.id) {
       navigate('/login');
+      return;
+    }
+    if (photos.length > 0 || files.length > 0) {
+      setAttachmentBlocked(true);
       return;
     }
 
@@ -169,6 +174,9 @@ function PostWritePage() {
           </BottomSectionRow>
 
           <UploadButtonRow>
+            {attachmentBlocked && (
+              <ErrorText role="alert">사진/파일 첨부는 아직 지원하지 않아요. 첨부를 제거하고 다시 시도해주세요.</ErrorText>
+            )}
             {error && <ErrorText role="alert">게시글을 등록하지 못했어요. 다시 시도해주세요.</ErrorText>}
             <UploadButton onClick={handleUpload} disabled={isSubmitting}>
               {isSubmitting ? '업로드 중...' : '업로드하기 ↑'}
