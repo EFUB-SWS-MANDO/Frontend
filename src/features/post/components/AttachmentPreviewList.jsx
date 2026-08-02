@@ -25,7 +25,7 @@ function AttachmentPreviewList({ photos, files, onRemovePhoto, onRemoveFile }) {
       ))}
       {files.map((attachment) => (
         <FileChip key={attachment.id}>
-          {attachment.file.name}
+          <FileName>{attachment.file.name}</FileName>
           <RemoveButton onClick={() => onRemoveFile(attachment.id)} aria-label="파일 삭제">
             <CloseCircleIcon size={20} />
           </RemoveButton>
@@ -58,6 +58,7 @@ const PhotoThumbnail = styled.img`
 
 const RemoveButton = styled.button`
   display: flex;
+  flex-shrink: 0;
   padding: 0;
   line-height: 0;
 
@@ -78,6 +79,10 @@ const FileChip = styled.span`
   color: ${({ theme }) => theme.colors.text};
   font-size: ${({ theme }) => theme.fontSize.xs};
   max-width: 220px;
+`;
+
+const FileName = styled.span`
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

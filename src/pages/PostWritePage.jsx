@@ -182,6 +182,13 @@ function PostWritePage() {
             <CategorySelector selected={selectedCategories} onToggle={handleToggleCategory} />
           </BottomSectionRow>
 
+          <AttachmentPreviewList
+            photos={photos}
+            files={files}
+            onRemovePhoto={handleRemovePhoto}
+            onRemoveFile={handleRemoveFile}
+          />
+
           <UploadButtonRow>
             {hasAttachments && (
               <ErrorText role="alert">사진/파일 첨부는 아직 지원하지 않아요. 첨부를 제거하고 다시 시도해주세요.</ErrorText>
