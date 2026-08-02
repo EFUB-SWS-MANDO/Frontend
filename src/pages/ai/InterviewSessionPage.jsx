@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
 import PageHeader from '@/components/PageHeader/PageHeader';
 import CopyIcon from '@/asset/icons/CopyIcon';
@@ -9,19 +9,31 @@ import { useInterview } from '@/features/ai/api/useInterview';
 function InterviewSessionPage() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { state } = useLocation();
   const [answer, setAnswer] = useState('');
   const [isSaved, setIsSaved] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const {
     question,
+    isQuestionLoading,
     feedback,
     isSubmitting,
+    error,
+    sessionId,
+    isSessionReady,
+    isQuestionReady,
     submitAnswer,
     nextQuestion,
     followUpQuestion,
-  } = useInterview();
+  } = useInterview({ mode: state?.mode, selection: state?.selection });
 
   const isFeedbackStep = feedback !== null;
+  const isActionBlocked =
+    answer.trim() === '' ||
+    isQuestionLoading ||
+    isSubmitting ||
+    !isSessionReady ||
+    !isQuestionReady;
 
   const resetAnswerState = () => {
     setAnswer('');
@@ -30,12 +42,12 @@ function InterviewSessionPage() {
   };
 
   const handleNextQuestion = () => {
-    nextQuestion();
+    nextQuestion(answer);
     resetAnswerState();
   };
 
   const handleFollowUpQuestion = () => {
-    followUpQuestion();
+    followUpQuestion(answer);
     resetAnswerState();
   };
 
@@ -52,7 +64,9 @@ function InterviewSessionPage() {
         <AiAvatar aria-hidden />
         <QuestionBox>
           <BoxLabel>AI 질문</BoxLabel>
-          <BoxText>{question}</BoxText>
+          <BoxText>
+            {isQuestionLoading && !question ? '질문을 생성하는 중...' : question}
+          </BoxText>
         </QuestionBox>
       </QuestionRow>
 
@@ -80,25 +94,36 @@ function InterviewSessionPage() {
           </ActionRow>
           <PrimaryButton
             type="button"
-            onClick={() => navigate('/ai/interview/result')}
+            onClick={() => navigate('/ai/interview/result', { state: { sessionId } })}
           >
             총평 보기
           </PrimaryButton>
         </>
       ) : (
         <>
+          {error && (
+            <ErrorText role="alert">요청에 실패했어요. 다시 시도해 주세요.</ErrorText>
+          )}
           <ButtonRow>
-            <SubButton type="button" onClick={handleFollowUpQuestion}>
+            <SubButton
+              type="button"
+              disabled={isActionBlocked}
+              onClick={handleFollowUpQuestion}
+            >
               꼬리질문 받기
             </SubButton>
-            <SubButton type="button" onClick={handleNextQuestion}>
+            <SubButton
+              type="button"
+              disabled={isActionBlocked}
+              onClick={handleNextQuestion}
+            >
               추가질문 받기
             </SubButton>
           </ButtonRow>
           <PrimaryButton
             type="button"
-            disabled={answer.trim() === '' || isSubmitting}
-            onClick={submitAnswer}
+            disabled={isActionBlocked}
+            onClick={() => submitAnswer(answer)}
           >
             {isSubmitting ? '피드백 생성 중...' : '제출하고 피드백 보기'}
           </PrimaryButton>
@@ -203,6 +228,12 @@ const ActionButton = styled.button`
 const ButtonRow = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing(4)};
+`;
+
+const ErrorText = styled.p`
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  color: ${({ theme }) => theme.colors.error};
+  text-align: center;
 `;
 
 const SubButton = styled.button`

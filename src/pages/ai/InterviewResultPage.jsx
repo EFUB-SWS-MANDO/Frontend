@@ -1,22 +1,29 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import PageHeader from '@/components/PageHeader/PageHeader';
-import { useInterview } from '@/features/ai/api/useInterview';
+import Spinner from '@/components/Spinner/Spinner';
+import EmptyState from '@/components/EmptyState/EmptyState';
+import { useInterviewFeedback } from '@/features/ai/api/useInterviewFeedback';
 
 function InterviewResultPage() {
   const navigate = useNavigate();
-  const { summary } = useInterview();
+  const { state } = useLocation();
+  const { result, isLoading, error } = useInterviewFeedback(state?.sessionId);
+
+  if (isLoading) return <Spinner />;
+  if (error || !result)
+    return <EmptyState message="총평을 불러오지 못했어요. 다시 시도해 주세요." />;
 
   return (
     <Container>
       <PageHeader title="모의면접" />
       <ScoreArea>
-        <ScoreLabel>오늘 나의 면접 점수는</ScoreLabel>
-        <Score>{summary.score}점</Score>
+        <ScoreLabel>AI 한 줄 총평</ScoreLabel>
+        <Score>{result.feedbackSummary}</Score>
       </ScoreArea>
       <SummaryBox>
         <BoxLabel>총평</BoxLabel>
-        <BoxText>{summary.comment}</BoxText>
+        <BoxText>{result.feedback}</BoxText>
       </SummaryBox>
       <FinishButton type="button" onClick={() => navigate('/ai')}>
         모의 면접 끝내기
@@ -67,6 +74,7 @@ const BoxText = styled.p`
   font-size: ${({ theme }) => theme.fontSize.sm};
   color: ${({ theme }) => theme.colors.text};
   line-height: 1.7;
+  white-space: pre-wrap;
 `;
 
 const FinishButton = styled.button`
