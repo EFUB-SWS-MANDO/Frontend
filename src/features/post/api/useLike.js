@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
 import { USE_MOCK } from '@/apis/config';
@@ -9,6 +9,8 @@ export function useLike(postId, initialLiked, initialCount) {
   const [isLiked, setIsLiked] = useState(initialLiked);
   const [count, setCount] = useState(initialCount);
   const [error, setError] = useState(null);
+  const [isToggling, setIsToggling] = useState(false);
+  const isTogglingRef = useRef(false);
 
   useEffect(() => {
     setIsLiked(initialLiked);
@@ -27,6 +29,10 @@ export function useLike(postId, initialLiked, initialCount) {
   };
 
   const toggleLike = async () => {
+    if (isTogglingRef.current) return;
+    isTogglingRef.current = true;
+    setIsToggling(true);
+
     const previousIsLiked = isLiked;
     const previousCount = count;
     const nextIsLiked = !isLiked;
@@ -37,6 +43,8 @@ export function useLike(postId, initialLiked, initialCount) {
 
     if (USE_MOCK) {
       syncMock(nextIsLiked, nextCount);
+      isTogglingRef.current = false;
+      setIsToggling(false);
       return;
     }
 
@@ -51,8 +59,11 @@ export function useLike(postId, initialLiked, initialCount) {
       setIsLiked(previousIsLiked);
       setCount(previousCount);
       setError(e);
+    } finally {
+      isTogglingRef.current = false;
+      setIsToggling(false);
     }
   };
 
-  return { isLiked, count, toggleLike, error };
+  return { isLiked, count, toggleLike, error, isToggling };
 }

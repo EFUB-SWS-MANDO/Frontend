@@ -5,7 +5,7 @@ import { USE_MOCK } from '@/apis/config';
 import { MOCK_POSTS } from '@/mocks/mockPosts';
 import { useAuthStore } from '@/stores/authStore';
 import { categoryCodeToLabel } from '@/constants/postCategories';
-import { mapPostDetail } from './postMappers';
+import { formatDateTime, mapPostDetail } from './postMappers';
 
 // categories는 호출부에서 enum 코드로 변환해서 넘겨준다.
 export function useCreatePost() {
@@ -23,16 +23,20 @@ export function useCreatePost() {
           id: crypto.randomUUID(),
           title,
           content,
+          fileUrls: [],
           author: {
             id: myUser?.id,
             name: myUser?.nickname ?? '나',
             profileImage: myUser?.profileImage ?? '',
             isFollowing: false,
           },
-          createdAt: new Date().toLocaleString(),
+          createdAt: formatDateTime(new Date().toISOString()),
+          updatedAt: formatDateTime(new Date().toISOString()),
+          isUpdated: false,
           commentCount: 0,
           likeCount: 0,
           tags: (categories ?? []).map(categoryCodeToLabel),
+          isMine: true,
           isLiked: false,
           isPrivate,
         };

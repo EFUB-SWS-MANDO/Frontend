@@ -3,6 +3,7 @@ import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
 import { USE_MOCK } from '@/apis/config';
 import { MOCK_POST_DETAIL } from '@/mocks/mockPostDetail';
+import { MOCK_POSTS } from '@/mocks/mockPosts';
 import { mapPostDetail } from './postMappers';
 
 export function usePostDetail(postId) {
@@ -16,7 +17,8 @@ export function usePostDetail(postId) {
     try {
       if (USE_MOCK) {
         await new Promise((resolve) => setTimeout(resolve, 300));
-        setPost(MOCK_POST_DETAIL);
+        const foundPost = MOCK_POSTS.find((p) => p.id === postId);
+        setPost(foundPost ?? MOCK_POST_DETAIL);
         return;
       }
       const data = await api.get(ENDPOINTS.posts.detail(postId));

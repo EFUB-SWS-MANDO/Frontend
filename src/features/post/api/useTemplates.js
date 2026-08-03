@@ -11,6 +11,8 @@ export function useTemplates(type = 'BASIC', enabled = true) {
 
   useEffect(() => {
     if (!enabled) {
+      setValues([]);
+      setError(null);
       setIsLoading(false);
       return;
     }

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
 import { USE_MOCK } from '@/apis/config';
+import { MOCK_POST_DETAIL } from '@/mocks/mockPostDetail';
+import { MOCK_POSTS } from '@/mocks/mockPosts';
 import { mapPostDetail } from './postMappers';
 
 // 게시글 수정. categories는 NOT-NULL 스펙이라 항상 배열(enum 코드)로 전달해야 함.
@@ -15,14 +17,20 @@ export function useUpdatePost() {
     setIsSubmitting(true);
     setError(null);
     try {
+      if (!Array.isArray(categories)) {
+        throw new Error('categories는 항상 배열로 전달해야 합니다 (NOT-NULL 스펙)');
+      }
       if (USE_MOCK) {
         await new Promise((resolve) => setTimeout(resolve, 300));
-        return null;
+        Object.assign(MOCK_POST_DETAIL, { title, content, tags: categories, isPrivate });
+        const listPost = MOCK_POSTS.find((p) => p.id === postId);
+        if (listPost) Object.assign(listPost, { title, content, tags: categories, isPrivate });
+        return { ...MOCK_POST_DETAIL };
       }
       const data = await api.patch(ENDPOINTS.posts.update(postId), {
         title: title ?? null,
         content: content ?? null,
-        categories: categories ?? [],
+        categories,
         fileKeys: fileKeys ?? null,
         isPrivate,
       });

@@ -12,9 +12,10 @@ function PostDetailHeader({ post, isOwner }) {
     post.author.id,
     post.author.isFollowing ?? false,
   );
-  const { deletePost, error: deleteError } = useDeletePost();
+  const { deletePost, isDeleting, error: deleteError } = useDeletePost();
 
   const handleDelete = async () => {
+    if (isDeleting) return;
     const ok = await deletePost(post.id);
     if (ok) navigate('/');
   };
@@ -22,7 +23,7 @@ function PostDetailHeader({ post, isOwner }) {
   const menuOptions = isOwner
     ? [
         { label: '본문 수정', onClick: () => {/* TODO: 수정 화면 이동 */} },
-        { label: '본문 삭제', onClick: handleDelete, danger: true },
+        { label: '본문 삭제', onClick: handleDelete, danger: true, disabled: isDeleting },
       ]
     : [];
 
