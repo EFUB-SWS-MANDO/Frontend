@@ -17,8 +17,6 @@ import { useCreatePost } from '@/features/post/api/useCreatePost';
 import { useAuthStore } from '@/stores/authStore';
 import { uploadPostFile } from '@/apis/uploadPostFile';
 import { USE_MOCK } from '@/apis/config';
-import { MOCK_CATEGORIES } from '@/mocks/mockCategories';
-import { categoryLabelToCode } from '@/constants/postCategories';
 
 const TITLE_MAX_LENGTH = 20;
 
@@ -96,10 +94,7 @@ function PostWritePage() {
             .map((field) => templateContent[field])
             .filter(Boolean)
             .join('\n\n');
-    const categories = selectedCategories
-      .map((id) => MOCK_CATEGORIES.find((c) => c.id === id)?.name)
-      .filter(Boolean)
-      .map(categoryLabelToCode);
+    const categories = [...selectedCategories];
 
     setUploadError(null);
     let fileKeys = [];
