@@ -71,8 +71,10 @@ const CoverLetterStep2 = ({ selectedActivities, setSelectedActivities, onNext })
         <Spinner />
       ) : error ? (
         <EmptyState message="불러오지 못했어요. 다시 시도해 주세요." />
-      ) : filteredActivities.length === 0 ? (
+      ) : activities.length === 0 ? (
         <EmptyState message="아직 기록한 활동이 없어요." />
+      ) : filteredActivities.length === 0 ? (
+        <EmptyState message="검색 결과가 없어요." />
       ) : (
         <ActivityList>
           {filteredActivities.map((activity) => (

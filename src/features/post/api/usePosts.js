@@ -21,14 +21,20 @@ function filterMockPosts(posts, { followingOnly, categories, author, keyword }) 
   });
 }
 
-export function usePosts(params = {}) {
+export function usePosts(params = {}, enabled = true) {
   const [posts, setPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(enabled);
   const [error, setError] = useState(null);
 
   const paramsKey = JSON.stringify(params);
 
   const fetchPosts = useCallback(async () => {
+    if (!enabled) {
+      setPosts([]);
+      setError(null);
+      setIsLoading(false);
+      return;
+    }
     setIsLoading(true);
     setError(null);
     try {
@@ -70,7 +76,7 @@ export function usePosts(params = {}) {
     } finally {
       setIsLoading(false);
     }
-  }, [paramsKey]);
+  }, [paramsKey, enabled]);
 
   useEffect(() => {
     fetchPosts();
