@@ -15,7 +15,10 @@ function ProfilePage() {
   const userId = rawUserId === 'me' ? myUser?.id : rawUserId;
 
   const { profile, isLoading: profileLoading, error: profileError, refetch } = useProfile(userId);
-  const { posts, isLoading: postsLoading, error: postsError } = usePosts({ author: userId });
+  const { posts, isLoading: postsLoading, error: postsError } = usePosts({
+    author: userId,
+    followingOnly: false,
+  });
 
   if (profileLoading || postsLoading) return <Spinner />;
   if (profileError || postsError) {
