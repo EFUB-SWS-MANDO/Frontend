@@ -2,7 +2,20 @@ import styled from 'styled-components';
 import LockIcon from '@/asset/icons/LockIcon';
 import Tag from '@/features/post/components/Tag';
 
-function PostBody({ content, isPrivate = false, tags = [] }) {
+const IMAGE_EXTENSIONS = /\.(jpe?g|png|gif|webp|avif)(\?|$)/i;
+
+const getFileName = (url) => {
+  try {
+    return decodeURIComponent(new URL(url).pathname.split('/').pop());
+  } catch {
+    return url;
+  }
+};
+
+function PostBody({ content, isPrivate = false, tags = [], fileUrls = [] }) {
+  const imageUrls = fileUrls.filter((url) => IMAGE_EXTENSIONS.test(url));
+  const attachmentUrls = fileUrls.filter((url) => !IMAGE_EXTENSIONS.test(url));
+
   return (
     <Wrapper>
       {(isPrivate || tags.length > 0) && (
@@ -18,6 +31,22 @@ function PostBody({ content, isPrivate = false, tags = [] }) {
         </MetaRow>
       )}
       <Content>{content}</Content>
+      {imageUrls.length > 0 && (
+        <ImageList>
+          {imageUrls.map((url) => (
+            <AttachedImage key={url} src={url} alt="첨부 이미지" loading="lazy" />
+          ))}
+        </ImageList>
+      )}
+      {attachmentUrls.length > 0 && (
+        <FileList>
+          {attachmentUrls.map((url) => (
+            <FileLink key={url} href={url} target="_blank" rel="noopener noreferrer">
+              {getFileName(url)}
+            </FileLink>
+          ))}
+        </FileList>
+      )}
     </Wrapper>
   );
 }
@@ -43,6 +72,33 @@ const TagArea = styled.div`
   align-items: center;
   flex-wrap: wrap;
   gap: ${({ theme }) => theme.spacing(1)};
+`;
+
+const ImageList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing(3)};
+  margin-top: ${({ theme }) => theme.spacing(4)};
+`;
+
+const AttachedImage = styled.img`
+  max-width: 100%;
+  border-radius: ${({ theme }) => theme.radius.md};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+`;
+
+const FileList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing(2)};
+  margin-top: ${({ theme }) => theme.spacing(4)};
+`;
+
+const FileLink = styled.a`
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  color: ${({ theme }) => theme.colors.primaryDark};
+  text-decoration: underline;
+  word-break: break-all;
 `;
 
 const Content = styled.div`
