@@ -21,8 +21,8 @@ function CommentItem({ comment, myUserId, onUpdate, onDelete, onReplySubmit }) {
     setIsEditing(false);
   };
 
-  const handleReplySubmit = (content) => {
-    onReplySubmit(comment.id, content);
+  const handleReplySubmit = (content, isPrivate) => {
+    onReplySubmit(comment.id, content, isPrivate);
     setIsReplying(false);
   };
 

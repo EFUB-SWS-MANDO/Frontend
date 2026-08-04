@@ -48,13 +48,13 @@ function PostDetailPage() {
     });
   };
 
-  const handleReplySubmit = (parentId, content) => {
+  const handleReplySubmit = (parentId, content, isPrivate = false) => {
     addReply(parentId, {
       id: crypto.randomUUID(),
       author: buildAuthor(),
       createdAt: new Date().toLocaleString(),
       content,
-      isPrivate: false,
+      isPrivate,
       isDeleted: false,
     });
   };
