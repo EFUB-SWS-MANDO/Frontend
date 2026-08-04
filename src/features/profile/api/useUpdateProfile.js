@@ -29,8 +29,10 @@ export function useUpdateProfile() {
       } else {
         const payload = { nickname, bio };
         if (profileImageFile) {
-          // PATCH는 POST(profileImage)와 달리 fileKey 필드명을 사용 (백엔드 확인 완료)
-          payload.fileKey = await uploadProfileImage(profileImageFile);
+          // 백엔드가 생성(profileImage)/수정(fileKey) 필드명이 갈라져 있어 통일 전까지 둘 다 전송
+          const uploadedKey = await uploadProfileImage(profileImageFile);
+          payload.fileKey = uploadedKey;
+          payload.profileImage = uploadedKey;
         }
         const data = await api.patch(ENDPOINTS.profile.update, payload);
         profileImage = data?.profileImage ?? profileImage;
