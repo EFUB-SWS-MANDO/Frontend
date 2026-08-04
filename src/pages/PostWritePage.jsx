@@ -39,6 +39,7 @@ function PostWritePage() {
 
   const [step, setStep] = useState(1);
   const [postType, setPostType] = useState(location.state?.postType ?? 'free');
+  const [title, setTitle] = useState('');
   const [freeContent, setFreeContent] = useState('');
   const [templateContent, setTemplateContent] = useState({});
   const {
@@ -117,7 +118,7 @@ function PostWritePage() {
     }
 
     const post = await createPost({
-      title: buildTitle(content),
+      title: title.trim() || buildTitle(content),
       content,
       categories,
       isPrivate: visibility === 'private',
@@ -187,6 +188,12 @@ function PostWritePage() {
           </TopRow>
 
           <SectionTitle>내가 쓴 글</SectionTitle>
+          <TitleInput
+            value={title}
+            maxLength={TITLE_MAX_LENGTH}
+            placeholder="제목을 입력해 주세요 (비우면 첫 줄로 자동 생성돼요)"
+            onChange={(e) => setTitle(e.target.value)}
+          />
           <PreviewBox>
             {postType === 'free'
               ? freeContent
@@ -279,6 +286,26 @@ const SectionTitle = styled.h3`
   font-size: ${({ theme }) => theme.fontSize.md};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   color: ${({ theme }) => theme.colors.text};
+`;
+
+const TitleInput = styled.input`
+  padding: ${({ theme }) => theme.spacing(3)} ${({ theme }) => theme.spacing(4)};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+  background: ${({ theme }) => theme.colors.bg};
+  font-size: ${({ theme }) => theme.fontSize.md};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  color: ${({ theme }) => theme.colors.text};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.textSub};
+    font-weight: ${({ theme }) => theme.fontWeight.regular};
+  }
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const PreviewBox = styled.div`
