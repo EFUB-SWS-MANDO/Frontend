@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
 import { USE_MOCK } from '@/apis/config';
@@ -24,23 +24,27 @@ export function useProfile(userId) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const myUserId = useAuthStore((state) => state.user?.id);
+  const requestIdRef = useRef(0);
 
   const fetchProfile = useCallback(async () => {
+    requestIdRef.current += 1;
+    const requestId = requestIdRef.current;
+    const isStale = () => requestId !== requestIdRef.current;
     setIsLoading(true);
     setError(null);
     try {
       const isMe = userId != null && myUserId != null && String(userId) === String(myUserId);
       if (USE_MOCK) {
         await new Promise((resolve) => setTimeout(resolve, 300));
-        setProfile(mapMockProfileToApiShape(MOCK_PROFILE, isMe));
+        if (!isStale()) setProfile(mapMockProfileToApiShape(MOCK_PROFILE, isMe));
         return;
       }
       const data = await api.get(ENDPOINTS.profile.detail(userId));
-      setProfile({ ...data, isMe: data.isMe ?? isMe });
+      if (!isStale()) setProfile({ ...data, isMe: data.isMe ?? isMe });
     } catch (e) {
-      setError(e);
+      if (!isStale()) setError(e);
     } finally {
-      setIsLoading(false);
+      if (!isStale()) setIsLoading(false);
     }
   }, [userId, myUserId]);
 
