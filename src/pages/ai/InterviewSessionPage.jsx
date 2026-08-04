@@ -25,7 +25,7 @@ function InterviewSessionPage() {
     submitAnswer,
     nextQuestion,
     followUpQuestion,
-  } = useInterview({ mode: state?.mode, selection: state?.selection });
+  } = useInterview({ mode: state?.mode, selection: state?.selection, title: state?.title });
 
   const isFeedbackStep = feedback !== null;
   const isActionBlocked =

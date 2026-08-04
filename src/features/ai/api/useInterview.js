@@ -17,7 +17,7 @@ const buildSessionTitle = () => {
   return `모의면접 ${pad(now.getMonth() + 1)}.${pad(now.getDate())}`;
 };
 
-export function useInterview({ mode, selection } = {}) {
+export function useInterview({ mode, selection, title } = {}) {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [question, setQuestion] = useState(
     USE_MOCK ? MOCK_INTERVIEW_QUESTIONS[0].question : '',
@@ -106,7 +106,7 @@ export function useInterview({ mode, selection } = {}) {
       try {
         const data = await api.post(ENDPOINTS.interviews.create, {
           type: TYPE_BY_MODE[mode] ?? 'POST',
-          title: buildSessionTitle(),
+          title: title?.trim() || buildSessionTitle(),
           targetIds: selection ?? [],
         });
         if (ignore) return;

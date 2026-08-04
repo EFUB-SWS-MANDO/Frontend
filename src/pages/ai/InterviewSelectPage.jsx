@@ -30,6 +30,7 @@ function InterviewSelectPage() {
   const { mode } = useParams();
   const navigate = useNavigate();
   const [keyword, setKeyword] = useState('');
+  const [title, setTitle] = useState('');
   const [selected, setSelected] = useState(() => new Set());
 
   const { activities, isLoading: activitiesLoading, error: activitiesError } =
@@ -72,7 +73,7 @@ function InterviewSelectPage() {
 
   const handleSubmit = () => {
     navigate('/ai/interview/session', {
-      state: { mode, selection: [...selected] },
+      state: { mode, selection: [...selected], title: title.trim() },
     });
   };
 
@@ -151,6 +152,14 @@ function InterviewSelectPage() {
         </CardList>
       )}
 
+      <TitleInput
+        value={title}
+        maxLength={50}
+        aria-label="모의면접 제목"
+        placeholder="모의면접 제목을 입력해 주세요 (비우면 자동 생성돼요)"
+        onChange={(e) => setTitle(e.target.value)}
+      />
+
       <SubmitButton
         type="button"
         disabled={selected.size === 0}
@@ -203,6 +212,27 @@ const TagChip = styled.button`
     $selected ? theme.colors.primary : theme.colors.bg};
   color: ${({ theme, $selected }) =>
     $selected ? '#fff' : theme.colors.textSub};
+`;
+
+const TitleInput = styled.input`
+  display: block;
+  width: 100%;
+  margin-top: ${({ theme }) => theme.spacing(8)};
+  padding: ${({ theme }) => theme.spacing(3)} ${({ theme }) => theme.spacing(4)};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+  background: ${({ theme }) => theme.colors.bg};
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  color: ${({ theme }) => theme.colors.text};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.textSub};
+  }
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const SubmitButton = styled.button`
