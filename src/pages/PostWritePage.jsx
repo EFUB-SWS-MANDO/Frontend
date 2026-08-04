@@ -15,6 +15,8 @@ import EmptyState from '@/components/EmptyState/EmptyState';
 import { useTemplates } from '@/features/post/api/useTemplates';
 import { useCreatePost } from '@/features/post/api/useCreatePost';
 import { useAuthStore } from '@/stores/authStore';
+import { uploadPostFile } from '@/apis/uploadPostFile';
+import { USE_MOCK } from '@/apis/config';
 import { MOCK_CATEGORIES } from '@/mocks/mockCategories';
 import { categoryLabelToCode } from '@/constants/postCategories';
 
@@ -49,10 +51,11 @@ function PostWritePage() {
   const [visibility, setVisibility] = useState('public');
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [showToast, setShowToast] = useState(false);
+  const [isUploadingFiles, setIsUploadingFiles] = useState(false);
+  const [uploadError, setUploadError] = useState(null);
 
   const isTemplateUnavailable =
     postType !== 'free' && (isTemplateLoading || templateError || templateFields.length === 0);
-  const hasAttachments = photos.length > 0 || files.length > 0;
 
   const handleClose = () => {
     navigate(-1);
@@ -98,11 +101,27 @@ function PostWritePage() {
       .filter(Boolean)
       .map(categoryLabelToCode);
 
+    setUploadError(null);
+    let fileKeys = [];
+    const attachments = [...photos, ...files.map((attachment) => attachment.file)];
+    if (!USE_MOCK && attachments.length > 0) {
+      setIsUploadingFiles(true);
+      try {
+        fileKeys = await Promise.all(attachments.map((file) => uploadPostFile(file)));
+      } catch {
+        setUploadError(new Error('첨부 파일 업로드에 실패했어요. 다시 시도해 주세요.'));
+        return;
+      } finally {
+        setIsUploadingFiles(false);
+      }
+    }
+
     const post = await createPost({
       title: buildTitle(content),
       content,
       categories,
       isPrivate: visibility === 'private',
+      fileKeys,
     });
 
     if (post) setShowToast(true);
@@ -190,12 +209,10 @@ function PostWritePage() {
           />
 
           <UploadButtonRow>
-            {hasAttachments && (
-              <ErrorText role="alert">사진/파일 첨부는 아직 지원하지 않아요. 첨부를 제거하고 다시 시도해주세요.</ErrorText>
-            )}
+            {uploadError && <ErrorText role="alert">{uploadError.message}</ErrorText>}
             {error && <ErrorText role="alert">게시글을 등록하지 못했어요. 다시 시도해주세요.</ErrorText>}
-            <UploadButton onClick={handleUpload} disabled={isSubmitting || hasAttachments}>
-              {isSubmitting ? '업로드 중...' : '업로드하기 ↑'}
+            <UploadButton onClick={handleUpload} disabled={isSubmitting || isUploadingFiles}>
+              {isSubmitting || isUploadingFiles ? '업로드 중...' : '업로드하기 ↑'}
             </UploadButton>
           </UploadButtonRow>
         </>
