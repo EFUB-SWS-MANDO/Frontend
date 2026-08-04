@@ -58,7 +58,7 @@ export function usePosts(params = {}, shouldFetch = true) {
       let nextCursor;
       let hasNext = true;
       let page = 0;
-      while (hasNext && page < MAX_PAGES) {
+      while (hasNext && page < MAX_PAGES && requestId === requestIdRef.current) {
         page += 1;
         const data = await api.get(ENDPOINTS.posts.list, {
           params: {
