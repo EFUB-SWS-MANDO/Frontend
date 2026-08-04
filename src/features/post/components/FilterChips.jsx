@@ -1,23 +1,13 @@
 import styled, { useTheme } from 'styled-components';
 import FilterIcon from '@/asset/icons/FilterIcon';
 
-export const RECRUIT_LABELS = {
-  recruiting: '모집 중',
-  closed: '모집 완료',
-};
-
-function FilterChips({ filters, onRemoveTag, onClearRecruit, onOpenModal }) {
+function FilterChips({ filters, onRemoveTag, onOpenModal }) {
   const theme = useTheme();
-  const { tags, recruitStatus } = filters;
+  const { tags } = filters;
 
   return (
     <Row>
       <Chips>
-        {recruitStatus !== 'all' && (
-          <Chip type="button" onClick={onClearRecruit}>
-            {RECRUIT_LABELS[recruitStatus]} <span aria-hidden>×</span>
-          </Chip>
-        )}
         {tags.map((tag) => (
           <Chip key={tag} type="button" onClick={() => onRemoveTag(tag)}>
             {tag} <span aria-hidden>×</span>

@@ -14,13 +14,19 @@ import Spinner from '@/components/Spinner/Spinner';
 import EmptyState from '@/components/EmptyState/EmptyState';
 import { useTemplates } from '@/features/post/api/useTemplates';
 import { useCreatePost } from '@/features/post/api/useCreatePost';
-import { MOCK_CATEGORIES } from '@/mocks/mockCategories';
 import { useAuthStore } from '@/stores/authStore';
+import { MOCK_CATEGORIES } from '@/mocks/mockCategories';
+import { categoryLabelToCode } from '@/constants/postCategories';
+
+const TITLE_MAX_LENGTH = 20;
 
 function buildTitle(content) {
   const firstLine = content.trim().split('\n')[0];
   if (!firstLine) return '제목 없음';
-  return firstLine.length > 30 ? `${firstLine.slice(0, 27)}...` : firstLine;
+  const characters = Array.from(firstLine);
+  return characters.length > TITLE_MAX_LENGTH
+    ? `${characters.slice(0, TITLE_MAX_LENGTH - 3).join('')}...`
+    : firstLine;
 }
 
 function PostWritePage() {
@@ -37,7 +43,7 @@ function PostWritePage() {
     values: templateFields,
     isLoading: isTemplateLoading,
     error: templateError,
-  } = useTemplates();
+  } = useTemplates('BASIC', postType !== 'free');
   const [photos, setPhotos] = useState([]);
   const [files, setFiles] = useState([]);
   const [visibility, setVisibility] = useState('public');
@@ -46,6 +52,7 @@ function PostWritePage() {
 
   const isTemplateUnavailable =
     postType !== 'free' && (isTemplateLoading || templateError || templateFields.length === 0);
+  const hasAttachments = photos.length > 0 || files.length > 0;
 
   const handleClose = () => {
     navigate(-1);
@@ -57,6 +64,14 @@ function PostWritePage() {
 
   const handleEvidenceUpload = (newFiles) => {
     setFiles((prev) => [...prev, ...newFiles]);
+  };
+
+  const handleRemovePhoto = (index) => {
+    setPhotos((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleRemoveFile = (fileId) => {
+    setFiles((prev) => prev.filter((f) => f.id !== fileId));
   };
 
   const handleToggleCategory = (categoryId) => {
@@ -78,27 +93,19 @@ function PostWritePage() {
             .map((field) => templateContent[field])
             .filter(Boolean)
             .join('\n\n');
-    const tags = MOCK_CATEGORIES.filter((c) => selectedCategories.includes(c.id)).map((c) => c.name);
+    const categories = selectedCategories
+      .map((id) => MOCK_CATEGORIES.find((c) => c.id === id)?.name)
+      .filter(Boolean)
+      .map(categoryLabelToCode);
 
-    const ok = await createPost({
-      id: crypto.randomUUID(),
+    const post = await createPost({
       title: buildTitle(content),
       content,
-      author: {
-        id: myUser?.id,
-        name: myUser?.nickname ?? '나',
-        profileImage: myUser?.profileImage ?? '',
-        isFollowing: false,
-      },
-      createdAt: new Date().toLocaleString(),
-      commentCount: 0,
-      likeCount: 0,
-      tags,
-      recruitStatus: 'recruiting',
+      categories,
       isPrivate: visibility === 'private',
     });
 
-    if (ok) setShowToast(true);
+    if (post) setShowToast(true);
   };
 
   const handleToastDone = () => {
@@ -134,7 +141,12 @@ function PostWritePage() {
             )}
           </FormArea>
 
-          <AttachmentPreviewList photos={photos} files={files} />
+          <AttachmentPreviewList
+            photos={photos}
+            files={files}
+            onRemovePhoto={handleRemovePhoto}
+            onRemoveFile={handleRemoveFile}
+          />
 
           <BottomRow>
             <AttachmentButtons
@@ -170,9 +182,19 @@ function PostWritePage() {
             <CategorySelector selected={selectedCategories} onToggle={handleToggleCategory} />
           </BottomSectionRow>
 
+          <AttachmentPreviewList
+            photos={photos}
+            files={files}
+            onRemovePhoto={handleRemovePhoto}
+            onRemoveFile={handleRemoveFile}
+          />
+
           <UploadButtonRow>
-            {error && <ErrorText role="alert">게시글을 등록하지 못했습니다. 다시 시도해주세요.</ErrorText>}
-            <UploadButton onClick={handleUpload} disabled={isSubmitting}>
+            {hasAttachments && (
+              <ErrorText role="alert">사진/파일 첨부는 아직 지원하지 않아요. 첨부를 제거하고 다시 시도해주세요.</ErrorText>
+            )}
+            {error && <ErrorText role="alert">게시글을 등록하지 못했어요. 다시 시도해주세요.</ErrorText>}
+            <UploadButton onClick={handleUpload} disabled={isSubmitting || hasAttachments}>
               {isSubmitting ? '업로드 중...' : '업로드하기 ↑'}
             </UploadButton>
           </UploadButtonRow>

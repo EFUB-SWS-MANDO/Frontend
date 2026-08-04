@@ -11,13 +11,13 @@ import EmptyState from '@/components/EmptyState/EmptyState';
 
 function HomePage() {
   const [activeTab, setActiveTab] = useState('all');
-  const [filters, setFilters] = useState({ recruitStatus: 'all', tags: [] });
+  const [filters, setFilters] = useState({ tags: [] });
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [keyword, setKeyword] = useState('');
   const { posts, isLoading, error } = usePosts({
-    tab: activeTab,
+    followingOnly: activeTab === 'following',
     keyword,
-    ...filters,
+    categories: filters.tags,
   });
 
   return (
@@ -36,9 +36,6 @@ function HomePage() {
             ...prev,
             tags: prev.tags.filter((t) => t !== tag),
           }))
-        }
-        onClearRecruit={() =>
-          setFilters((prev) => ({ ...prev, recruitStatus: 'all' }))
         }
         onOpenModal={() => setIsFilterOpen(true)}
       />

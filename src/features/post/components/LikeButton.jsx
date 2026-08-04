@@ -3,7 +3,11 @@ import LeafIcon from '@/asset/icons/LeafIcon';
 import { useLike } from '@/features/post/api/useLike';
 
 function LikeButton({ postId, initialCount, initialLiked }) {
-  const { isLiked, count, toggleLike } = useLike(postId, initialLiked ?? false, initialCount ?? 0);
+  const { isLiked, count, toggleLike, isToggling } = useLike(
+    postId,
+    initialLiked ?? false,
+    initialCount ?? 0
+  );
 
   return (
     <Wrapper>
@@ -11,6 +15,7 @@ function LikeButton({ postId, initialCount, initialLiked }) {
       <Button
         $active={isLiked}
         onClick={toggleLike}
+        disabled={isToggling}
         aria-pressed={isLiked}
         aria-label={isLiked ? '추천 취소' : '추천하기'}
       >

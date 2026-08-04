@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import FollowButton from '@/features/profile/FollowButton';
 import { useFollow } from '@/features/profile/api/useFollow';
+import { useDeletePost } from '@/features/post/api/useDeletePost';
 import EditPostButton from './EditPostButton';
 import DropdownMenu from '@/components/DropdownMenu/DropdownMenu';
 
@@ -11,11 +12,18 @@ function PostDetailHeader({ post, isOwner }) {
     post.author.id,
     post.author.isFollowing ?? false,
   );
+  const { deletePost, isDeleting, error: deleteError } = useDeletePost();
+
+  const handleDelete = async () => {
+    if (isDeleting) return;
+    const ok = await deletePost(post.id);
+    if (ok) navigate('/');
+  };
 
   const menuOptions = isOwner
     ? [
         { label: '본문 수정', onClick: () => {/* TODO: 수정 화면 이동 */} },
-        { label: '본문 삭제', onClick: () => {/* TODO: 삭제 API 연동 */}, danger: true },
+        { label: '본문 삭제', onClick: handleDelete, danger: true, disabled: isDeleting },
       ]
     : [];
 
@@ -49,6 +57,9 @@ function PostDetailHeader({ post, isOwner }) {
       </AuthorRow>
 
       {!isOwner && followError && <FollowErrorText>{followError.message}</FollowErrorText>}
+      {isOwner && deleteError && (
+        <FollowErrorText>게시글을 삭제하지 못했어요. 다시 시도해주세요.</FollowErrorText>
+      )}
     </Wrapper>
   );
 }
