@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import CommentContent from './CommentContent';
 
-function ReplyItem({ reply, myUserId, onUpdate, onDelete, onReplyClick }) {
+function ReplyItem({ reply, myUserId, onUpdate, onDelete }) {
   const isOwner = String(reply.author.id) === String(myUserId);
   const [isEditing, setIsEditing] = useState(false);
   const [draftContent, setDraftContent] = useState(reply.content);
@@ -33,7 +33,6 @@ function ReplyItem({ reply, myUserId, onUpdate, onDelete, onReplyClick }) {
         onTogglePrivate={() => onUpdate(reply.id, { isPrivate: !reply.isPrivate })}
         onDelete={() => onDelete(reply.id)}
       />
-      <ReplyLink onClick={onReplyClick}>답글 달기</ReplyLink>
     </Wrapper>
   );
 }
@@ -41,9 +40,3 @@ function ReplyItem({ reply, myUserId, onUpdate, onDelete, onReplyClick }) {
 export default ReplyItem;
 
 const Wrapper = styled.div``;
-
-const ReplyLink = styled.button`
-  font-size: ${({ theme }) => theme.fontSize.xs};
-  color: ${({ theme }) => theme.colors.textSub};
-  text-decoration: underline;
-`;

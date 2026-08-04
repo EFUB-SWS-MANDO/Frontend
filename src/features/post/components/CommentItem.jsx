@@ -61,7 +61,6 @@ function CommentItem({ comment, myUserId, onUpdate, onDelete, onReplySubmit }) {
               myUserId={myUserId}
               onUpdate={onUpdate}
               onDelete={onDelete}
-              onReplyClick={() => setIsReplying(true)}
             />
           ))}
         </ReplyList>
