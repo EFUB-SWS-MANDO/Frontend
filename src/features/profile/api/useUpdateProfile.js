@@ -29,8 +29,7 @@ export function useUpdateProfile() {
       } else {
         const payload = { nickname, bio };
         if (profileImageFile) {
-          // PATCH는 POST(profileImage)와 달리 fileKey 필드명을 사용 (백엔드 확인 완료)
-          payload.fileKey = await uploadProfileImage(profileImageFile);
+          payload.profileImage = await uploadProfileImage(profileImageFile);
         }
         const data = await api.patch(ENDPOINTS.profile.update, payload);
         profileImage = data?.profileImage ?? profileImage;
