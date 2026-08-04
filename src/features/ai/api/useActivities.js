@@ -1,29 +1,17 @@
-import { useState, useEffect } from 'react';
-import { MOCK_ACTIVITIES } from '@/mocks/mockActivities';
+import { useMemo } from 'react';
+import { USE_MOCK } from '@/apis/config';
+import { useAuthStore } from '@/stores/authStore';
+import { usePosts } from '@/features/post/api/usePosts';
 
+// '활동'은 내가 쓴 게시글을 재사용한다 (postId -> id, title -> name, tags -> keyword)
 export function useActivities() {
-  const [activities, setActivities] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const myUserId = useAuthStore((state) => state.user?.id);
+  const { posts, isLoading, error } = usePosts(USE_MOCK ? {} : { author: myUserId });
 
-  useEffect(() => {
-    let ignore = false;
-    (async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 300));
-        if (!ignore) setActivities(MOCK_ACTIVITIES);
-      } catch (e) {
-        if (!ignore) setError(e);
-      } finally {
-        if (!ignore) setIsLoading(false);
-      }
-    })();
-    return () => {
-      ignore = true;
-    };
-  }, []);
+  const activities = useMemo(
+    () => posts.map((post) => ({ id: post.id, name: post.title, keyword: post.tags.join(', ') })),
+    [posts],
+  );
 
   return { activities, isLoading, error };
 }
