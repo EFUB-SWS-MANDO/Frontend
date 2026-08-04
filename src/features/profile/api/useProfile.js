@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
-import { USE_MOCK } from '@/apis/config';
+import { USE_MOCK, MOCK_AUTH } from '@/apis/config';
 import { MOCK_PROFILE } from '@/mocks/mockProfile';
 import { useAuthStore } from '@/stores/authStore';
 
@@ -34,7 +34,7 @@ export function useProfile(userId) {
     setError(null);
     try {
       const isMe = userId != null && myUserId != null && String(userId) === String(myUserId);
-      if (USE_MOCK) {
+      if (USE_MOCK || MOCK_AUTH) {
         await new Promise((resolve) => setTimeout(resolve, 300));
         if (!isStale()) setProfile(mapMockProfileToApiShape(MOCK_PROFILE, isMe));
         return;
