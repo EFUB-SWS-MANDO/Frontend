@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
 import CommentIcon from '@/asset/icons/CommentIcon';
 import LeafIcon from '@/asset/icons/LeafIcon';
@@ -28,7 +28,10 @@ function PostCard({ post }) {
       </TitleRow>
       <Content>{post.content}</Content>
       <Footer>
-        <AuthorInfo>
+        <AuthorInfo
+          to={`/profile/${post.author.id}`}
+          onClick={(e) => e.stopPropagation()}
+        >
           {post.author.profileImage ? (
             <AuthorImage src={post.author.profileImage} alt={`${post.author.name} 프로필`} />
           ) : (
@@ -113,10 +116,17 @@ const Footer = styled.div`
   align-items: center;
 `;
 
-const AuthorInfo = styled.div`
+const AuthorInfo = styled(Link)`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing(2)};
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+
+  &:hover span {
+    text-decoration: underline;
+  }
 `;
 
 const AuthorImage = styled.img`

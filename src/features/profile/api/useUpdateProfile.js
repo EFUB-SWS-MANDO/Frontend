@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
 import { uploadProfileImage } from '@/apis/uploadProfileImage';
+import { MOCK_AUTH } from '@/apis/config';
 import { MOCK_PROFILE } from '@/mocks/mockProfile';
 import { useAuthStore } from '@/stores/authStore';
 
@@ -19,8 +20,8 @@ export function useUpdateProfile() {
       const previousImage = useAuthStore.getState().user?.profileImage ?? null;
       let profileImage = previousImage;
 
-      // VITE_MOCK_AUTH=true면 API 호출 없이 목 데이터만 갱신 (시연/개발용)
-      if (import.meta.env.VITE_MOCK_AUTH === 'true') {
+      // 목 모드면 API 호출 없이 목 데이터만 갱신 (시연/개발용)
+      if (MOCK_AUTH) {
         await new Promise((resolve) => setTimeout(resolve, 500));
         if (profileImageFile) {
           profileImage = URL.createObjectURL(profileImageFile);
@@ -29,8 +30,11 @@ export function useUpdateProfile() {
       } else {
         const payload = { nickname, bio };
         if (profileImageFile) {
-          // PATCH는 POST(profileImage)와 달리 fileKey 필드명을 사용 (백엔드 확인 완료)
-          payload.fileKey = await uploadProfileImage(profileImageFile);
+          // 백엔드가 생성(profileImage)/수정(fileKey) 필드명이 갈라져 있어 통일 전까지 둘 다 전송
+          const uploadedKey = await uploadProfileImage(profileImageFile);
+          payload.fileKey = uploadedKey;
+          payload.profileImage = uploadedKey;
+          profileImage = uploadedKey;
         }
         const data = await api.patch(ENDPOINTS.profile.update, payload);
         profileImage = data?.profileImage ?? profileImage;

@@ -17,7 +17,7 @@ export function usePostDetail(postId) {
     try {
       if (USE_MOCK) {
         await new Promise((resolve) => setTimeout(resolve, 300));
-        const foundPost = MOCK_POSTS.find((p) => p.id === postId);
+        const foundPost = MOCK_POSTS.find((p) => String(p.id) === String(postId));
         setPost(foundPost ?? MOCK_POST_DETAIL);
         return;
       }
