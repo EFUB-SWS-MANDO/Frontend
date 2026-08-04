@@ -5,8 +5,16 @@ import FollowButton from './FollowButton';
 import ProfileEditModal from './ProfileEditModal';
 
 function ProfileHeader({ user, isOwner, onProfileUpdated }) {
-  const { isFollowing, isToggling, error: followError, toggleFollow } = useFollow(user?.memberId, false);
+  const { isFollowing, isToggling, error: followError, toggleFollow } = useFollow(
+    user?.memberId,
+    user?.isFollowing ?? false,
+  );
   const [isEditOpen, setIsEditOpen] = useState(false);
+
+  const handleToggleFollow = async () => {
+    const ok = await toggleFollow();
+    if (ok) onProfileUpdated?.();
+  };
 
   return (
     <Wrapper>
@@ -36,7 +44,7 @@ function ProfileHeader({ user, isOwner, onProfileUpdated }) {
             </EditButton>
           ) : (
             <>
-              <FollowButton isFollowing={isFollowing} onClick={toggleFollow} disabled={isToggling} />
+              <FollowButton isFollowing={isFollowing} onClick={handleToggleFollow} disabled={isToggling} />
               {followError && <FollowErrorText>{followError.message}</FollowErrorText>}
             </>
           )}

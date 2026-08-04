@@ -15,7 +15,7 @@ export function useFollow(memberId, initialIsFollowing) {
   }, [memberId, initialIsFollowing]);
 
   const toggleFollow = async () => {
-    if (isToggling || !memberId) return;
+    if (isToggling || !memberId) return false;
     const requestId = ++requestIdRef.current;
     const nextIsFollowing = !isFollowing;
     setIsToggling(true);
@@ -30,11 +30,13 @@ export function useFollow(memberId, initialIsFollowing) {
           await api.delete(ENDPOINTS.follow.toggle(memberId));
         }
       }
+      return true;
     } catch (e) {
       if (requestIdRef.current === requestId) {
         setIsFollowing(!nextIsFollowing);
         setError(e);
       }
+      return false;
     } finally {
       if (requestIdRef.current === requestId) {
         setIsToggling(false);
