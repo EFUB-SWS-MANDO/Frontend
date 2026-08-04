@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import SendCircleIcon from '@/asset/icons/SendCircleIcon';
-import { MOCK_CATEGORIES } from '@/mocks/mockCategories';
+import Spinner from '@/components/Spinner/Spinner';
+import { useCategories } from '@/features/post/api/useCategories';
 
 function CategorySelector({ selected, onToggle }) {
   const [search, setSearch] = useState('');
+  const { categories, isLoading, error } = useCategories();
 
-  const filtered = MOCK_CATEGORIES.filter((c) => c.name.includes(search));
+  const filtered = categories.filter((c) => c.name.includes(search));
 
   return (
     <Wrapper>
@@ -21,16 +23,22 @@ function CategorySelector({ selected, onToggle }) {
           <SendCircleIcon size={36} />
         </SearchIcon>
       </SearchRow>
-      <ChipList>
-        {filtered.map((category) => {
-          const isSelected = selected.includes(category.id);
-          return (
-            <Chip key={category.id} $selected={isSelected} onClick={() => onToggle(category.id)}>
-              {category.name}
-            </Chip>
-          );
-        })}
-      </ChipList>
+      {isLoading ? (
+        <Spinner />
+      ) : error || categories.length === 0 ? (
+        <StatusText>카테고리를 불러오지 못했어요. 다시 시도해 주세요.</StatusText>
+      ) : (
+        <ChipList>
+          {filtered.map((category) => {
+            const isSelected = selected.includes(category.id);
+            return (
+              <Chip key={category.id} $selected={isSelected} onClick={() => onToggle(category.id)}>
+                {category.name}
+              </Chip>
+            );
+          })}
+        </ChipList>
+      )}
     </Wrapper>
   );
 }
@@ -47,6 +55,11 @@ const Title = styled.h3`
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   color: ${({ theme }) => theme.colors.text};
+`;
+
+const StatusText = styled.p`
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.textSub};
 `;
 
 const SearchRow = styled.div`
