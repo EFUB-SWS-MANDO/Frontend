@@ -34,7 +34,11 @@ function PostDetailHeader({ post, isOwner }) {
       </TopRow>
 
       <AuthorRow>
-        <AuthorInfo>
+        <AuthorInfo
+          role="link"
+          tabIndex={0}
+          onClick={() => navigate(`/profile/${post.author.id}`)}
+        >
           {post.author.profileImage ? (
             <Avatar src={post.author.profileImage} alt={`${post.author.name} 프로필`} />
           ) : (
@@ -87,6 +91,7 @@ const AuthorInfo = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing(3)};
+  cursor: pointer;
 `;
 
 const Avatar = styled.img`

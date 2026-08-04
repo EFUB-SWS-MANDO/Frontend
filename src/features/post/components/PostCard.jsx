@@ -28,7 +28,14 @@ function PostCard({ post }) {
       </TitleRow>
       <Content>{post.content}</Content>
       <Footer>
-        <AuthorInfo>
+        <AuthorInfo
+          role="link"
+          tabIndex={0}
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/profile/${post.author.id}`);
+          }}
+        >
           {post.author.profileImage ? (
             <AuthorImage src={post.author.profileImage} alt={`${post.author.name} 프로필`} />
           ) : (
@@ -117,6 +124,11 @@ const AuthorInfo = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing(2)};
+  cursor: pointer;
+
+  &:hover span {
+    text-decoration: underline;
+  }
 `;
 
 const AuthorImage = styled.img`
