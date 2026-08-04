@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
 import { USE_MOCK } from '@/apis/config';
@@ -21,15 +21,18 @@ function filterMockPosts(posts, { followingOnly, categories, author, keyword }) 
   });
 }
 
-export function usePosts(params = {}, enabled = true) {
+export function usePosts(params = {}, shouldFetch = true) {
   const [posts, setPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(enabled);
+  const [isLoading, setIsLoading] = useState(shouldFetch);
   const [error, setError] = useState(null);
+  const requestIdRef = useRef(0);
 
   const paramsKey = JSON.stringify(params);
 
   const fetchPosts = useCallback(async () => {
-    if (!enabled) {
+    const requestId = ++requestIdRef.current;
+
+    if (!shouldFetch) {
       setPosts([]);
       setError(null);
       setIsLoading(false);
@@ -43,7 +46,9 @@ export function usePosts(params = {}, enabled = true) {
 
       if (USE_MOCK) {
         await new Promise((resolve) => setTimeout(resolve, 300));
-        setPosts(filterMockPosts(MOCK_POSTS, { followingOnly, categories, author, keyword }));
+        if (requestId === requestIdRef.current) {
+          setPosts(filterMockPosts(MOCK_POSTS, { followingOnly, categories, author, keyword }));
+        }
         return;
       }
 
@@ -70,13 +75,13 @@ export function usePosts(params = {}, enabled = true) {
         hasNext = (data.hasNext ?? false) && next !== undefined && next !== nextCursor;
         nextCursor = next;
       }
-      setPosts(flat);
+      if (requestId === requestIdRef.current) setPosts(flat);
     } catch (e) {
-      setError(e);
+      if (requestId === requestIdRef.current) setError(e);
     } finally {
-      setIsLoading(false);
+      if (requestId === requestIdRef.current) setIsLoading(false);
     }
-  }, [paramsKey, enabled]);
+  }, [paramsKey, shouldFetch]);
 
   useEffect(() => {
     fetchPosts();
