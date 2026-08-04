@@ -18,7 +18,7 @@ import { useAuthStore } from '@/stores/authStore';
 import { uploadPostFile } from '@/apis/uploadPostFile';
 import { USE_MOCK } from '@/apis/config';
 
-const TITLE_MAX_LENGTH = 20;
+const TITLE_MAX_LENGTH = 50;
 
 function buildTitle(content) {
   const firstLine = content.trim().split('\n')[0];
@@ -55,6 +55,14 @@ function PostWritePage() {
 
   const isTemplateUnavailable =
     postType !== 'free' && (isTemplateLoading || templateError || templateFields.length === 0);
+  const mergedContent =
+    postType === 'free'
+      ? freeContent
+      : templateFields
+          .map((field) => templateContent[field])
+          .filter(Boolean)
+          .join('\n\n');
+  const isContentEmpty = mergedContent.trim() === '';
 
   const handleClose = () => {
     navigate(-1);
@@ -88,13 +96,7 @@ function PostWritePage() {
       return;
     }
 
-    const content =
-      postType === 'free'
-        ? freeContent
-        : templateFields
-            .map((field) => templateContent[field])
-            .filter(Boolean)
-            .join('\n\n');
+    const content = mergedContent;
     const categories = [...selectedCategories];
 
     setUploadError(null);
@@ -168,7 +170,7 @@ function PostWritePage() {
               onPhotoSelect={(newPhotos) => setPhotos((prev) => [...prev, ...newPhotos])}
               onFileSelect={(newFiles) => setFiles((prev) => [...prev, ...newFiles])}
             />
-            <NextButton onClick={handleNext} disabled={isTemplateUnavailable}>
+            <NextButton onClick={handleNext} disabled={isTemplateUnavailable || isContentEmpty}>
               다음
               <ArrowRightIcon color="#494D5A" size={16} />
             </NextButton>
@@ -214,7 +216,7 @@ function PostWritePage() {
           <UploadButtonRow>
             {uploadError && <ErrorText role="alert">{uploadError.message}</ErrorText>}
             {error && <ErrorText role="alert">게시글을 등록하지 못했어요. 다시 시도해주세요.</ErrorText>}
-            <UploadButton onClick={handleUpload} disabled={isSubmitting || isUploadingFiles}>
+            <UploadButton onClick={handleUpload} disabled={isSubmitting || isUploadingFiles || isContentEmpty}>
               {isSubmitting || isUploadingFiles ? '업로드 중...' : '업로드하기 ↑'}
             </UploadButton>
           </UploadButtonRow>
