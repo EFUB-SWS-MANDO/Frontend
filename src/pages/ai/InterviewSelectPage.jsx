@@ -9,7 +9,7 @@ import SelectSearchField from '@/features/ai/components/SelectSearchField';
 import SelectableCard from '@/features/ai/components/SelectableCard';
 import { useActivities } from '@/features/ai/api/useActivities';
 import { useCoverLetters } from '@/features/ai/api/useCoverLetters';
-import { POST_CATEGORIES } from '@/constants/postCategories';
+import { useCategories } from '@/features/post/api/useCategories';
 
 const MODE_CONFIG = {
   activity: {
@@ -37,13 +37,17 @@ function InterviewSelectPage() {
     useActivities();
   const { groups, isLoading: lettersLoading, error: lettersError } =
     useCoverLetters();
+  const { categories, isLoading: categoriesLoading, error: categoriesError } =
+    useCategories();
 
   const config = MODE_CONFIG[mode] ?? MODE_CONFIG.activity;
   const q = keyword.trim().toLowerCase();
 
+  const visibleCategories = categories.filter((c) => c.name.toLowerCase().includes(q));
+
   const candidates =
     mode === 'category'
-      ? POST_CATEGORIES.map((c) => c.label).filter((c) => c.toLowerCase().includes(q))
+      ? visibleCategories.map((c) => c.id)
       : mode === 'cover-letter'
         ? groups
             .flatMap((g) => g.items)
@@ -91,18 +95,24 @@ function InterviewSelectPage() {
       <SelectSearchField value={keyword} onChange={setKeyword} />
 
       {mode === 'category' ? (
-        <ChipRow>
-          {candidates.map((tag) => (
-            <TagChip
-              key={tag}
-              type="button"
-              $selected={selected.has(tag)}
-              onClick={() => toggle(tag)}
-            >
-              {tag} {selected.has(tag) && <span aria-hidden>×</span>}
-            </TagChip>
-          ))}
-        </ChipRow>
+        categoriesLoading ? (
+          <Spinner />
+        ) : categoriesError || categories.length === 0 ? (
+          <EmptyState message="카테고리를 불러오지 못했어요. 다시 시도해 주세요." />
+        ) : (
+          <ChipRow>
+            {visibleCategories.map((category) => (
+              <TagChip
+                key={category.id}
+                type="button"
+                $selected={selected.has(category.id)}
+                onClick={() => toggle(category.id)}
+              >
+                {category.name} {selected.has(category.id) && <span aria-hidden>×</span>}
+              </TagChip>
+            ))}
+          </ChipRow>
+        )
       ) : isLoading ? (
         <Spinner />
       ) : error ? (

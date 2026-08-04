@@ -22,9 +22,15 @@ export function useCategories() {
           return;
         }
         const data = await api.get(ENDPOINTS.categories.list);
-        const codes = data.categories ?? [];
+        const rawCategories = data.categories ?? data ?? [];
         if (!ignore) {
-          setCategories(codes.map((code) => ({ id: code, name: categoryCodeToLabel(code) })));
+          setCategories(
+            rawCategories.map((item, index) =>
+              typeof item === 'string'
+                ? { id: index + 1, code: item, name: categoryCodeToLabel(item) }
+                : { id: item.id, code: item.type, name: categoryCodeToLabel(item.type) },
+            ),
+          );
         }
       } catch (e) {
         if (!ignore) setError(e);
