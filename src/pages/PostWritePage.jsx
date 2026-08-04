@@ -191,6 +191,7 @@ function PostWritePage() {
           <TitleInput
             value={title}
             maxLength={TITLE_MAX_LENGTH}
+            aria-label="게시글 제목"
             placeholder="제목을 입력해 주세요 (비우면 첫 줄로 자동 생성돼요)"
             onChange={(e) => setTitle(e.target.value)}
           />
