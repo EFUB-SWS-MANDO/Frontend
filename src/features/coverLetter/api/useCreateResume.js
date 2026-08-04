@@ -36,7 +36,7 @@ export function useCreateResume() {
         title,
         postIds,
         questions: questions.map((q, index) => ({ order: index + 1, content: q.content })),
-      });
+      }, { timeout: 120000 });
 
       return {
         resumeId: data.resumeId,

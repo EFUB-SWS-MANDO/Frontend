@@ -142,7 +142,7 @@ export function useInterview({ mode, selection } = {}) {
       const data = await api.post(ENDPOINTS.interviews.feedback(sessionId), {
         questionId: questionIdRef.current,
         answer,
-      });
+      }, { timeout: 120000 });
       setFeedback(data.feedback);
       streamRef.current?.close();
       streamRef.current = null;
