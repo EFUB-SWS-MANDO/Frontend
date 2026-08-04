@@ -1,20 +1,41 @@
 import styled from 'styled-components';
 
-function SelectableCard({ title, description, selected, onToggle }) {
+function SelectableCard({ title, description, selected, onToggle, onOpen }) {
   return (
-    <Card type="button" $selected={selected} onClick={onToggle}>
+    <Card
+      as={onOpen ? 'div' : 'button'}
+      type={onOpen ? undefined : 'button'}
+      $selected={selected}
+      onClick={onOpen ?? onToggle}
+    >
       <TextArea>
         <Title>{title}</Title>
         {description && <Description>{description}</Description>}
       </TextArea>
-      <CheckCircle $selected={selected} aria-hidden>
-        ✓
-      </CheckCircle>
+      {onOpen ? (
+        <CheckCircle
+          as="button"
+          type="button"
+          $selected={selected}
+          aria-label={selected ? '선택 해제' : '선택'}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggle();
+          }}
+        >
+          ✓
+        </CheckCircle>
+      ) : (
+        <CheckCircle $selected={selected} aria-hidden>
+          ✓
+        </CheckCircle>
+      )}
     </Card>
   );
 }
 
 const Card = styled.button`
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;

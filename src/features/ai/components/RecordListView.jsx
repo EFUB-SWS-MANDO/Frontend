@@ -11,7 +11,7 @@ const TABS = [
   { key: 'interview', label: '모의 면접' },
 ];
 
-function RecordListView({ title, type }) {
+function RecordListView({ title, type, onItemOpen }) {
   const [activeTab, setActiveTab] = useState('coverLetter');
   const [selected, setSelected] = useState(() => new Set());
   const { records, isLoading, error } = useRecords(type);
@@ -63,6 +63,7 @@ function RecordListView({ title, type }) {
                   description={item.description}
                   selected={selected.has(item.id)}
                   onToggle={() => toggle(item.id)}
+                  onOpen={onItemOpen ? () => onItemOpen(activeTab, item) : undefined}
                 />
               ))}
             </CardList>
