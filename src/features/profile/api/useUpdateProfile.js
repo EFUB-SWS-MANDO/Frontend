@@ -34,6 +34,7 @@ export function useUpdateProfile() {
           const uploadedKey = await uploadProfileImage(profileImageFile);
           payload.fileKey = uploadedKey;
           payload.profileImage = uploadedKey;
+          profileImage = uploadedKey;
         }
         const data = await api.patch(ENDPOINTS.profile.update, payload);
         profileImage = data?.profileImage ?? profileImage;
