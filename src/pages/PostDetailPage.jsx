@@ -62,7 +62,7 @@ function PostDetailPage() {
   return (
     <Wrapper>
       <PostDetailHeader post={post} isOwner={isPostOwner} />
-      <PostBody content={post.content} />
+      <PostBody content={post.content} isPrivate={post.isPrivate} tags={post.tags} />
       <LikeButton postId={post.id} initialCount={post.likeCount} initialLiked={post.isLiked} />
 
       <CommentSection>
