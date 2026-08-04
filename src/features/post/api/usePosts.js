@@ -30,14 +30,15 @@ export function usePosts(params = {}, shouldFetch = true) {
   const paramsKey = JSON.stringify(params);
 
   const fetchPosts = useCallback(async () => {
-    const requestId = ++requestIdRef.current;
-
     if (!shouldFetch) {
+      ++requestIdRef.current;
       setPosts([]);
       setError(null);
       setIsLoading(false);
       return;
     }
+
+    const requestId = ++requestIdRef.current;
     setIsLoading(true);
     setError(null);
     try {
