@@ -1,4 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
+import { api } from '@/apis/axiosInstance';
+import { ENDPOINTS } from '@/apis/endpoints';
+import { USE_MOCK } from '@/apis/config';
 import { MOCK_PROFILE } from '@/mocks/mockProfile';
 import { useAuthStore } from '@/stores/authStore';
 
@@ -26,10 +29,14 @@ export function useProfile(userId) {
     setIsLoading(true);
     setError(null);
     try {
-      // TODO: 백엔드 연동 후 api.get(ENDPOINTS.profile.detail(userId)) 사용, mapMockProfileToApiShape 제거
-      await new Promise((resolve) => setTimeout(resolve, 300));
       const isMe = userId != null && myUserId != null && String(userId) === String(myUserId);
-      setProfile(mapMockProfileToApiShape(MOCK_PROFILE, isMe));
+      if (USE_MOCK) {
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        setProfile(mapMockProfileToApiShape(MOCK_PROFILE, isMe));
+        return;
+      }
+      const data = await api.get(ENDPOINTS.profile.detail(userId));
+      setProfile({ ...data, isMe: data.isMe ?? isMe });
     } catch (e) {
       setError(e);
     } finally {
