@@ -73,7 +73,10 @@ function PostWritePage() {
   };
 
   const handleEvidenceUpload = (newFiles) => {
-    setFiles((prev) => [...prev, ...newFiles]);
+    setFiles((prev) => [
+      ...prev,
+      ...newFiles.map((file) => ({ id: crypto.randomUUID(), file })),
+    ]);
   };
 
   const handleRemovePhoto = (index) => {
