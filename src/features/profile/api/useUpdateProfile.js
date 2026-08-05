@@ -1,10 +1,24 @@
 import { useState } from 'react';
+import axios from 'axios';
 import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
-import { uploadProfileImage } from '@/apis/uploadProfileImage';
 import { MOCK_AUTH } from '@/apis/config';
 import { MOCK_PROFILE } from '@/mocks/mockProfile';
 import { useAuthStore } from '@/stores/authStore';
+
+// presigned URL 발급(내부 API) 후 S3에 직접 업로드(외부 요청)
+async function uploadProfileImage(file) {
+  const { uploadUrl, fileKey } = await api.post(ENDPOINTS.files.presignedUrl, {
+    fileName: file.name,
+    contentType: file.type,
+    uploadType: 'PROFILE',
+  });
+  await axios.put(uploadUrl, file, {
+    headers: { 'Content-Type': file.type },
+    timeout: 10000,
+  });
+  return fileKey;
+}
 
 // 프로필 수정(닉네임/프로필 이미지/소개글) 제출.
 export function useUpdateProfile() {

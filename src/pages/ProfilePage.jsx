@@ -15,12 +15,13 @@ function ProfilePage() {
   const userId = rawUserId === 'me' ? myUser?.id : rawUserId;
 
   const { profile, isLoading: profileLoading, error: profileError, refetch } = useProfile(userId);
-  const { posts, isLoading: postsLoading, error: postsError } = usePosts({
-    author: userId,
-    followingOnly: false,
-  });
+  const { posts, isLoading: postsLoading, error: postsError } = usePosts(
+    { author: userId, followingOnly: false },
+    userId != null,
+  );
 
   if (profileLoading || postsLoading) return <Spinner />;
+  if (userId == null) return <EmptyState message="사용자를 찾을 수 없어요." />;
   if (profileError || postsError) {
     return (
       <EmptyState

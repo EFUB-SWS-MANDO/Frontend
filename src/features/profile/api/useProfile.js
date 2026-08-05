@@ -29,6 +29,9 @@ export function useProfile(userId) {
 
   const fetchProfile = useCallback(async () => {
     if (userId == null) {
+      requestIdRef.current += 1;
+      setProfile(null);
+      setError(null);
       setIsLoading(false);
       return;
     }
