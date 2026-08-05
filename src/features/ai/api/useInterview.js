@@ -147,7 +147,18 @@ export function useInterview({ mode, selection, title } = {}) {
       streamRef.current?.close();
       streamRef.current = null;
     } catch (e) {
-      setError(e);
+      try {
+        const existing = await api.get(ENDPOINTS.interviews.feedback(sessionId));
+        if (existing?.feedback) {
+          setFeedback(existing.feedback);
+          streamRef.current?.close();
+          streamRef.current = null;
+          return;
+        }
+        setError(e);
+      } catch {
+        setError(e);
+      }
     } finally {
       setIsSubmitting(false);
     }
