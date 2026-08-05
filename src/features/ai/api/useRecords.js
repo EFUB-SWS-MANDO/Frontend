@@ -26,6 +26,14 @@ const groupByDate = (items) => {
   return groups;
 };
 
+// 자소서(resumeId)/모의면접(interviewSessionId)의 서로 다른 id 필드명을 공통 형태로 통일
+const toRecordItem = (id, title, dateSource, description = '') => ({
+  id,
+  title,
+  description,
+  date: formatDate(dateSource),
+});
+
 const fetchInterviewGroups = async () => {
   const MAX_PAGES = 50;
   const flat = [];
@@ -38,12 +46,9 @@ const fetchInterviewGroups = async () => {
       params: idAfter !== undefined ? { idAfter } : undefined,
     });
     (data.interviews ?? []).forEach((item) => {
-      flat.push({
-        id: item.interviewSessionId,
-        title: item.title,
-        description: STATUS_LABEL[item.status] ?? '',
-        date: formatDate(item.updatedAt),
-      });
+      flat.push(
+        toRecordItem(item.interviewSessionId, item.title, item.updatedAt, STATUS_LABEL[item.status] ?? ''),
+      );
     });
     const nextIdAfter = data.nextIdAfter;
     hasNext =
@@ -54,6 +59,21 @@ const fetchInterviewGroups = async () => {
     throw new Error('기록이 너무 많아 전체를 불러오지 못했습니다.');
   }
   return groupByDate(flat);
+};
+
+// 저장 목록은 더보기/무한스크롤 UI가 없어 첫 페이지(limit 기본값)만 조회
+const fetchSavedResumes = async () => {
+  const data = await api.get(ENDPOINTS.resumes.list);
+  const items = (data.resumes ?? []).map((r) => toRecordItem(r.resumeId, r.title, r.createdAt));
+  return groupByDate(items);
+};
+
+const fetchSavedInterviews = async () => {
+  const data = await api.get(ENDPOINTS.interviews.list);
+  const items = (data.interviews ?? []).map((i) =>
+    toRecordItem(i.interviewSessionId, i.title, i.updatedAt, STATUS_LABEL[i.status] ?? ''),
+  );
+  return groupByDate(items);
 };
 
 export function useRecords(type) {
@@ -69,9 +89,17 @@ export function useRecords(type) {
     setIsLoading(true);
     setError(null);
     try {
-      if (USE_MOCK || type === 'saved') {
+      if (USE_MOCK) {
         await new Promise((resolve) => setTimeout(resolve, 300));
         if (!isStale()) setRecords(type === 'saved' ? MOCK_SAVED : MOCK_HISTORY);
+        return;
+      }
+      if (type === 'saved') {
+        const [coverLetter, interview] = await Promise.all([
+          fetchSavedResumes(),
+          fetchSavedInterviews(),
+        ]);
+        if (!isStale()) setRecords({ coverLetter, interview });
         return;
       }
       const interview = await fetchInterviewGroups();
