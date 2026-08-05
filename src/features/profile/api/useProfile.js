@@ -1,4 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
+import { api } from '@/apis/axiosInstance';
+import { ENDPOINTS } from '@/apis/endpoints';
+import { USE_MOCK } from '@/apis/config';
 import { MOCK_PROFILE } from '@/mocks/mockProfile';
 import { useAuthStore } from '@/stores/authStore';
 
@@ -12,6 +15,7 @@ function mapMockProfileToApiShape(mock, isMe) {
     followeeCount: mock.followingCount,
     sproutLevel: mock.sproutLevel,
     isMe,
+    isFollowing: mock.isFollowing ?? false,
     goalMessage: mock.goalMessage,
   };
 }
@@ -23,13 +27,21 @@ export function useProfile(userId) {
   const myUserId = useAuthStore((state) => state.user?.id);
 
   const fetchProfile = useCallback(async () => {
+    if (userId == null) {
+      setIsLoading(false);
+      return;
+    }
     setIsLoading(true);
     setError(null);
     try {
-      // TODO: 백엔드 연동 후 api.get(ENDPOINTS.profile.detail(userId)) 사용, mapMockProfileToApiShape 제거
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      const isMe = userId != null && myUserId != null && String(userId) === String(myUserId);
-      setProfile(mapMockProfileToApiShape(MOCK_PROFILE, isMe));
+      if (USE_MOCK) {
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        const isMe = myUserId != null && String(userId) === String(myUserId);
+        setProfile(mapMockProfileToApiShape(MOCK_PROFILE, isMe));
+      } else {
+        const data = await api.get(ENDPOINTS.profile.detail(userId));
+        setProfile(data);
+      }
     } catch (e) {
       setError(e);
     } finally {

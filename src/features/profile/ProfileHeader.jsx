@@ -5,7 +5,10 @@ import FollowButton from './FollowButton';
 import ProfileEditModal from './ProfileEditModal';
 
 function ProfileHeader({ user, isOwner, onProfileUpdated }) {
-  const { isFollowing, isToggling, error: followError, toggleFollow } = useFollow(user?.memberId, false);
+  const { isFollowing, isToggling, error: followError, toggleFollow } = useFollow(
+    user?.memberId,
+    user?.isFollowing ?? false,
+  );
   const [isEditOpen, setIsEditOpen] = useState(false);
 
   return (
