@@ -12,7 +12,7 @@ export function useCreatePost() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
-  const createPost = async ({ title, content, categories, isPrivate }) => {
+  const createPost = async ({ title, content, categories, isPrivate, fileKeys }) => {
     setIsSubmitting(true);
     setError(null);
     try {
@@ -48,8 +48,7 @@ export function useCreatePost() {
         title,
         content,
         categories: categories?.length ? categories : null,
-        // TODO: 첨부 이미지/파일 presigned URL 업로드 연동 후 fileKeys 채우기
-        fileKeys: null,
+        fileKeys: fileKeys?.length ? fileKeys : null,
         isPrivate,
       });
       return mapPostDetail(data);

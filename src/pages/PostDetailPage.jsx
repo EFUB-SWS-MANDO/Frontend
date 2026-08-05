@@ -48,13 +48,13 @@ function PostDetailPage() {
     });
   };
 
-  const handleReplySubmit = (parentId, content) => {
+  const handleReplySubmit = (parentId, content, isPrivate = false) => {
     addReply(parentId, {
       id: crypto.randomUUID(),
       author: buildAuthor(),
       createdAt: new Date().toLocaleString(),
       content,
-      isPrivate: false,
+      isPrivate,
       isDeleted: false,
     });
   };
@@ -62,7 +62,12 @@ function PostDetailPage() {
   return (
     <Wrapper>
       <PostDetailHeader post={post} isOwner={isPostOwner} />
-      <PostBody content={post.content} />
+      <PostBody
+        content={post.content}
+        isPrivate={post.isPrivate}
+        tags={post.tags}
+        fileUrls={post.fileUrls}
+      />
       <LikeButton postId={post.id} initialCount={post.likeCount} initialLiked={post.isLiked} />
 
       <CommentSection>

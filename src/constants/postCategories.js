@@ -1,6 +1,5 @@
 // 게시글 카테고리 - 백엔드는 영문 enum으로 주고받음(LEADERSHIP, COMMUNICATION 등).
-// 아래 매핑은 실제 명세에서 확인된 3개(LEADERSHIP/COMMUNICATION/PLANNING) 외 나머지는
-// 프론트에서 합리적으로 추정한 값이라 백엔드 확인 필요.
+// 카테고리 조회 명세(GET /api/categories) 기준 15종.
 export const POST_CATEGORIES = [
   { code: 'COLLABORATION', label: '협업' },
   { code: 'PROBLEM_SOLVING', label: '문제해결' },
@@ -9,17 +8,28 @@ export const POST_CATEGORIES = [
   { code: 'CHALLENGE', label: '도전' },
   { code: 'ACHIEVEMENT', label: '성과' },
   { code: 'GROWTH', label: '성장' },
-  { code: 'JOB_COMPETENCY', label: '직무역량' },
+  { code: 'PROFESSIONAL_SKILLS', label: '직무역량' },
   { code: 'CREATIVITY', label: '창의성' },
   { code: 'RESPONSIBILITY', label: '책임감' },
   { code: 'CONFLICT_MANAGEMENT', label: '갈등관리' },
   { code: 'PLANNING', label: '기획력' },
+  { code: 'EXTERNAL_ACTIVITY', label: '대외활동' },
+  { code: 'CONTEST', label: '공모전' },
+  { code: 'ETC', label: '기타' },
 ];
+
+// 서버 표기가 바뀌었거나 문서에만 남은 구 코드 흡수용
+const LEGACY_CODE_LABELS = {
+  JOB_COMPETENCY: '직무역량',
+  COOPERATE: '협업',
+};
 
 export function categoryLabelToCode(label) {
   return POST_CATEGORIES.find((c) => c.label === label)?.code ?? label;
 }
 
 export function categoryCodeToLabel(code) {
-  return POST_CATEGORIES.find((c) => c.code === code)?.label ?? code;
+  return (
+    POST_CATEGORIES.find((c) => c.code === code)?.label ?? LEGACY_CODE_LABELS[code] ?? code
+  );
 }

@@ -9,7 +9,7 @@ import SelectSearchField from '@/features/ai/components/SelectSearchField';
 import SelectableCard from '@/features/ai/components/SelectableCard';
 import { useActivities } from '@/features/ai/api/useActivities';
 import { useCoverLetters } from '@/features/ai/api/useCoverLetters';
-import { CATEGORIES } from '@/constants/categories';
+import { POST_CATEGORIES } from '@/constants/postCategories';
 
 const MODE_CONFIG = {
   activity: {
@@ -42,7 +42,7 @@ function InterviewSelectPage() {
 
   const candidates =
     mode === 'category'
-      ? CATEGORIES.filter((c) => c.toLowerCase().includes(q))
+      ? POST_CATEGORIES.map((c) => c.label).filter((c) => c.toLowerCase().includes(q))
       : mode === 'cover-letter'
         ? groups
             .flatMap((g) => g.items)

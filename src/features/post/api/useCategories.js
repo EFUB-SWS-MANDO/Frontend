@@ -3,6 +3,7 @@ import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
 import { USE_MOCK } from '@/apis/config';
 import { MOCK_CATEGORIES } from '@/mocks/mockCategories';
+import { categoryCodeToLabel } from '@/constants/postCategories';
 
 export function useCategories() {
   const [categories, setCategories] = useState([]);
@@ -21,7 +22,10 @@ export function useCategories() {
           return;
         }
         const data = await api.get(ENDPOINTS.categories.list);
-        if (!ignore) setCategories(data.categories ?? data);
+        const codes = data.categories ?? [];
+        if (!ignore) {
+          setCategories(codes.map((code) => ({ id: code, name: categoryCodeToLabel(code) })));
+        }
       } catch (e) {
         if (!ignore) setError(e);
       } finally {

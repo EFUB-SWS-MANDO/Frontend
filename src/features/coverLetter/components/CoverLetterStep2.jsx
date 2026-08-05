@@ -3,22 +3,24 @@ import styled from 'styled-components';
 import SendIcon from '../../../asset/icons/SendIcon';
 import CloseCircleIcon from '../../../asset/icons/CloseCircleIcon';
 import ActivityListItem from './ActivityListItem';
-import { mockActivities } from '../mocks/activities';
+import Spinner from '@/components/Spinner/Spinner';
+import EmptyState from '@/components/EmptyState/EmptyState';
+import { useActivities } from '@/features/ai/api/useActivities';
 
 const CoverLetterStep2 = ({ selectedActivities, setSelectedActivities, onNext }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const { activities, isLoading, error } = useActivities();
 
   const filteredActivities = useMemo(() => {
     const trimmed = searchTerm.trim().toLowerCase();
-    if (!trimmed) return mockActivities;
-    return mockActivities.filter((activity) =>
+    if (!trimmed) return activities;
+    return activities.filter((activity) =>
       activity.name.toLowerCase().includes(trimmed)
     );
-  }, [searchTerm]);
+  }, [activities, searchTerm]);
 
   const isAllSelected =
-    mockActivities.length > 0 &&
-    selectedActivities.length === mockActivities.length;
+    activities.length > 0 && selectedActivities.length === activities.length;
 
   const handleToggleActivity = (id) => {
     setSelectedActivities((prev) =>
@@ -30,7 +32,7 @@ const CoverLetterStep2 = ({ selectedActivities, setSelectedActivities, onNext })
     if (isAllSelected) {
       setSelectedActivities([]);
     } else {
-      setSelectedActivities(mockActivities.map((activity) => activity.id));
+      setSelectedActivities(activities.map((activity) => activity.id));
     }
   };
 
@@ -65,16 +67,26 @@ const CoverLetterStep2 = ({ selectedActivities, setSelectedActivities, onNext })
         </IconButton>
       </SearchBox>
 
-      <ActivityList>
-        {filteredActivities.map((activity) => (
-          <ActivityListItem
-            key={activity.id}
-            activity={activity}
-            selected={selectedActivities.includes(activity.id)}
-            onToggle={handleToggleActivity}
-          />
-        ))}
-      </ActivityList>
+      {isLoading ? (
+        <Spinner />
+      ) : error ? (
+        <EmptyState message="불러오지 못했어요. 다시 시도해 주세요." />
+      ) : activities.length === 0 ? (
+        <EmptyState message="아직 기록한 활동이 없어요." />
+      ) : filteredActivities.length === 0 ? (
+        <EmptyState message="검색 결과가 없어요." />
+      ) : (
+        <ActivityList>
+          {filteredActivities.map((activity) => (
+            <ActivityListItem
+              key={activity.id}
+              activity={activity}
+              selected={selectedActivities.includes(activity.id)}
+              onToggle={handleToggleActivity}
+            />
+          ))}
+        </ActivityList>
+      )}
 
       <BottomArea>
         <PrimaryButton onClick={onNext}>활동 선택하기</PrimaryButton>

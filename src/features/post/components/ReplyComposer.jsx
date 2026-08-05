@@ -3,11 +3,13 @@ import styled from 'styled-components';
 
 function ReplyComposer({ onSubmit, onCancel }) {
   const [text, setText] = useState('');
+  const [isPrivate, setIsPrivate] = useState(false);
 
   const handleSubmit = () => {
     if (!text.trim()) return;
-    onSubmit(text);
+    onSubmit(text, isPrivate);
     setText('');
+    setIsPrivate(false);
   };
 
   return (
@@ -18,6 +20,9 @@ function ReplyComposer({ onSubmit, onCancel }) {
         onChange={(e) => setText(e.target.value)}
         autoFocus
       />
+      <ToggleButton type="button" $active={isPrivate} onClick={() => setIsPrivate((prev) => !prev)}>
+        {isPrivate ? '비공개' : '공개'}
+      </ToggleButton>
       <IconButton type="button" onClick={onCancel} aria-label="답글 취소">✕</IconButton>
       <SendButton type="button" onClick={handleSubmit} aria-label="답글 전송">➤</SendButton>
     </Wrapper>
@@ -44,6 +49,16 @@ const Input = styled.input`
     outline: none;
     border-color: ${({ theme }) => theme.colors.primary};
   }
+`;
+
+const ToggleButton = styled.button`
+  padding: ${({ theme }) => theme.spacing(1)} ${({ theme }) => theme.spacing(3)};
+  border-radius: ${({ theme }) => theme.radius.full};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  background-color: ${({ theme }) => theme.colors.bgSub} !important;
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.textSub};
+  flex-shrink: 0;
 `;
 
 const IconButton = styled.button`

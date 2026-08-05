@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
 import { uploadProfileImage } from '@/apis/uploadProfileImage';
+import { MOCK_AUTH } from '@/apis/config';
 import { MOCK_PROFILE } from '@/mocks/mockProfile';
 import { useAuthStore } from '@/stores/authStore';
 
@@ -19,8 +20,8 @@ export function useUpdateProfile() {
       const previousImage = useAuthStore.getState().user?.profileImage ?? null;
       let profileImage = previousImage;
 
-      // VITE_MOCK_AUTH=true면 API 호출 없이 목 데이터만 갱신 (시연/개발용)
-      if (import.meta.env.VITE_MOCK_AUTH === 'true') {
+      // 목 모드면 API 호출 없이 목 데이터만 갱신 (시연/개발용)
+      if (MOCK_AUTH) {
         await new Promise((resolve) => setTimeout(resolve, 500));
         if (profileImageFile) {
           profileImage = URL.createObjectURL(profileImageFile);

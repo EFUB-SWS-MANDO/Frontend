@@ -11,4 +11,7 @@ export const MOCK_POST_DETAIL = {
     '안녕하세요~~~~ 저는 금쪽이를 보고있어요 안녕하세요~~~~ 저는 금쪽이를 보고있어요 안녕하세요~~~~ 저는 금쪽이를 보고있어요',
   likeCount: 342,
   isLiked: false,
+  isPrivate: true,
+  tags: ['협업', '리더십'],
+  fileUrls: [],
 };

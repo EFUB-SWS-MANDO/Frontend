@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import FollowButton from '@/features/profile/FollowButton';
 import { useFollow } from '@/features/profile/api/useFollow';
@@ -34,7 +34,7 @@ function PostDetailHeader({ post, isOwner }) {
       </TopRow>
 
       <AuthorRow>
-        <AuthorInfo>
+        <AuthorInfo to={`/profile/${post.author.id}`}>
           {post.author.profileImage ? (
             <Avatar src={post.author.profileImage} alt={`${post.author.name} 프로필`} />
           ) : (
@@ -83,10 +83,13 @@ const AuthorRow = styled.div`
   align-items: center;
 `;
 
-const AuthorInfo = styled.div`
+const AuthorInfo = styled(Link)`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing(3)};
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
 `;
 
 const Avatar = styled.img`

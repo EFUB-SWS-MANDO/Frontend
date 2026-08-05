@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
 import { USE_MOCK } from '@/apis/config';
@@ -21,14 +21,24 @@ function filterMockPosts(posts, { followingOnly, categories, author, keyword }) 
   });
 }
 
-export function usePosts(params = {}) {
+export function usePosts(params = {}, shouldFetch = true) {
   const [posts, setPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(shouldFetch);
   const [error, setError] = useState(null);
+  const requestIdRef = useRef(0);
 
   const paramsKey = JSON.stringify(params);
 
   const fetchPosts = useCallback(async () => {
+    if (!shouldFetch) {
+      ++requestIdRef.current;
+      setPosts([]);
+      setError(null);
+      setIsLoading(false);
+      return;
+    }
+
+    const requestId = ++requestIdRef.current;
     setIsLoading(true);
     setError(null);
     try {
@@ -37,7 +47,9 @@ export function usePosts(params = {}) {
 
       if (USE_MOCK) {
         await new Promise((resolve) => setTimeout(resolve, 300));
-        setPosts(filterMockPosts(MOCK_POSTS, { followingOnly, categories, author, keyword }));
+        if (requestId === requestIdRef.current) {
+          setPosts(filterMockPosts(MOCK_POSTS, { followingOnly, categories, author, keyword }));
+        }
         return;
       }
 
@@ -46,7 +58,7 @@ export function usePosts(params = {}) {
       let nextCursor;
       let hasNext = true;
       let page = 0;
-      while (hasNext && page < MAX_PAGES) {
+      while (hasNext && page < MAX_PAGES && requestId === requestIdRef.current) {
         page += 1;
         const data = await api.get(ENDPOINTS.posts.list, {
           params: {
@@ -64,13 +76,13 @@ export function usePosts(params = {}) {
         hasNext = (data.hasNext ?? false) && next !== undefined && next !== nextCursor;
         nextCursor = next;
       }
-      setPosts(flat);
+      if (requestId === requestIdRef.current) setPosts(flat);
     } catch (e) {
-      setError(e);
+      if (requestId === requestIdRef.current) setError(e);
     } finally {
-      setIsLoading(false);
+      if (requestId === requestIdRef.current) setIsLoading(false);
     }
-  }, [paramsKey]);
+  }, [paramsKey, shouldFetch]);
 
   useEffect(() => {
     fetchPosts();
