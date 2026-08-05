@@ -28,15 +28,15 @@ function ActivityRecordList({ records }) {
         <EmptyState />
       ) : (
         <List>
-          {records.map((record, index) => {
-            const clickable = Boolean(ROUTE_BY_TYPE[record.type]);
+          {records.map((record) => {
+            const isClickable = Boolean(ROUTE_BY_TYPE[record.type]);
             return (
-              <Item key={`${record.type}-${index}`}>
+              <Item key={`${record.type}-${record.id}`}>
                 <ItemContent
-                  as={clickable ? 'button' : 'div'}
-                  type={clickable ? 'button' : undefined}
-                  onClick={clickable ? () => handleClick(record) : undefined}
-                  $clickable={clickable}
+                  as={isClickable ? 'button' : 'div'}
+                  type={isClickable ? 'button' : undefined}
+                  onClick={isClickable ? () => handleClick(record) : undefined}
+                  $isClickable={isClickable}
                 >
                   <TypeTag $type={record.type}>{TYPE_LABEL[record.type]}</TypeTag>
                   <Title>{record.title}</Title>
@@ -80,7 +80,7 @@ const ItemContent = styled.div`
   background: none;
   font: inherit;
   text-align: left;
-  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'not-allowed')};
+  cursor: ${({ $isClickable }) => ($isClickable ? 'pointer' : 'not-allowed')};
 `;
 
 const TypeTag = styled.span`
