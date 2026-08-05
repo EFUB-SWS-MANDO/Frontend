@@ -15,8 +15,10 @@ function ResumeDetailPage() {
       <PageHeader title={resume?.title ?? '자소서'} />
       {isLoading ? (
         <Spinner />
-      ) : error || !resume?.questions?.length ? (
+      ) : error || !resume ? (
         <EmptyState message="불러오지 못했어요. 다시 시도해 주세요." />
+      ) : resume.questions.length === 0 ? (
+        <EmptyState message="작성된 문항이 없어요." />
       ) : (
         <ResumeQuestionList questions={resume.questions} />
       )}
