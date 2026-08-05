@@ -3,18 +3,23 @@ import { useNavigate } from 'react-router-dom';
 import EmptyState from '@/components/EmptyState/EmptyState';
 
 const TYPE_LABEL = {
-  post: '게시글',
-  coverLetter: '자소서',
+  POST: '게시글',
+  INTERVIEW: 'AI 면접',
+  RESUME: '자소서',
+};
+
+const ROUTE_BY_TYPE = {
+  POST: (id) => `/posts/${id}`,
+  RESUME: (id) => `/resume/${id}`,
+  INTERVIEW: (id) => `/ai/interview/result/${id}`,
 };
 
 function ActivityRecordList({ records }) {
   const navigate = useNavigate();
 
   const handleClick = (record) => {
-    if (record.type === 'post') {
-      navigate(`/posts/${record.postId}`);
-    }
-    // TODO: 자소서 상세/열람 라우트가 생기면 coverLetter 타입도 연결
+    const buildPath = ROUTE_BY_TYPE[record.type];
+    if (buildPath) navigate(buildPath(record.id));
   };
 
   return (
@@ -23,10 +28,10 @@ function ActivityRecordList({ records }) {
         <EmptyState />
       ) : (
         <List>
-          {records.map((record) => {
-            const clickable = record.type === 'post';
+          {records.map((record, index) => {
+            const clickable = Boolean(ROUTE_BY_TYPE[record.type]);
             return (
-              <Item key={`${record.type}-${record.id}`}>
+              <Item key={`${record.type}-${index}`}>
                 <ItemContent
                   as={clickable ? 'button' : 'div'}
                   type={clickable ? 'button' : undefined}
@@ -35,7 +40,7 @@ function ActivityRecordList({ records }) {
                 >
                   <TypeTag $type={record.type}>{TYPE_LABEL[record.type]}</TypeTag>
                   <Title>{record.title}</Title>
-                  <DateText>{record.createdAt}</DateText>
+                  <DateText>{record.updatedAt}</DateText>
                 </ItemContent>
               </Item>
             );
@@ -75,7 +80,7 @@ const ItemContent = styled.div`
   background: none;
   font: inherit;
   text-align: left;
-  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
+  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'not-allowed')};
 `;
 
 const TypeTag = styled.span`
@@ -84,8 +89,8 @@ const TypeTag = styled.span`
   border-radius: ${({ theme }) => theme.radius.sm};
   font-size: ${({ theme }) => theme.fontSize.xs};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
-  color: ${({ theme, $type }) => ($type === 'post' ? theme.colors.primary : theme.colors.gray800)};
-  background: ${({ theme, $type }) => ($type === 'post' ? theme.colors.green50 : theme.colors.gray200)};
+  color: ${({ theme, $type }) => ($type === 'POST' ? theme.colors.primary : theme.colors.gray800)};
+  background: ${({ theme, $type }) => ($type === 'POST' ? theme.colors.green50 : theme.colors.gray200)};
 `;
 
 const Title = styled.span`

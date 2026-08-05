@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { useProfile } from '@/features/profile/api/useProfile';
 import { useMyPageData } from '@/features/mypage/api/useMyPageData';
 import GoalMessageCard from '@/features/mypage/components/GoalMessageCard';
 import StatsSummary from '@/features/mypage/components/StatsSummary';
@@ -9,17 +8,14 @@ import Spinner from '@/components/Spinner/Spinner';
 import EmptyState from '@/components/EmptyState/EmptyState';
 
 function MyPage() {
-  // TODO: 닉네임/아바타는 이미 전역 Header가 useAuthStore로 표시 중.
-  // 마이페이지 내부에도 유저 정보가 필요해지면 useProfile(mock) 대신 useAuthStore 연동 검토
-  const { profile, isLoading: profileLoading, error: profileError } = useProfile();
-  const { stats, records, isLoading: dataLoading, error: dataError } = useMyPageData();
+  const { motivation, stats, records, isLoading, error } = useMyPageData();
 
-  if (profileLoading || dataLoading) return <Spinner />;
-  if (profileError || dataError) return <EmptyState message="불러오지 못했어요. 다시 시도해 주세요." />;
+  if (isLoading) return <Spinner />;
+  if (error) return <EmptyState message="불러오지 못했어요. 다시 시도해 주세요." />;
 
   return (
     <Wrapper>
-      <GoalMessageCard message={profile.goalMessage} />
+      <GoalMessageCard message={motivation} />
       <StatsSection>
         <SectionTitle>나의 통계, 기록</SectionTitle>
         <StatsSummary stats={stats} />
