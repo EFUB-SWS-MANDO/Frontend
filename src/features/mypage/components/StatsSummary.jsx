@@ -10,10 +10,10 @@ function StatsSummary({ stats }) {
 
   const items = [
     { key: 'postCount', label: '게시글', value: stats.postCount, Icon: GalleryIcon },
-    { key: 'likeCount', label: '좋아요', value: stats.likeCount, Icon: LeafIcon },
-    { key: 'streakDays', label: '연속 접속', value: `${stats.streakDays}일`, Icon: MedalStarIcon },
+    { key: 'receivedLikeCount', label: '좋아요', value: stats.receivedLikeCount, Icon: LeafIcon },
+    { key: 'attendanceStreak', label: '연속 접속', value: `${stats.attendanceStreak}일`, Icon: MedalStarIcon },
     { key: 'interviewCount', label: 'AI 면접 연습', value: stats.interviewCount, Icon: MagicpenIcon },
-    { key: 'coverLetterCount', label: '작성한 자소서', value: stats.coverLetterCount, Icon: FolderAddIcon },
+    { key: 'resumeCount', label: '작성한 자소서', value: stats.resumeCount, Icon: FolderAddIcon },
   ];
 
   return (

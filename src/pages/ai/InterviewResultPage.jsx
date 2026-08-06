@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import PageHeader from '@/components/PageHeader/PageHeader';
 import Spinner from '@/components/Spinner/Spinner';
@@ -7,8 +7,8 @@ import { useInterviewFeedback } from '@/features/ai/api/useInterviewFeedback';
 
 function InterviewResultPage() {
   const navigate = useNavigate();
-  const { state } = useLocation();
-  const { result, isLoading, error } = useInterviewFeedback(state?.sessionId);
+  const { sessionId } = useParams();
+  const { result, isLoading, error } = useInterviewFeedback(sessionId);
 
   if (isLoading) return <Spinner />;
   if (error || !result)
