@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { MOCK_MYPAGE_STATS } from '../mocks/mockMyPageStats';
-import { MOCK_ACTIVITY_RECORDS } from '../mocks/mockActivityRecords';
+import { api } from '@/apis/axiosInstance';
+import { ENDPOINTS } from '@/apis/endpoints';
 
 export function useMyPageData() {
+  const [motivation, setMotivation] = useState('');
   const [stats, setStats] = useState(null);
   const [records, setRecords] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -12,11 +13,11 @@ export function useMyPageData() {
     setIsLoading(true);
     setError(null);
     try {
-      // TODO: 백엔드 연동 후 아래 mock 대신 실제 api.get() 사용
       // TODO: 컴포넌트 언마운트/재요청 시 이전 요청 취소 처리 (AbortController 등) 필요
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      setStats(MOCK_MYPAGE_STATS);
-      setRecords(MOCK_ACTIVITY_RECORDS);
+      const data = await api.get(ENDPOINTS.dashboard.get);
+      setMotivation(data.motivation);
+      setStats(data.statistics);
+      setRecords(data.recentActivities);
     } catch (e) {
       setError(e);
     } finally {
@@ -28,5 +29,5 @@ export function useMyPageData() {
     fetchData();
   }, [fetchData]);
 
-  return { stats, records, isLoading, error, refetch: fetchData };
+  return { motivation, stats, records, isLoading, error, refetch: fetchData };
 }

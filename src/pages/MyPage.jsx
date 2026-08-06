@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-import { useProfile } from '@/features/profile/api/useProfile';
-import { useAuthStore } from '@/stores/authStore';
 import { useMyPageData } from '@/features/mypage/api/useMyPageData';
 import GoalMessageCard from '@/features/mypage/components/GoalMessageCard';
 import StatsSummary from '@/features/mypage/components/StatsSummary';
@@ -10,16 +8,14 @@ import Spinner from '@/components/Spinner/Spinner';
 import EmptyState from '@/components/EmptyState/EmptyState';
 
 function MyPage() {
-  const myUserId = useAuthStore((state) => state.user?.id);
-  const { profile, isLoading: profileLoading, error: profileError } = useProfile(myUserId);
-  const { stats, records, isLoading: dataLoading, error: dataError } = useMyPageData();
+  const { motivation, stats, records, isLoading, error } = useMyPageData();
 
-  if (profileLoading || dataLoading) return <Spinner />;
-  if (profileError || dataError) return <EmptyState message="불러오지 못했어요. 다시 시도해 주세요." />;
+  if (isLoading) return <Spinner />;
+  if (error) return <EmptyState message="불러오지 못했어요. 다시 시도해 주세요." />;
 
   return (
     <Wrapper>
-      <GoalMessageCard message={profile.goalMessage} />
+      <GoalMessageCard message={motivation} />
       <StatsSection>
         <SectionTitle>나의 통계, 기록</SectionTitle>
         <StatsSummary stats={stats} />

@@ -9,6 +9,7 @@ import ProfileSetupPage from '@/pages/ProfileSetupPage';
 import HomePage from '@/pages/HomePage';
 import PostDetailPage from '@/pages/PostDetailPage';
 import PostWritePage from '@/pages/PostWritePage';
+import ResumeDetailPage from '@/pages/ResumeDetailPage';
 import MyPage from '@/pages/MyPage';
 import ProfilePage from '@/pages/ProfilePage';
 import AiHomePage from '@/pages/ai/AiHomePage';
@@ -39,6 +40,7 @@ export const router = createBrowserRouter([
       { index: true, element: <HomeGate /> },
       { path: 'posts/:postId', element: <PostDetailPage /> },
       { path: 'write', element: <PostWritePage /> },
+      { path: 'resume/:resumeId', element: <ResumeDetailPage /> },
       { path: 'mypage', element: <MyPage /> },
       { path: 'profile/:userId', element: <ProfilePage /> },
       {
@@ -49,7 +51,7 @@ export const router = createBrowserRouter([
           { path: 'interview', element: <InterviewPage /> },
           { path: 'interview/select/:mode', element: <InterviewSelectPage /> },
           { path: 'interview/session', element: <InterviewSessionPage /> },
-          { path: 'interview/result', element: <InterviewResultPage /> },
+          { path: 'interview/result/:sessionId', element: <InterviewResultPage /> },
           { path: 'history', element: <HistoryPage /> },
           { path: 'saved', element: <SavedPage /> },
         ],

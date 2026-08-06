@@ -4,7 +4,6 @@ import { ENDPOINTS } from '@/apis/endpoints';
 import { USE_MOCK } from '@/apis/config';
 
 // 자소서 상세 조회. 문항별 answer(AI 답변)와 description(AI가 강조한 점) 포함.
-// TODO: 상세를 보여줄 화면이 생기면 연결
 const mapResumeDetail = (raw) => ({
   resumeId: raw.resumeId,
   title: raw.title,

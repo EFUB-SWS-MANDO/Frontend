@@ -15,6 +15,7 @@ function mapMockProfileToApiShape(mock, isMe) {
     followeeCount: mock.followingCount,
     sproutLevel: mock.sproutLevel,
     isMe,
+    isFollowing: mock.isFollowing ?? false,
     goalMessage: mock.goalMessage,
   };
 }
@@ -27,13 +28,20 @@ export function useProfile(userId) {
   const requestIdRef = useRef(0);
 
   const fetchProfile = useCallback(async () => {
+    if (userId == null) {
+      requestIdRef.current += 1;
+      setProfile(null);
+      setError(null);
+      setIsLoading(false);
+      return;
+    }
     requestIdRef.current += 1;
     const requestId = requestIdRef.current;
     const isStale = () => requestId !== requestIdRef.current;
     setIsLoading(true);
     setError(null);
     try {
-      const isMe = userId != null && myUserId != null && String(userId) === String(myUserId);
+      const isMe = myUserId != null && String(userId) === String(myUserId);
       if (USE_MOCK || MOCK_AUTH) {
         await new Promise((resolve) => setTimeout(resolve, 300));
         if (!isStale()) setProfile(mapMockProfileToApiShape(MOCK_PROFILE, isMe));

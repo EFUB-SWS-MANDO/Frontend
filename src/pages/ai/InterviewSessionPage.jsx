@@ -94,7 +94,7 @@ function InterviewSessionPage() {
           </ActionRow>
           <PrimaryButton
             type="button"
-            onClick={() => navigate('/ai/interview/result', { state: { sessionId } })}
+            onClick={() => navigate(`/ai/interview/result/${sessionId}`)}
           >
             총평 보기
           </PrimaryButton>

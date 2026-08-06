@@ -1,4 +1,7 @@
 export const ENDPOINTS = {
+  dashboard: {
+    get: '/api/dashboard',
+  },
   auth: {
     signIn: '/api/auth/sign-in',
     signOut: '/api/auth/sign-out',
