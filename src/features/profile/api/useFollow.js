@@ -11,6 +11,7 @@ export function useFollow(memberId, initialIsFollowing) {
   useEffect(() => {
     requestIdRef.current += 1;
     setIsFollowing(initialIsFollowing);
+    setIsToggling(false);
     setError(null);
   }, [memberId, initialIsFollowing]);
 
@@ -30,7 +31,7 @@ export function useFollow(memberId, initialIsFollowing) {
           await api.delete(ENDPOINTS.follow.toggle(memberId));
         }
       }
-      return true;
+      return requestIdRef.current === requestId;
     } catch (e) {
       if (requestIdRef.current === requestId) {
         setIsFollowing(!nextIsFollowing);
