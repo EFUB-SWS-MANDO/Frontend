@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useFollow } from './api/useFollow';
 import FollowButton from './FollowButton';
 import ProfileEditModal from './ProfileEditModal';
+import FollowListModal from './FollowListModal';
 
 function ProfileHeader({ user, isOwner, onProfileUpdated }) {
   const { isFollowing, isToggling, error: followError, toggleFollow } = useFollow(
@@ -10,6 +11,7 @@ function ProfileHeader({ user, isOwner, onProfileUpdated }) {
     user?.isFollowing ?? false,
   );
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [followListMode, setFollowListMode] = useState(null);
 
   return (
     <Wrapper>
@@ -26,8 +28,12 @@ function ProfileHeader({ user, isOwner, onProfileUpdated }) {
             </NameRow>
             <Intro>{user?.bio}</Intro>
             <FollowCounts>
-              <span>팔로워 {user?.followerCount}</span>
-              <span>팔로잉 {user?.followeeCount}</span>
+              <CountButton type="button" onClick={() => setFollowListMode('followers')}>
+                팔로워 {user?.followerCount}
+              </CountButton>
+              <CountButton type="button" onClick={() => setFollowListMode('following')}>
+                팔로잉 {user?.followeeCount}
+              </CountButton>
             </FollowCounts>
           </TextGroup>
         </ProfileInfo>
@@ -51,6 +57,14 @@ function ProfileHeader({ user, isOwner, onProfileUpdated }) {
           profile={user}
           onClose={() => setIsEditOpen(false)}
           onUpdated={onProfileUpdated}
+        />
+      )}
+
+      {followListMode && (
+        <FollowListModal
+          memberId={user?.memberId}
+          mode={followListMode}
+          onClose={() => setFollowListMode(null)}
         />
       )}
     </Wrapper>
@@ -119,10 +133,17 @@ const Intro = styled.p`
 const FollowCounts = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing(6)};
+  margin-top: ${({ theme }) => theme.spacing(3)};
+`;
+
+const CountButton = styled.button`
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme }) => theme.colors.text};
-  margin-top: ${({ theme }) => theme.spacing(3)};
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.textSub};
+  }
 `;
 
 const ActionArea = styled.div`
