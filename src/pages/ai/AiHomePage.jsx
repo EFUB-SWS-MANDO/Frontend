@@ -43,12 +43,11 @@ const PageWrapper = styled.div`
   left: 50%;
   width: 100vw;
   transform: translateX(-50%);
-  min-height: 70vh;
+  min-height: 100vh;
   background: radial-gradient(
-    ellipse 65% 60% at 50% 100%,
-    ${({ theme }) => theme.colors.green100} 0%,
-    ${({ theme }) => theme.colors.green50} 45%,
-    transparent 75%
+    ellipse 30.3% 75.3% at 51.7% 88.3%,
+    ${({ theme }) => theme.colors.green500} 0%,
+    ${({ theme }) => theme.colors.pageBg} 100%
   );
 `;
 
