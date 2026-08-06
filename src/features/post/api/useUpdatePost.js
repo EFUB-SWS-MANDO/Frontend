@@ -23,11 +23,13 @@ export function useUpdatePost() {
       }
       if (USE_MOCK) {
         await new Promise((resolve) => setTimeout(resolve, 300));
-        const tags = categories.map(categoryCodeToLabel);
-        Object.assign(MOCK_POST_DETAIL, { title, content, tags, isPrivate });
+        const updates = { title, content, tags: categories.map(categoryCodeToLabel), isPrivate };
         const listPost = MOCK_POSTS.find((p) => String(p.id) === String(postId));
-        if (listPost) Object.assign(listPost, { title, content, tags, isPrivate });
-        return { ...MOCK_POST_DETAIL };
+        if (listPost) Object.assign(listPost, updates);
+        if (String(MOCK_POST_DETAIL.id) === String(postId)) {
+          Object.assign(MOCK_POST_DETAIL, updates);
+        }
+        return { ...(listPost ?? MOCK_POST_DETAIL), ...updates, id: postId };
       }
       const data = await api.patch(ENDPOINTS.posts.update(postId), {
         title: title ?? null,
