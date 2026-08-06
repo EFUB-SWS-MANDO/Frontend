@@ -28,10 +28,18 @@ function ProfileHeader({ user, isOwner, onProfileUpdated }) {
             </NameRow>
             <Intro>{user?.bio}</Intro>
             <FollowCounts>
-              <CountButton type="button" onClick={() => setFollowListMode('followers')}>
+              <CountButton
+                type="button"
+                disabled={!user?.memberId}
+                onClick={() => setFollowListMode('followers')}
+              >
                 팔로워 {user?.followerCount}
               </CountButton>
-              <CountButton type="button" onClick={() => setFollowListMode('following')}>
+              <CountButton
+                type="button"
+                disabled={!user?.memberId}
+                onClick={() => setFollowListMode('following')}
+              >
                 팔로잉 {user?.followeeCount}
               </CountButton>
             </FollowCounts>
@@ -60,7 +68,7 @@ function ProfileHeader({ user, isOwner, onProfileUpdated }) {
         />
       )}
 
-      {followListMode && (
+      {followListMode && user?.memberId && (
         <FollowListModal
           memberId={user?.memberId}
           mode={followListMode}
@@ -143,6 +151,11 @@ const CountButton = styled.button`
 
   &:hover {
     color: ${({ theme }) => theme.colors.textSub};
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 `;
 

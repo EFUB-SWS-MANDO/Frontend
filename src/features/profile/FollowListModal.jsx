@@ -30,7 +30,7 @@ function FollowListModal({ memberId, mode, onClose }) {
 
   return (
     <Overlay onClick={onClose}>
-      <Sheet role="dialog" aria-label={title} onClick={(e) => e.stopPropagation()}>
+      <Sheet role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()}>
         <Header>
           <Title>{title}</Title>
           <CloseButton type="button" onClick={onClose} aria-label="닫기">

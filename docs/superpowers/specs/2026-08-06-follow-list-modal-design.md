@@ -16,7 +16,7 @@
 
 ## 파일 구조
 
-```
+```text
 src/apis/endpoints.js          # follow.followers, follow.followings 추가
 src/features/profile/
   api/useFollowList.js         # 신규: 팔로워/팔로잉 목록 조회 훅 (mode로 분기)
