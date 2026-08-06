@@ -11,6 +11,11 @@ function ProfileHeader({ user, isOwner, onProfileUpdated }) {
   );
   const [isEditOpen, setIsEditOpen] = useState(false);
 
+  const handleToggleFollow = async () => {
+    const ok = await toggleFollow();
+    if (ok) onProfileUpdated?.();
+  };
+
   return (
     <Wrapper>
       <TopRow>
@@ -39,7 +44,7 @@ function ProfileHeader({ user, isOwner, onProfileUpdated }) {
             </EditButton>
           ) : (
             <>
-              <FollowButton isFollowing={isFollowing} onClick={toggleFollow} disabled={isToggling} />
+              <FollowButton isFollowing={isFollowing} onClick={handleToggleFollow} disabled={isToggling} />
               {followError && <FollowErrorText>{followError.message}</FollowErrorText>}
             </>
           )}

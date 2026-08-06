@@ -24,12 +24,18 @@ const LEGACY_CODE_LABELS = {
   COOPERATE: '협업',
 };
 
+// 스네이크/카멜/파스칼 등 표기 차이를 흡수하기 위해 구분자 제거 + 대문자 기준으로 비교한다.
+const normalizeCode = (code) => String(code).replace(/[_\s-]/g, '').toUpperCase();
+
+const LABEL_BY_NORMALIZED_CODE = new Map([
+  ...POST_CATEGORIES.map(({ code, label }) => [normalizeCode(code), label]),
+  ...Object.entries(LEGACY_CODE_LABELS).map(([code, label]) => [normalizeCode(code), label]),
+]);
+
 export function categoryLabelToCode(label) {
   return POST_CATEGORIES.find((c) => c.label === label)?.code ?? label;
 }
 
 export function categoryCodeToLabel(code) {
-  return (
-    POST_CATEGORIES.find((c) => c.code === code)?.label ?? LEGACY_CODE_LABELS[code] ?? code
-  );
+  return LABEL_BY_NORMALIZED_CODE.get(normalizeCode(code)) ?? code;
 }

@@ -9,7 +9,7 @@ import SelectSearchField from '@/features/ai/components/SelectSearchField';
 import SelectableCard from '@/features/ai/components/SelectableCard';
 import { useActivities } from '@/features/ai/api/useActivities';
 import { useCoverLetters } from '@/features/ai/api/useCoverLetters';
-import { POST_CATEGORIES } from '@/constants/postCategories';
+import { useCategories } from '@/features/post/api/useCategories';
 
 const MODE_CONFIG = {
   activity: {
@@ -30,19 +30,24 @@ function InterviewSelectPage() {
   const { mode } = useParams();
   const navigate = useNavigate();
   const [keyword, setKeyword] = useState('');
+  const [title, setTitle] = useState('');
   const [selected, setSelected] = useState(() => new Set());
 
   const { activities, isLoading: activitiesLoading, error: activitiesError } =
     useActivities();
   const { groups, isLoading: lettersLoading, error: lettersError } =
     useCoverLetters();
+  const { categories, isLoading: categoriesLoading, error: categoriesError } =
+    useCategories();
 
   const config = MODE_CONFIG[mode] ?? MODE_CONFIG.activity;
   const q = keyword.trim().toLowerCase();
 
+  const visibleCategories = categories.filter((c) => c.name.toLowerCase().includes(q));
+
   const candidates =
     mode === 'category'
-      ? POST_CATEGORIES.map((c) => c.label).filter((c) => c.toLowerCase().includes(q))
+      ? visibleCategories.map((c) => c.id)
       : mode === 'cover-letter'
         ? groups
             .flatMap((g) => g.items)
@@ -72,7 +77,7 @@ function InterviewSelectPage() {
 
   const handleSubmit = () => {
     navigate('/ai/interview/session', {
-      state: { mode, selection: [...selected] },
+      state: { mode, selection: [...selected], title: title.trim() },
     });
   };
 
@@ -90,18 +95,24 @@ function InterviewSelectPage() {
       <SelectSearchField value={keyword} onChange={setKeyword} />
 
       {mode === 'category' ? (
-        <ChipRow>
-          {candidates.map((tag) => (
-            <TagChip
-              key={tag}
-              type="button"
-              $selected={selected.has(tag)}
-              onClick={() => toggle(tag)}
-            >
-              {tag} {selected.has(tag) && <span aria-hidden>×</span>}
-            </TagChip>
-          ))}
-        </ChipRow>
+        categoriesLoading ? (
+          <Spinner />
+        ) : categoriesError || categories.length === 0 ? (
+          <EmptyState message="카테고리를 불러오지 못했어요. 다시 시도해 주세요." />
+        ) : (
+          <ChipRow>
+            {visibleCategories.map((category) => (
+              <TagChip
+                key={category.id}
+                type="button"
+                $selected={selected.has(category.id)}
+                onClick={() => toggle(category.id)}
+              >
+                {category.name} {selected.has(category.id) && <span aria-hidden>×</span>}
+              </TagChip>
+            ))}
+          </ChipRow>
+        )
       ) : isLoading ? (
         <Spinner />
       ) : error ? (
@@ -150,6 +161,14 @@ function InterviewSelectPage() {
             ))}
         </CardList>
       )}
+
+      <TitleInput
+        value={title}
+        maxLength={50}
+        aria-label="모의면접 제목"
+        placeholder="모의면접 제목을 입력해 주세요 (비우면 자동 생성돼요)"
+        onChange={(e) => setTitle(e.target.value)}
+      />
 
       <SubmitButton
         type="button"
@@ -203,6 +222,27 @@ const TagChip = styled.button`
     $selected ? theme.colors.primary : theme.colors.bg};
   color: ${({ theme, $selected }) =>
     $selected ? '#fff' : theme.colors.textSub};
+`;
+
+const TitleInput = styled.input`
+  display: block;
+  width: 100%;
+  margin-top: ${({ theme }) => theme.spacing(8)};
+  padding: ${({ theme }) => theme.spacing(3)} ${({ theme }) => theme.spacing(4)};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+  background: ${({ theme }) => theme.colors.bg};
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  color: ${({ theme }) => theme.colors.text};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.textSub};
+  }
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const SubmitButton = styled.button`

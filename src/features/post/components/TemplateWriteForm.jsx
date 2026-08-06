@@ -19,7 +19,7 @@ function TemplateWriteForm({ fields = [], value, onChange, uploadedFiles = [], o
           <UploadArea key={field}>
             {field}
             {uploadedFiles.length > 0 && (
-              <FileList>{uploadedFiles.map((file) => file.name).join(', ')}</FileList>
+              <FileList>{uploadedFiles.map((attachment) => attachment.file?.name ?? attachment.name).join(', ')}</FileList>
             )}
             <HiddenInput type="file" multiple onChange={handleFileChange} />
           </UploadArea>

@@ -59,6 +59,7 @@ function CommentItem({ comment, myUserId, onUpdate, onDelete, onReplySubmit }) {
               key={reply.id}
               reply={reply}
               myUserId={myUserId}
+              parentIsPrivate={comment.isPrivate}
               onUpdate={onUpdate}
               onDelete={onDelete}
             />

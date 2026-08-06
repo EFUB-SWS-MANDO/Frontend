@@ -1,6 +1,28 @@
 import styled from 'styled-components';
 
-function SelectableCard({ title, description, selected, onToggle }) {
+function SelectableCard({ title, description, selected, onToggle, onOpen }) {
+  if (onOpen) {
+    return (
+      <Card as="div" $selected={selected}>
+        <OpenButton type="button" onClick={onOpen}>
+          <TextArea>
+            <Title>{title}</Title>
+            {description && <Description>{description}</Description>}
+          </TextArea>
+        </OpenButton>
+        <CheckCircle
+          as="button"
+          type="button"
+          $selected={selected}
+          aria-label={selected ? '선택 해제' : '선택'}
+          onClick={onToggle}
+        >
+          ✓
+        </CheckCircle>
+      </Card>
+    );
+  }
+
   return (
     <Card type="button" $selected={selected} onClick={onToggle}>
       <TextArea>
@@ -15,6 +37,7 @@ function SelectableCard({ title, description, selected, onToggle }) {
 }
 
 const Card = styled.button`
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -28,6 +51,16 @@ const Card = styled.button`
   background: ${({ theme }) => theme.colors.bg};
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   text-align: left;
+`;
+
+const OpenButton = styled.button`
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 `;
 
 const TextArea = styled.div`
