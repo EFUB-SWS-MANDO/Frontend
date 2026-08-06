@@ -6,7 +6,7 @@ function HistoryPage() {
 
   const handleItemOpen = (tab, item) => {
     if (tab === 'interview') {
-      navigate('/ai/interview/result', { state: { sessionId: item.id } });
+      navigate(`/ai/interview/result/${item.id}`);
     }
   };
 
