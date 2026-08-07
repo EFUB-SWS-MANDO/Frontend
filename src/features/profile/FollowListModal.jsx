@@ -9,8 +9,14 @@ import EmptyState from '@/components/EmptyState/EmptyState';
 const FOCUSABLE_SELECTOR =
   'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])';
 
-function FollowListItem({ member }) {
+function FollowListItem({ member, onUnfollowed }) {
   const { isFollowing, isToggling, toggleFollow } = useFollow(member.memberId, member.isFollowing);
+
+  const handleToggle = async () => {
+    const wasFollowing = isFollowing;
+    const ok = await toggleFollow();
+    if (ok && wasFollowing) onUnfollowed?.(member.memberId);
+  };
 
   return (
     <Item>
@@ -22,15 +28,23 @@ function FollowListItem({ member }) {
         )}
         <Nickname>{member.nickname}</Nickname>
       </ItemInfo>
-      <FollowButton isFollowing={isFollowing} onClick={toggleFollow} disabled={isToggling} />
+      <FollowButton isFollowing={isFollowing} onClick={handleToggle} disabled={isToggling} />
     </Item>
   );
 }
 
-function FollowListModal({ memberId, mode, onClose }) {
-  const { members, isLoading, error } = useFollowList(memberId, mode);
+function FollowListModal({ memberId, mode, isOwner, onProfileUpdated, onClose }) {
+  const { members, isLoading, error, removeMember } = useFollowList(memberId, mode);
   const title = mode === 'followers' ? `팔로워 ${members.length}` : `팔로잉 ${members.length}`;
   const emptyMessage = mode === 'followers' ? '아직 팔로워가 없어요' : '아직 팔로잉이 없어요';
+  // 본인의 팔로잉 목록에서 언팔로우하면 목록과 프로필 수량을 함께 갱신
+  const handleUnfollowed =
+    isOwner && mode === 'following'
+      ? (targetMemberId) => {
+          removeMember(targetMemberId);
+          onProfileUpdated?.();
+        }
+      : undefined;
   const sheetRef = useRef(null);
   const closeButtonRef = useRef(null);
 
@@ -84,7 +98,9 @@ function FollowListModal({ memberId, mode, onClose }) {
           ) : members.length === 0 ? (
             <EmptyState message={emptyMessage} />
           ) : (
-            members.map((member) => <FollowListItem key={member.memberId} member={member} />)
+            members.map((member) => (
+              <FollowListItem key={member.memberId} member={member} onUnfollowed={handleUnfollowed} />
+            ))
           )}
         </List>
       </Sheet>
@@ -103,9 +119,11 @@ const Overlay = styled.div`
 `;
 
 const Sheet = styled.div`
+  box-sizing: border-box;
   width: 353px;
   max-width: calc(100vw - ${({ theme }) => theme.spacing(8)});
   height: 389px;
+  max-height: calc(100dvh - ${({ theme }) => theme.spacing(8)});
   padding: ${({ theme }) => theme.spacing(6)};
   border-radius: 16px;
   background: ${({ theme }) => theme.colors.bg};
@@ -179,6 +197,7 @@ const AvatarPlaceholder = styled.div`
 `;
 
 const Nickname = styled.span`
+  min-width: 0;
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme }) => theme.colors.text};

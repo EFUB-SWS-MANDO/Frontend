@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
 
@@ -6,9 +6,19 @@ export function useFollowList(memberId, mode) {
   const [members, setMembers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const requestIdRef = useRef(0);
 
   const fetchMembers = useCallback(async () => {
-    if (!memberId) return;
+    const requestId = ++requestIdRef.current;
+    const isStale = () => requestId !== requestIdRef.current;
+
+    if (!memberId) {
+      setMembers([]);
+      setError(null);
+      setIsLoading(false);
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     try {
@@ -24,16 +34,17 @@ export function useFollowList(memberId, mode) {
         const data = await api.get(endpoint, {
           params: idAfter !== undefined ? { idAfter } : undefined,
         });
+        if (isStale()) return;
         (data.members ?? []).forEach((m) => flat.push(m));
         const nextIdAfter = data.nextIdAfter;
         hasNext = (data.hasNext ?? false) && nextIdAfter !== undefined && nextIdAfter !== idAfter;
         idAfter = nextIdAfter;
       }
-      setMembers(flat);
+      if (!isStale()) setMembers(flat);
     } catch (e) {
-      setError(e);
+      if (!isStale()) setError(e);
     } finally {
-      setIsLoading(false);
+      if (!isStale()) setIsLoading(false);
     }
   }, [memberId, mode]);
 
@@ -41,5 +52,9 @@ export function useFollowList(memberId, mode) {
     fetchMembers();
   }, [fetchMembers]);
 
-  return { members, isLoading, error, refetch: fetchMembers };
+  const removeMember = (targetMemberId) => {
+    setMembers((prev) => prev.filter((m) => m.memberId !== targetMemberId));
+  };
+
+  return { members, isLoading, error, refetch: fetchMembers, removeMember };
 }

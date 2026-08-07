@@ -77,6 +77,8 @@ function ProfileHeader({ user, isOwner, onProfileUpdated }) {
         <FollowListModal
           memberId={user?.memberId}
           mode={followListMode}
+          isOwner={isOwner}
+          onProfileUpdated={onProfileUpdated}
           onClose={() => setFollowListMode(null)}
         />
       )}
