@@ -1,10 +1,26 @@
 import styled from 'styled-components';
 
-function SelectableCard({ title, description, selected, onToggle }) {
+function SelectableCard({ title, description, selected, onToggle, onTitleClick }) {
+  const handleTitleClick = (e) => {
+    e.stopPropagation();
+    onTitleClick();
+  };
+
   return (
-    <Card type="button" $selected={selected} onClick={onToggle}>
+    <Card
+      as={onTitleClick ? 'div' : 'button'}
+      type={onTitleClick ? undefined : 'button'}
+      $selected={selected}
+      onClick={onToggle}
+    >
       <TextArea>
-        <Title>{title}</Title>
+        <Title
+          as={onTitleClick ? 'button' : 'p'}
+          type={onTitleClick ? 'button' : undefined}
+          onClick={onTitleClick ? handleTitleClick : undefined}
+        >
+          {title}
+        </Title>
         {description && <Description>{description}</Description>}
       </TextArea>
       <CheckCircle $selected={selected} aria-hidden>
@@ -35,9 +51,15 @@ const TextArea = styled.div`
 `;
 
 const Title = styled.p`
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: inherit;
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme }) => theme.colors.text};
+  text-align: left;
 `;
 
 const Description = styled.p`

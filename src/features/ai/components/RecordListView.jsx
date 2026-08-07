@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import PageHeader from '@/components/PageHeader/PageHeader';
 import Spinner from '@/components/Spinner/Spinner';
@@ -11,7 +12,14 @@ const TABS = [
   { key: 'interview', label: '모의 면접' },
 ];
 
+// 대시보드(ActivityRecordList)의 RESUME/INTERVIEW 상세 라우트와 동일한 경로
+const DETAIL_ROUTE_BY_TAB = {
+  coverLetter: (id) => `/resume/${id}`,
+  interview: (id) => `/ai/interview/result/${id}`,
+};
+
 function RecordListView({ title, type }) {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('coverLetter');
   const [selected, setSelected] = useState(() => new Set());
   const { records, isLoading, error } = useRecords(type);
@@ -63,6 +71,7 @@ function RecordListView({ title, type }) {
                   description={item.description}
                   selected={selected.has(item.id)}
                   onToggle={() => toggle(item.id)}
+                  onTitleClick={() => navigate(DETAIL_ROUTE_BY_TAB[activeTab](item.id))}
                 />
               ))}
             </CardList>
