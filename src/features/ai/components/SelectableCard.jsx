@@ -1,32 +1,26 @@
 import styled from 'styled-components';
 
-function SelectableCard({ title, description, selected, onToggle, onOpen }) {
-  if (onOpen) {
-    return (
-      <Card as="div" $selected={selected}>
-        <OpenButton type="button" onClick={onOpen}>
-          <TextArea>
-            <Title>{title}</Title>
-            {description && <Description>{description}</Description>}
-          </TextArea>
-        </OpenButton>
-        <CheckCircle
-          as="button"
-          type="button"
-          $selected={selected}
-          aria-label={selected ? '선택 해제' : '선택'}
-          onClick={onToggle}
-        >
-          ✓
-        </CheckCircle>
-      </Card>
-    );
-  }
+function SelectableCard({ title, description, selected, onToggle, onTitleClick }) {
+  const handleTitleClick = (e) => {
+    e.stopPropagation();
+    onTitleClick();
+  };
 
   return (
-    <Card type="button" $selected={selected} onClick={onToggle}>
+    <Card
+      as={onTitleClick ? 'div' : 'button'}
+      type={onTitleClick ? undefined : 'button'}
+      $selected={selected}
+      onClick={onToggle}
+    >
       <TextArea>
-        <Title>{title}</Title>
+        <Title
+          as={onTitleClick ? 'button' : 'p'}
+          type={onTitleClick ? 'button' : undefined}
+          onClick={onTitleClick ? handleTitleClick : undefined}
+        >
+          {title}
+        </Title>
         {description && <Description>{description}</Description>}
       </TextArea>
       <CheckCircle $selected={selected} aria-hidden>
@@ -53,24 +47,20 @@ const Card = styled.button`
   text-align: left;
 `;
 
-const OpenButton = styled.button`
-  flex: 1;
-  min-width: 0;
-  text-align: left;
-  background: transparent;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-`;
-
 const TextArea = styled.div`
   min-width: 0;
 `;
 
 const Title = styled.p`
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: inherit;
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme }) => theme.colors.text};
+  text-align: left;
 `;
 
 const Description = styled.p`

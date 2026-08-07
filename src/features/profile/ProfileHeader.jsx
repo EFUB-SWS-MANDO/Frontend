@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useFollow } from './api/useFollow';
 import FollowButton from './FollowButton';
 import ProfileEditModal from './ProfileEditModal';
+import FollowListModal from './FollowListModal';
 
 function ProfileHeader({ user, isOwner, onProfileUpdated }) {
   const { isFollowing, isToggling, error: followError, toggleFollow } = useFollow(
@@ -10,6 +11,7 @@ function ProfileHeader({ user, isOwner, onProfileUpdated }) {
     user?.isFollowing ?? false,
   );
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [followListMode, setFollowListMode] = useState(null);
 
   const handleToggleFollow = async () => {
     const ok = await toggleFollow();
@@ -31,8 +33,20 @@ function ProfileHeader({ user, isOwner, onProfileUpdated }) {
             </NameRow>
             <Intro>{user?.bio}</Intro>
             <FollowCounts>
-              <span>팔로워 {user?.followerCount}</span>
-              <span>팔로잉 {user?.followeeCount}</span>
+              <CountButton
+                type="button"
+                disabled={!user?.memberId}
+                onClick={() => setFollowListMode('followers')}
+              >
+                팔로워 {user?.followerCount}
+              </CountButton>
+              <CountButton
+                type="button"
+                disabled={!user?.memberId}
+                onClick={() => setFollowListMode('following')}
+              >
+                팔로잉 {user?.followeeCount}
+              </CountButton>
             </FollowCounts>
           </TextGroup>
         </ProfileInfo>
@@ -56,6 +70,16 @@ function ProfileHeader({ user, isOwner, onProfileUpdated }) {
           profile={user}
           onClose={() => setIsEditOpen(false)}
           onUpdated={onProfileUpdated}
+        />
+      )}
+
+      {followListMode && user?.memberId && (
+        <FollowListModal
+          memberId={user?.memberId}
+          mode={followListMode}
+          isOwner={isOwner}
+          onProfileUpdated={onProfileUpdated}
+          onClose={() => setFollowListMode(null)}
         />
       )}
     </Wrapper>
@@ -124,10 +148,26 @@ const Intro = styled.p`
 const FollowCounts = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing(6)};
+  margin-top: ${({ theme }) => theme.spacing(3)};
+`;
+
+const CountButton = styled.button`
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme }) => theme.colors.text};
-  margin-top: ${({ theme }) => theme.spacing(3)};
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.textSub};
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;
 
 const ActionArea = styled.div`

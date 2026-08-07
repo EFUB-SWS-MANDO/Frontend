@@ -33,6 +33,8 @@ export const ENDPOINTS = {
   },
   follow: {
     toggle: (memberId) => `/api/members/${memberId}/follow`,
+    followers: (memberId) => `/api/members/${memberId}/followers`,
+    followings: (memberId) => `/api/members/${memberId}/followings`,
   },
   resumes: {
     list: '/api/resumes',
