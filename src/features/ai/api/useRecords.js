@@ -85,6 +85,7 @@ export function useRecords(type) {
   const hasHydrated = useAuthStore((state) => state.hasHydrated);
 
   const fetchRecords = useCallback(async () => {
+    if (!hasHydrated) return;
     requestIdRef.current += 1;
     const requestId = requestIdRef.current;
     const isStale = () => requestId !== requestIdRef.current;
@@ -111,12 +112,11 @@ export function useRecords(type) {
     } finally {
       if (!isStale()) setIsLoading(false);
     }
-  }, [type]);
+  }, [type, hasHydrated]);
 
   useEffect(() => {
-    if (!hasHydrated) return;
     fetchRecords();
-  }, [fetchRecords, hasHydrated]);
+  }, [fetchRecords]);
 
   const removeInterview = async (interviewSessionId) => {
     setError(null);

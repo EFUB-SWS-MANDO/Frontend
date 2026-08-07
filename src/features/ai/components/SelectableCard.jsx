@@ -6,7 +6,7 @@ function SelectableCard({
   selected,
   onToggle,
   onTitleClick,
-  showCheck = true,
+  shouldShowCheck = true,
 }) {
   const handleTitleClick = (e) => {
     e.stopPropagation();
@@ -30,7 +30,7 @@ function SelectableCard({
         </Title>
         {description && <Description>{description}</Description>}
       </TextArea>
-      {showCheck && (
+      {shouldShowCheck && (
         <CheckCircle $selected={selected} aria-hidden>
           ✓
         </CheckCircle>
