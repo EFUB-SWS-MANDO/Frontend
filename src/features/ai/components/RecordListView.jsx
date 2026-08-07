@@ -72,6 +72,7 @@ function RecordListView({ title, type }) {
                   selected={selected.has(item.id)}
                   onToggle={() => toggle(item.id)}
                   onTitleClick={() => navigate(DETAIL_ROUTE_BY_TAB[activeTab](item.id))}
+                  showCheck={false}
                 />
               ))}
             </CardList>

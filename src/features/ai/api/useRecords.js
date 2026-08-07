@@ -3,6 +3,7 @@ import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
 import { USE_MOCK } from '@/apis/config';
 import { MOCK_HISTORY, MOCK_SAVED } from '@/mocks/mockRecords';
+import { useAuthStore } from '@/stores/authStore';
 
 const STATUS_LABEL = {
   IN_PROGRESS: '진행 중',
@@ -81,6 +82,7 @@ export function useRecords(type) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const requestIdRef = useRef(0);
+  const hasHydrated = useAuthStore((state) => state.hasHydrated);
 
   const fetchRecords = useCallback(async () => {
     requestIdRef.current += 1;
@@ -112,8 +114,9 @@ export function useRecords(type) {
   }, [type]);
 
   useEffect(() => {
+    if (!hasHydrated) return;
     fetchRecords();
-  }, [fetchRecords]);
+  }, [fetchRecords, hasHydrated]);
 
   const removeInterview = async (interviewSessionId) => {
     setError(null);

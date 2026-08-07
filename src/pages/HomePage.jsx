@@ -23,7 +23,7 @@ function HomePage() {
   return (
     <Container>
       <TitleRow>
-        <Title>Welcome</Title>
+        <Title>반가워요, 여긴 SPROUT.</Title>
         <PostSearch keyword={keyword} onSearch={setKeyword} />
       </TitleRow>
 
