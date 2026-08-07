@@ -5,6 +5,8 @@ import { ENDPOINTS } from '@/apis/endpoints';
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
+  // 배열 파라미터를 category=A&category=B 형태로 직렬화 (기본값은 category[]=A)
+  paramsSerializer: { indexes: null },
 });
 
 api.interceptors.request.use((config) => {

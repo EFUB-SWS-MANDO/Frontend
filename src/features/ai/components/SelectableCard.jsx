@@ -31,6 +31,7 @@ function SelectableCard({ title, description, selected, onToggle, onTitleClick }
 }
 
 const Card = styled.button`
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;

@@ -26,7 +26,7 @@ export function useRegenerateResume() {
         }));
       }
 
-      const data = await api.post(ENDPOINTS.resumes.regenerate(resumeId));
+      const data = await api.post(ENDPOINTS.resumes.regenerate(resumeId), null, { timeout: 120000 });
       return data.questions.map((q) => ({
         questionId: q.questionId,
         order: q.order,

@@ -20,9 +20,13 @@ function PostDetailHeader({ post, isOwner }) {
     if (ok) navigate('/');
   };
 
+  const handleEdit = () => {
+    navigate('/write', { state: { editPost: post } });
+  };
+
   const menuOptions = isOwner
     ? [
-        { label: '본문 수정', onClick: () => {/* TODO: 수정 화면 이동 */} },
+        { label: '본문 수정', onClick: handleEdit },
         { label: '본문 삭제', onClick: handleDelete, danger: true, disabled: isDeleting },
       ]
     : [];
@@ -48,7 +52,7 @@ function PostDetailHeader({ post, isOwner }) {
 
         <ActionArea>
           {isOwner ? (
-            <EditPostButton onClick={() => {}} />
+            <EditPostButton onClick={handleEdit} />
           ) : (
             <FollowButton isFollowing={isFollowing} onClick={toggleFollow} disabled={isToggling} />
           )}

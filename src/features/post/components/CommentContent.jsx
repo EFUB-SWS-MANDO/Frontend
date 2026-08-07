@@ -13,15 +13,17 @@ function CommentContent({
   onSaveEdit,
   onCancelEdit,
   onTogglePrivate,
+  isPrivateToggleLocked = false,
   onDelete,
 }) {
   const menuOptions = isOwner
     ? [
         {
           type: 'toggle',
-          label: '공개',
+          label: isPrivateToggleLocked ? '공개 전환 불가' : '공개',
           checked: !item.isPrivate,
-          onChange: onTogglePrivate,
+          disabled: isPrivateToggleLocked,
+          onChange: isPrivateToggleLocked ? () => {} : onTogglePrivate,
         },
         { label: '수정하기', onClick: onStartEdit },
         { label: '삭제하기', onClick: onDelete, danger: true },

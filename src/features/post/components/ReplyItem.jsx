@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import CommentContent from './CommentContent';
 
-function ReplyItem({ reply, myUserId, onUpdate, onDelete }) {
+function ReplyItem({ reply, myUserId, parentIsPrivate = false, onUpdate, onDelete }) {
   const isOwner = String(reply.author.id) === String(myUserId);
   const [isEditing, setIsEditing] = useState(false);
   const [draftContent, setDraftContent] = useState(reply.content);
@@ -31,6 +31,7 @@ function ReplyItem({ reply, myUserId, onUpdate, onDelete }) {
         onSaveEdit={handleSaveEdit}
         onCancelEdit={() => setIsEditing(false)}
         onTogglePrivate={() => onUpdate(reply.id, { isPrivate: !reply.isPrivate })}
+        isPrivateToggleLocked={parentIsPrivate && reply.isPrivate}
         onDelete={() => onDelete(reply.id)}
       />
     </Wrapper>

@@ -30,9 +30,9 @@ function CategorySelector({ selected, onToggle }) {
       ) : (
         <ChipList>
           {filtered.map((category) => {
-            const isSelected = selected.includes(category.id);
+            const isSelected = selected.includes(category.code);
             return (
-              <Chip key={category.id} $selected={isSelected} onClick={() => onToggle(category.id)}>
+              <Chip key={category.code} $selected={isSelected} onClick={() => onToggle(category.code)}>
                 {category.name}
               </Chip>
             );

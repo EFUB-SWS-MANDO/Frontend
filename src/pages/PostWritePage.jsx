@@ -14,11 +14,13 @@ import Spinner from '@/components/Spinner/Spinner';
 import EmptyState from '@/components/EmptyState/EmptyState';
 import { useTemplates } from '@/features/post/api/useTemplates';
 import { useCreatePost } from '@/features/post/api/useCreatePost';
+import { useUpdatePost } from '@/features/post/api/useUpdatePost';
+import { categoryLabelToCode } from '@/constants/postCategories';
 import { useAuthStore } from '@/stores/authStore';
 import { uploadPostFile } from '@/apis/uploadPostFile';
 import { USE_MOCK } from '@/apis/config';
 
-const TITLE_MAX_LENGTH = 20;
+const TITLE_MAX_LENGTH = 50;
 
 function buildTitle(content) {
   const firstLine = content.trim().split('\n')[0];
@@ -33,12 +35,17 @@ function PostWritePage() {
   const navigate = useNavigate();
   const location = useLocation();
   const myUser = useAuthStore((state) => state.user);
-  const { createPost, isSubmitting, error } = useCreatePost();
+  const editPost = location.state?.editPost ?? null;
+  const isEditMode = editPost !== null;
+  const { createPost, isSubmitting: isCreating, error: createError } = useCreatePost();
+  const { updatePost, isSubmitting: isUpdating, error: updateError } = useUpdatePost();
+  const isSubmitting = isCreating || isUpdating;
+  const error = createError || updateError;
 
   const [step, setStep] = useState(1);
-  const [postType, setPostType] = useState(location.state?.postType ?? 'free');
-  const [title, setTitle] = useState('');
-  const [freeContent, setFreeContent] = useState('');
+  const [postType, setPostType] = useState(isEditMode ? 'free' : (location.state?.postType ?? 'free'));
+  const [title, setTitle] = useState(editPost?.title ?? '');
+  const [freeContent, setFreeContent] = useState(editPost?.content ?? '');
   const [templateContent, setTemplateContent] = useState({});
   const {
     values: templateFields,
@@ -47,14 +54,26 @@ function PostWritePage() {
   } = useTemplates('BASIC', postType !== 'free');
   const [photos, setPhotos] = useState([]);
   const [files, setFiles] = useState([]);
-  const [visibility, setVisibility] = useState('public');
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [visibility, setVisibility] = useState(
+    editPost?.isPrivate ? 'private' : 'public',
+  );
+  const [selectedCategories, setSelectedCategories] = useState(() =>
+    (editPost?.tags ?? []).map(categoryLabelToCode),
+  );
   const [showToast, setShowToast] = useState(false);
   const [isUploadingFiles, setIsUploadingFiles] = useState(false);
   const [uploadError, setUploadError] = useState(null);
 
   const isTemplateUnavailable =
     postType !== 'free' && (isTemplateLoading || templateError || templateFields.length === 0);
+  const mergedContent =
+    postType === 'free'
+      ? freeContent
+      : templateFields
+          .map((field) => templateContent[field])
+          .filter(Boolean)
+          .join('\n\n');
+  const isContentEmpty = mergedContent.trim() === '';
 
   const handleClose = () => {
     navigate(-1);
@@ -65,7 +84,10 @@ function PostWritePage() {
   };
 
   const handleEvidenceUpload = (newFiles) => {
-    setFiles((prev) => [...prev, ...newFiles]);
+    setFiles((prev) => [
+      ...prev,
+      ...newFiles.map((file) => ({ id: crypto.randomUUID(), file })),
+    ]);
   };
 
   const handleRemovePhoto = (index) => {
@@ -88,13 +110,7 @@ function PostWritePage() {
       return;
     }
 
-    const content =
-      postType === 'free'
-        ? freeContent
-        : templateFields
-            .map((field) => templateContent[field])
-            .filter(Boolean)
-            .join('\n\n');
+    const content = mergedContent;
     const categories = [...selectedCategories];
 
     setUploadError(null);
@@ -112,13 +128,21 @@ function PostWritePage() {
       }
     }
 
-    const post = await createPost({
-      title: title.trim() || buildTitle(content),
-      content,
-      categories,
-      isPrivate: visibility === 'private',
-      fileKeys,
-    });
+    const post = isEditMode
+      ? await updatePost(editPost.id, {
+          title: title.trim() || buildTitle(content),
+          content,
+          categories,
+          fileKeys: null,
+          isPrivate: visibility === 'private',
+        })
+      : await createPost({
+          title: title.trim() || buildTitle(content),
+          content,
+          categories,
+          isPrivate: visibility === 'private',
+          fileKeys,
+        });
 
     if (post) setShowToast(true);
   };
@@ -133,7 +157,8 @@ function PostWritePage() {
         <>
           <TopRow>
             <CloseButton onClick={handleClose} aria-label="닫기">✕</CloseButton>
-            <PostTypeDropdown value={postType} onChange={setPostType} />
+            {!isEditMode && <PostTypeDropdown value={postType} onChange={setPostType} />}
+            {isEditMode && <SectionTitle>게시글 수정</SectionTitle>}
           </TopRow>
 
           <FormArea>
@@ -156,19 +181,23 @@ function PostWritePage() {
             )}
           </FormArea>
 
-          <AttachmentPreviewList
-            photos={photos}
-            files={files}
-            onRemovePhoto={handleRemovePhoto}
-            onRemoveFile={handleRemoveFile}
-          />
+          {!isEditMode && (
+            <AttachmentPreviewList
+              photos={photos}
+              files={files}
+              onRemovePhoto={handleRemovePhoto}
+              onRemoveFile={handleRemoveFile}
+            />
+          )}
 
           <BottomRow>
-            <AttachmentButtons
-              onPhotoSelect={(newPhotos) => setPhotos((prev) => [...prev, ...newPhotos])}
-              onFileSelect={(newFiles) => setFiles((prev) => [...prev, ...newFiles])}
-            />
-            <NextButton onClick={handleNext} disabled={isTemplateUnavailable}>
+            {!isEditMode && (
+              <AttachmentButtons
+                onPhotoSelect={(newPhotos) => setPhotos((prev) => [...prev, ...newPhotos])}
+                onFileSelect={(newFiles) => setFiles((prev) => [...prev, ...newFiles])}
+              />
+            )}
+            <NextButton onClick={handleNext} disabled={isTemplateUnavailable || isContentEmpty}>
               다음
               <ArrowRightIcon color="#494D5A" size={16} />
             </NextButton>
@@ -213,9 +242,19 @@ function PostWritePage() {
 
           <UploadButtonRow>
             {uploadError && <ErrorText role="alert">{uploadError.message}</ErrorText>}
-            {error && <ErrorText role="alert">게시글을 등록하지 못했어요. 다시 시도해주세요.</ErrorText>}
-            <UploadButton onClick={handleUpload} disabled={isSubmitting || isUploadingFiles}>
-              {isSubmitting || isUploadingFiles ? '업로드 중...' : '업로드하기 ↑'}
+            {error && (
+              <ErrorText role="alert">
+                {isEditMode
+                  ? '게시글을 수정하지 못했어요. 다시 시도해주세요.'
+                  : '게시글을 등록하지 못했어요. 다시 시도해주세요.'}
+              </ErrorText>
+            )}
+            <UploadButton onClick={handleUpload} disabled={isSubmitting || isUploadingFiles || isContentEmpty}>
+              {isSubmitting || isUploadingFiles
+                ? '저장 중...'
+                : isEditMode
+                  ? '수정하기 ↑'
+                  : '업로드하기 ↑'}
             </UploadButton>
           </UploadButtonRow>
         </>

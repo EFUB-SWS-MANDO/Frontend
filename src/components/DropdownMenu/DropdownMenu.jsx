@@ -32,6 +32,7 @@ function DropdownMenu({ options }) {
                   role="switch"
                   aria-checked={option.checked}
                   aria-label={option.label}
+                  disabled={option.disabled}
                   $checked={option.checked}
                   onClick={() => option.onChange(!option.checked)}
                 >
@@ -124,6 +125,11 @@ const Switch = styled.button`
   border-radius: ${({ theme }) => theme.radius.full};
   background: ${({ $checked, theme }) => ($checked ? theme.colors.primary : theme.colors.gray300)};
   transition: background-color 0.15s ease;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;
 
 const SwitchKnob = styled.span`
