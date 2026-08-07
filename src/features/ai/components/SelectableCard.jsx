@@ -8,26 +8,10 @@ function SelectableCard({
   onTitleClick,
   shouldShowCheck = true,
 }) {
-  const handleTitleClick = (e) => {
-    e.stopPropagation();
-    onTitleClick();
-  };
-
   return (
-    <Card
-      as={onTitleClick ? 'div' : 'button'}
-      type={onTitleClick ? undefined : 'button'}
-      $selected={selected}
-      onClick={onToggle}
-    >
+    <Card type="button" $selected={selected} onClick={onTitleClick ?? onToggle}>
       <TextArea>
-        <Title
-          as={onTitleClick ? 'button' : 'p'}
-          type={onTitleClick ? 'button' : undefined}
-          onClick={onTitleClick ? handleTitleClick : undefined}
-        >
-          {title}
-        </Title>
+        <Title>{title}</Title>
         {description && <Description>{description}</Description>}
       </TextArea>
       {shouldShowCheck && (
