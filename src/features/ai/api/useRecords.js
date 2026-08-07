@@ -3,6 +3,7 @@ import { api } from '@/apis/axiosInstance';
 import { ENDPOINTS } from '@/apis/endpoints';
 import { USE_MOCK } from '@/apis/config';
 import { MOCK_HISTORY, MOCK_SAVED } from '@/mocks/mockRecords';
+import { useAuthStore } from '@/stores/authStore';
 
 const STATUS_LABEL = {
   IN_PROGRESS: '진행 중',
@@ -81,8 +82,10 @@ export function useRecords(type) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const requestIdRef = useRef(0);
+  const hasHydrated = useAuthStore((state) => state.hasHydrated);
 
   const fetchRecords = useCallback(async () => {
+    if (!hasHydrated) return;
     requestIdRef.current += 1;
     const requestId = requestIdRef.current;
     const isStale = () => requestId !== requestIdRef.current;
@@ -109,7 +112,7 @@ export function useRecords(type) {
     } finally {
       if (!isStale()) setIsLoading(false);
     }
-  }, [type]);
+  }, [type, hasHydrated]);
 
   useEffect(() => {
     fetchRecords();

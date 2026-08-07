@@ -1,6 +1,13 @@
 import styled from 'styled-components';
 
-function SelectableCard({ title, description, selected, onToggle, onTitleClick }) {
+function SelectableCard({
+  title,
+  description,
+  selected,
+  onToggle,
+  onTitleClick,
+  shouldShowCheck = true,
+}) {
   const handleTitleClick = (e) => {
     e.stopPropagation();
     onTitleClick();
@@ -23,9 +30,11 @@ function SelectableCard({ title, description, selected, onToggle, onTitleClick }
         </Title>
         {description && <Description>{description}</Description>}
       </TextArea>
-      <CheckCircle $selected={selected} aria-hidden>
-        ✓
-      </CheckCircle>
+      {shouldShowCheck && (
+        <CheckCircle $selected={selected} aria-hidden>
+          ✓
+        </CheckCircle>
+      )}
     </Card>
   );
 }
