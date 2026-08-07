@@ -145,6 +145,10 @@ const FollowCounts = styled.div`
 `;
 
 const CountButton = styled.button`
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme }) => theme.colors.text};
