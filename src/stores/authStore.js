@@ -25,17 +25,12 @@ export const useAuthStore = create(
           isLoggedIn: false,
         }),
     }),
-    {
-      name: 'sprout-auth',
-      // localStorage 복원도 내부적으로 비동기라, 마운트 직후 accessToken을 읽는
-      // 코드가 복원 완료 전에 null을 볼 수 있음 (persist rehydrate race).
-      // 이 콜백은 store 생성(create()) 도중 동기적으로 실행될 수 있어 외부 useAuthStore
-      // 바인딩이 아직 TDZ임 — queueMicrotask로 한 틱 미뤄서 안전하게 참조.
-      // 성공/실패(rehydrate 에러) 양쪽 다 이 콜백이 호출되므로 실패해도 hasHydrated는 true가 됨
-      // (그래야 토큰 없이도 로딩이 영원히 멈추지 않고 정상적인 비로그인 상태로 넘어감).
-      onRehydrateStorage: () => () => {
-        queueMicrotask(() => useAuthStore.setState({ hasHydrated: true }));
-      },
-    },
+    { name: 'sprout-auth' },
   ),
 );
+
+// localStorage 복원(rehydrate)은 store 생성 도중 동기적으로 끝날 수도 있고, 실패하거나
+// (JSON 파싱 에러) storage 자체에 접근 못 해 시도조차 안 될 수도 있음(zustand persist는
+// storage가 없으면 onRehydrateStorage를 아예 호출하지 않음) — 그 어떤 경우에도 마운트 직후
+// accessToken을 읽는 코드가 복원 전 상태를 보지 않도록 한 틱 뒤에 무조건 완료 처리한다.
+queueMicrotask(() => useAuthStore.setState({ hasHydrated: true }));
