@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useFollowList } from './api/useFollowList';
 import { useFollow } from './api/useFollow';
@@ -10,6 +10,7 @@ const FOCUSABLE_SELECTOR =
   'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])';
 
 function FollowListItem({ member, onUnfollowed }) {
+  const [imageFailed, setImageFailed] = useState(false);
   const { isFollowing, isToggling, toggleFollow } = useFollow(member.memberId, member.isFollowing);
 
   const handleToggle = async () => {
@@ -21,8 +22,12 @@ function FollowListItem({ member, onUnfollowed }) {
   return (
     <Item>
       <ItemInfo>
-        {member.profileImage ? (
-          <Avatar src={member.profileImage} alt={`${member.nickname} 프로필 사진`} />
+        {member.profileImage && !imageFailed ? (
+          <Avatar
+            src={member.profileImage}
+            alt={`${member.nickname} 프로필 사진`}
+            onError={() => setImageFailed(true)}
+          />
         ) : (
           <AvatarPlaceholder />
         )}
